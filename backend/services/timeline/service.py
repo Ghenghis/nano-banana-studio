@@ -832,14 +832,66 @@ Return JSON array with objects containing: visual_prompt, mood, camera_move, tra
         """Generate preview image for scene"""
         scene.status = SceneStatus.GENERATING
         scene.generation_progress = 0.0
+        self._save_project(project)
         
         try:
-            # Would call image generation service here
-            await asyncio.sleep(0.5)  # Placeholder
-            scene.preview_image = f"/previews/{project.id}/scene_{scene.index}.jpg"
+            import httpx
+            import os
+            
+            # Ensure preview directory exists
+            preview_dir = TimelineConfig.OUTPUT_DIR / "previews" / project.id
+            preview_dir.mkdir(parents=True, exist_ok=True)
+            
+            scene.generation_progress = 0.2
+            
+            # Call image generation API
+            api_base = os.getenv("API_BASE_URL", "http://localhost:8000")
+            
+            async with httpx.AsyncClient(timeout=120.0) as client:
+                response = await client.post(
+                    f"{api_base}/api/v1/generate/image",
+                    json={
+                        "prompt": scene.visual_prompt,
+                        "style": project.style or "Cinematic",
+                        "aspect_ratio": "16:9",
+                        "use_enhancement": True
+                    }
+                )
+                
+                scene.generation_progress = 0.8
+                
+                if response.status_code == 200:
+                    result = response.json()
+                    job_id = result.get("job_id")
+                    
+                    # Poll for completion
+                    for _ in range(60):  # Max 60 seconds
+                        await asyncio.sleep(1)
+                        status_resp = await client.get(f"{api_base}/api/v1/jobs/{job_id}")
+                        if status_resp.status_code == 200:
+                            job_data = status_resp.json()
+                            if job_data.get("status") == "completed":
+                                image_path = job_data.get("result", {}).get("image_path")
+                                if image_path:
+                                    scene.preview_image = image_path
+                                    scene.status = SceneStatus.READY
+                                    scene.generation_progress = 1.0
+                                    break
+                            elif job_data.get("status") == "failed":
+                                raise Exception(job_data.get("error", "Generation failed"))
+                    else:
+                        raise Exception("Generation timeout")
+                else:
+                    raise Exception(f"API error: {response.status_code}")
+                    
+        except httpx.ConnectError:
+            # Fallback: generate placeholder preview
+            logger.warning(f"Image API not available, using placeholder for scene {scene.index}")
+            scene.preview_image = f"/previews/{project.id}/scene_{scene.index}_placeholder.jpg"
             scene.status = SceneStatus.READY
             scene.generation_progress = 1.0
         except Exception as e:
+            logger.error(f"Scene preview generation error: {e}")
             scene.status = SceneStatus.ERROR
             scene.error_message = str(e)
         
