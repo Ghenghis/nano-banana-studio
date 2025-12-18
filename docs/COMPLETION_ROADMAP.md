@@ -248,7 +248,16 @@ These can be fixed quickly to boost completion percentage:
 - [x] `CharacterManager.jsx` - Character registration UI
 - [x] `YouTubePublisher.jsx` - YouTube upload wizard
 - [x] `AudioMixer.jsx` - Audio track mixing UI
+- [x] `DraggableTimeline.jsx` - Drag-and-drop scene reordering
 - [x] Component exports index
+
+### Testing
+- [x] `test_e2e_workflows.py` - Complete end-to-end workflow tests
+
+### Services Verified Complete
+- [x] Animation Service - Runway/Kling/SVD/Ken Burns providers
+- [x] Suno Service - Full generation with polling
+- [x] TTS Service - ElevenLabs/OpenAI/Edge providers
 
 ---
 
