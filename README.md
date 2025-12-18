@@ -1,156 +1,428 @@
-# 🍌 NANO BANANA STUDIO PRO v2.0
+<p align="center">
+  <img src="https://img.shields.io/badge/🍌-NANO_BANANA_STUDIO_PRO-FFD700?style=for-the-badge&labelColor=000000" alt="Nano Banana Studio Pro"/>
+</p>
 
-<div align="center">
+<h1 align="center">🍌 NANO BANANA STUDIO PRO v2.0.0</h1>
 
-![Nano Banana Studio](https://img.shields.io/badge/🍌-Nano_Banana_Studio-yellow?style=for-the-badge)
-![Version](https://img.shields.io/badge/Version-2.0.0-blue?style=for-the-badge)
-![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
-![Python](https://img.shields.io/badge/Python-3.10+-blue?style=for-the-badge&logo=python)
-![Docker](https://img.shields.io/badge/Docker-Ready-blue?style=for-the-badge&logo=docker)
+<p align="center">
+  <strong>Enterprise-Grade AI Video Production Pipeline</strong><br>
+  <em>Transform ideas into stunning videos with AI-powered intelligence</em>
+</p>
 
-**Enterprise-Grade AI Video Production Pipeline**
+<p align="center">
+  <img src="https://img.shields.io/badge/Version-2.0.0-blue?style=flat-square" alt="Version"/>
+  <img src="https://img.shields.io/badge/License-MIT-green?style=flat-square" alt="License"/>
+  <img src="https://img.shields.io/badge/Python-3.10+-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python"/>
+  <img src="https://img.shields.io/badge/React-18.2-61DAFB?style=flat-square&logo=react&logoColor=black" alt="React"/>
+  <img src="https://img.shields.io/badge/FastAPI-0.109-009688?style=flat-square&logo=fastapi&logoColor=white" alt="FastAPI"/>
+  <img src="https://img.shields.io/badge/Docker-Ready-2496ED?style=flat-square&logo=docker&logoColor=white" alt="Docker"/>
+</p>
 
-*Transform images and music into stunning videos with AI-powered character consistency, beat-synced transitions, and professional-grade output.*
-
-[Features](#-features) • [Quick Start](#-quick-start) • [Architecture](#-architecture) • [API](#-api-reference) • [Workflows](#-n8n-workflows) • [Contributing](#-contributing)
-
-</div>
-
----
-
-## 📋 Table of Contents
-
-- [Overview](#-overview)
-- [Features](#-features)
-- [System Requirements](#-system-requirements)
-- [Quick Start](#-quick-start)
-- [Architecture](#-architecture)
-- [Configuration](#-configuration)
-- [API Reference](#-api-reference)
-- [n8n Workflows](#-n8n-workflows)
-- [Model Support](#-model-support)
-- [Troubleshooting](#-troubleshooting)
-- [Roadmap](#-roadmap)
+<p align="center">
+  <a href="#-features">Features</a> •
+  <a href="#-quick-start">Quick Start</a> •
+  <a href="#-api-reference">API</a> •
+  <a href="#-architecture">Architecture</a> •
+  <a href="#-timeline-editor">Timeline Editor</a> •
+  <a href="#-documentation">Docs</a>
+</p>
 
 ---
 
-## 🎬 Overview
+## 🎬 What is Nano Banana Studio Pro?
 
-Nano Banana Studio Pro is a comprehensive, self-hosted AI video production system that combines:
+Nano Banana Studio Pro is a **complete, self-hosted AI video production system** that transforms simple text prompts into professional-quality videos with:
+
+- 🎨 **AI Image Generation** - Gemini, FLUX, SDXL, and more
+- 🎬 **Video Animation** - Runway, Kling, SVD, LTX-Video
+- 🎵 **AI Music Generation** - Suno API integration
+- 👤 **Character Consistency** - Face detection & embedding
+- 🎙️ **Voice & Audio** - Whisper, TTS, beat detection
+- 📺 **YouTube Publishing** - Direct upload with metadata
 
 ```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                     NANO BANANA STUDIO PRO                                   │
-│                                                                              │
-│   📝 Prompt        🎨 Image         🎵 Audio         🎬 Video               │
-│   Enhancement  →   Generation   →   Intelligence →   Assembly               │
-│                                                                              │
-│   7-Stage          Multi-Model      Beat Detection   Professional           │
-│   Pipeline         Support          AI Music         Output                  │
-│                                                                              │
-└─────────────────────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│                                                                                     │
+│   📝 PROMPT          🎨 IMAGE           🎬 VIDEO          🎵 AUDIO         📤 OUTPUT│
+│                                                                                     │
+│   ┌─────────┐       ┌─────────┐       ┌─────────┐       ┌─────────┐     ┌─────────┐│
+│   │ 7-Stage │  ──▶  │ Multi   │  ──▶  │ Animate │  ──▶  │ Beat    │ ──▶ │ YouTube ││
+│   │ Enhance │       │ Model   │       │ + Ken   │       │ Sync    │     │ Publish ││
+│   │ Pipeline│       │ Generate│       │ Burns   │       │ + Mix   │     │ + Export││
+│   └─────────┘       └─────────┘       └─────────┘       └─────────┘     └─────────┘│
+│                                                                                     │
+│   ✅ LLM-powered     ✅ 30+ models     ✅ 4 providers    ✅ Suno AI      ✅ One-click│
+│   ✅ Style DNA       ✅ Character      ✅ Transitions    ✅ Whisper      ✅ Metadata │
+│   ✅ Consistency     ✅ Batch mode     ✅ Assembly       ✅ TTS          ✅ Analytics│
+│                                                                                     │
+└─────────────────────────────────────────────────────────────────────────────────────┘
 ```
-
-### Why Nano Banana?
-
-| Feature | Commercial Tools | Nano Banana |
-|---------|-----------------|-------------|
-| **Cost** | $20-200/month | Free (self-hosted) |
-| **Privacy** | Cloud-dependent | 100% local option |
-| **Customization** | Limited | Fully extensible |
-| **Models** | Proprietary | 30+ open models |
-| **API Access** | Restricted | Full REST + WebSocket |
-| **Character Consistency** | Basic | Advanced (512-dim embeddings) |
 
 ---
 
-## ✨ Features
+## ✨ Features at a Glance
+
+<table>
+<tr>
+<td width="50%">
 
 ### 🎨 Image Generation
-| Feature | Status | Technology | Description |
-|---------|--------|------------|-------------|
-| Text-to-Image | ✅ | Gemini, FLUX, SDXL | Generate images from text prompts |
-| Multi-Reference Blending | ✅ | Custom algorithm | Blend up to 14 reference images |
-| Character Consistency | ✅ | IPAdapter, InstantID | Preserve identity across generations |
-| ControlNet Guidance | ✅ | Pose, Depth, Canny | Structural control for compositions |
-| Style Transfer | ✅ | 14 built-in presets | Apply consistent visual styles |
-| Batch Generation | ✅ | Parallel processing | Generate multiple images simultaneously |
+- **Text-to-Image** with Gemini, FLUX, SDXL
+- **Multi-Reference Blending** (up to 14 images)
+- **Character Consistency** with IPAdapter
+- **Style Transfer** with 14 presets
+- **ControlNet** (Pose, Depth, Canny)
+- **Batch Processing** for efficiency
 
-### 🎬 Video Generation
-| Feature | Status | Technology | Description |
-|---------|--------|------------|-------------|
-| Image-to-Video | ✅ | LTX-Video, WanVideo, SVD | Animate still images |
-| Keyframe Control | ✅ | LTX-Video 0.9.7+ | Control specific frames |
-| Motion Strength | ✅ | All video models | Adjust animation intensity |
-| Ken Burns Effects | ✅ | FFmpeg-based | Pan, zoom, and parallax |
-| Video Extension | ✅ | Frame interpolation | Extend video duration |
-| Multi-Scene Assembly | ✅ | FFmpeg + xfade | Combine scenes with transitions |
+</td>
+<td width="50%">
+
+### 🎬 Video Production
+- **Image-to-Video** animation
+- **Ken Burns Effects** (pan, zoom, parallax)
+- **25+ Transitions** (fade, wipe, zoom, etc.)
+- **Multi-Scene Assembly**
+- **Export Presets** (YouTube, TikTok, Instagram)
+- **Real-time Preview**
+
+</td>
+</tr>
+<tr>
+<td width="50%">
 
 ### 🎵 Audio Intelligence
-| Feature | Status | Technology | Description |
-|---------|--------|------------|-------------|
-| AI Music Generation | ✅ | MusicGen, Suno | Create original music |
-| Beat Detection | ✅ | Librosa, Aubio | Analyze rhythm and tempo |
-| Beat-Synced Transitions | ✅ | Custom algorithm | Sync transitions to beats |
-| Lyrics Extraction | ✅ | Whisper | Transcribe vocals |
-| Text-to-Speech | ✅ | Bark, XTTS, ElevenLabs | Generate voiceovers |
-| Audio Mixing | ✅ | FFmpeg | Layer and mix tracks |
-| Emotion Detection | 🔄 | Speech emotion models | Analyze vocal sentiment |
+- **AI Music Generation** via Suno
+- **Beat Detection** with Librosa/Aubio
+- **Beat-Synced Transitions**
+- **Speech Recognition** with Whisper
+- **Text-to-Speech** (Bark, XTTS, ElevenLabs)
+- **Audio Mixing** with FFmpeg
+
+</td>
+<td width="50%">
 
 ### 👤 Character System
-| Feature | Status | Technology | Description |
-|---------|--------|------------|-------------|
-| Face Detection | ✅ | MediaPipe (468 landmarks) | Detect faces in images |
-| Face Embedding | ✅ | InsightFace (512-dim) | Create identity vectors |
-| Character Registration | ✅ | SQLite database | Store character profiles |
-| Similarity Verification | ✅ | Cosine similarity ≥0.85 | Verify identity matches |
-| Multi-Reference Averaging | ✅ | Up to 14 references | Robust identity capture |
-| Auto-Rejection | ✅ | Threshold filtering | Reject inconsistent frames |
+- **Face Detection** (468 landmarks)
+- **Face Embedding** (512-dim vectors)
+- **Character Registration** database
+- **Similarity Verification** (≥0.85 threshold)
+- **Multi-Reference Averaging**
+- **Auto-Rejection** of inconsistent frames
 
-### 📝 Prompt Enhancement (7-Stage Pipeline)
-| Stage | Name | Description |
-|-------|------|-------------|
-| 1 | **Concept Expansion** | Theme analysis, mood profile, visual metaphors |
-| 2 | **Scene Definition** | Environment, spatial composition, time context |
-| 3 | **Visual Specification** | Color palette, lighting design, texture profile |
-| 4 | **Cinematic Language** | Camera angles, lens characteristics, frame dynamics |
-| 5 | **Narrative Context** | Story beat, emotional arc, audience engagement |
-| 6 | **Technical Parameters** | Quality keywords, resolution, technical specs |
-| 7 | **Consistency Polish** | Style DNA extraction, character injection, final polish |
-
-### 🔧 Production Tools
-| Feature | Status | Description |
-|---------|--------|-------------|
-| 25+ Video Transitions | ✅ | FFmpeg xfade library |
-| 14 Style Presets | ✅ | Pre-configured visual styles |
-| Content-Addressed Cache | ✅ | SHA256 fingerprinting |
-| Job Queue System | ✅ | Redis-backed with priorities |
-| WebSocket Updates | ✅ | Real-time progress tracking |
-| Export Formats | ✅ | MP4, MOV, GIF, WebM |
+</td>
+</tr>
+</table>
 
 ---
 
-## 💻 System Requirements
+## 🏗️ Architecture
 
-### Minimum Requirements
-| Component | Requirement |
-|-----------|-------------|
-| OS | Windows 10/11, Linux, macOS |
-| CPU | 8+ cores |
-| RAM | 16GB |
-| GPU | NVIDIA GTX 1080 (8GB VRAM) |
-| Storage | 50GB free space |
-| Docker | 24.0+ with GPU support |
+```
+┌──────────────────────────────────────────────────────────────────────────────────────┐
+│                           NANO BANANA STUDIO PRO v2.0                                │
+├──────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                      │
+│  ┌─────────────────────────────────────────────────────────────────────────────────┐ │
+│  │                              🖥️ FRONTEND (React 18)                             │ │
+│  │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐        │ │
+│  │  │  Timeline    │  │   Scene      │  │   Tool       │  │   Render     │        │ │
+│  │  │  Editor      │  │   Gallery    │  │   Panel      │  │   Panel      │        │ │
+│  │  │  (NLE)       │  │   Preview    │  │   Controls   │  │   Export     │        │ │
+│  │  └──────────────┘  └──────────────┘  └──────────────┘  └──────────────┘        │ │
+│  └─────────────────────────────────────────────────────────────────────────────────┘ │
+│                                         │                                            │
+│                              ┌──────────▼──────────┐                                 │
+│                              │   API Client (50+)  │                                 │
+│                              │   axios + WebSocket │                                 │
+│                              └──────────┬──────────┘                                 │
+│                                         │                                            │
+│  ┌─────────────────────────────────────────────────────────────────────────────────┐ │
+│  │                           🚀 BACKEND (FastAPI)                                  │ │
+│  │                                                                                 │ │
+│  │  ┌─────────────────────────────────────────────────────────────────────────┐   │ │
+│  │  │                         52 API ENDPOINTS                                │   │ │
+│  │  │  /api/v1/enhance/*     │  /api/v1/generate/*   │  /api/v1/animate/*    │   │ │
+│  │  │  /api/v1/face/*        │  /api/v1/character/*  │  /api/v1/audio/*      │   │ │
+│  │  │  /api/v1/suno/*        │  /api/v1/storyboard/* │  /api/v1/video/*      │   │ │
+│  │  │  /api/v1/timeline/*    │  /api/v1/youtube/*    │  /api/v1/jobs/*       │   │ │
+│  │  └─────────────────────────────────────────────────────────────────────────┘   │ │
+│  │                                                                                 │ │
+│  │  ┌──────────────────────────────────────────────────────────────────────────┐  │ │
+│  │  │                         24 SERVICE MODULES                               │  │ │
+│  │  │                                                                          │  │ │
+│  │  │  ┌────────────┐ ┌────────────┐ ┌────────────┐ ┌────────────┐            │  │ │
+│  │  │  │ Face       │ │ LLM        │ │ Audio      │ │ Timeline   │            │  │ │
+│  │  │  │ Service    │ │ Provider   │ │ Intel      │ │ Editor     │            │  │ │
+│  │  │  └────────────┘ └────────────┘ └────────────┘ └────────────┘            │  │ │
+│  │  │  ┌────────────┐ ┌────────────┐ ┌────────────┐ ┌────────────┐            │  │ │
+│  │  │  │ Suno       │ │ YouTube    │ │ Animation  │ │ Storyboard │            │  │ │
+│  │  │  │ Music      │ │ Publishing │ │ Service    │ │ Generator  │            │  │ │
+│  │  │  └────────────┘ └────────────┘ └────────────┘ └────────────┘            │  │ │
+│  │  │  ┌────────────┐ ┌────────────┐ ┌────────────┐ ┌────────────┐            │  │ │
+│  │  │  │ Whisper    │ │ TTS        │ │ Thumbnail  │ │ Publishing │            │  │ │
+│  │  │  │ Service    │ │ Service    │ │ Generator  │ │ Service    │            │  │ │
+│  │  │  └────────────┘ └────────────┘ └────────────┘ └────────────┘            │  │ │
+│  │  │  + 12 more services...                                                   │  │ │
+│  │  └──────────────────────────────────────────────────────────────────────────┘  │ │
+│  └─────────────────────────────────────────────────────────────────────────────────┘ │
+│                                                                                      │
+│  ┌─────────────────────────────────────────────────────────────────────────────────┐ │
+│  │                           🔧 INFRASTRUCTURE                                     │ │
+│  │  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐          │ │
+│  │  │ Redis    │  │ SQLite   │  │ FFmpeg   │  │ n8n      │  │ Docker   │          │ │
+│  │  │ Cache    │  │ Database │  │ Media    │  │ Workflows│  │ Compose  │          │ │
+│  │  └──────────┘  └──────────┘  └──────────┘  └──────────┘  └──────────┘          │ │
+│  └─────────────────────────────────────────────────────────────────────────────────┘ │
+└──────────────────────────────────────────────────────────────────────────────────────┘
+```
 
-### Recommended (Your Setup)
-| Component | Specification |
-|-----------|---------------|
-| CPU | AMD Ryzen 7 5800X3D |
-| RAM | 128GB DDR4 |
-| GPU (Primary) | RTX 3090 Ti (24GB VRAM) |
-| GPU (Secondary) | RTX 3060 Ti (12GB VRAM) |
-| Storage | 4TB NVMe |
-| OS | Windows 11 + WSL2 |
+---
+
+## 📝 7-Stage Prompt Enhancement Pipeline
+
+Our LLM-powered prompt enhancement transforms simple ideas into cinematic masterpieces:
+
+```
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│                        7-STAGE PROMPT ENHANCEMENT PIPELINE                          │
+├─────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                     │
+│  INPUT: "A cat in a forest"                                                         │
+│                                                                                     │
+│  ┌─────────┐    ┌─────────┐    ┌─────────┐    ┌─────────┐                          │
+│  │ STAGE 1 │───▶│ STAGE 2 │───▶│ STAGE 3 │───▶│ STAGE 4 │                          │
+│  │ Concept │    │  Scene  │    │ Visual  │    │Cinematic│                          │
+│  │Expansion│    │Definition│   │  Spec   │    │Language │                          │
+│  └─────────┘    └─────────┘    └─────────┘    └─────────┘                          │
+│       │              │              │              │                                │
+│       ▼              ▼              ▼              ▼                                │
+│  Theme analysis  Environment   Color palette  Camera angles                        │
+│  Mood profile    Spatial comp  Lighting       Lens choice                          │
+│  Visual metaphor Time context  Textures       Frame dynamics                       │
+│                                                                                     │
+│  ┌─────────┐    ┌─────────┐    ┌─────────┐                                         │
+│  │ STAGE 5 │───▶│ STAGE 6 │───▶│ STAGE 7 │                                         │
+│  │Narrative│    │Technical│    │ Polish  │                                         │
+│  │ Context │    │  Params │    │  Final  │                                         │
+│  └─────────┘    └─────────┘    └─────────┘                                         │
+│       │              │              │                                               │
+│       ▼              ▼              ▼                                               │
+│  Story beat      Resolution     Style DNA                                          │
+│  Emotional arc   Quality keys   Character inject                                   │
+│  Engagement      Tech specs     Consistency                                        │
+│                                                                                     │
+│  OUTPUT: "Majestic Maine Coon cat with emerald eyes, sitting regally on a          │
+│          moss-covered ancient oak root, enchanted forest backdrop with              │
+│          volumetric god rays filtering through towering redwoods, mystical          │
+│          atmosphere with floating pollen particles, shallow depth of field,         │
+│          golden hour lighting, shot on Arri Alexa, 85mm f/1.4, cinematic           │
+│          color grade with teal shadows and amber highlights, 8K resolution"        │
+│                                                                                     │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🖥️ Timeline Editor
+
+Professional non-linear editing with **Simple** and **Advanced** modes:
+
+### Simple Mode (One-Click Magic)
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│  🍌 Nano Banana Studio Pro          [Simple] [Advanced]    [+ New]     │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│  ┌───────────────────────────────────────────────────────────────────┐ │
+│  │  ✨ Quick Create - One Click Magic                                │ │
+│  │                                                                   │ │
+│  │  What's your video about?                                         │ │
+│  │  ┌─────────────────────────────────────────────────────────────┐ │ │
+│  │  │ A magical cat exploring an enchanted forest with glowing   │ │ │
+│  │  │ butterflies...                                              │ │ │
+│  │  └─────────────────────────────────────────────────────────────┘ │ │
+│  │                                                                   │ │
+│  │  Duration: [60 seconds ▼]    Style: [Cinematic ▼]                │ │
+│  │                                                                   │ │
+│  │  Music Prompt (optional):                                         │ │
+│  │  ┌─────────────────────────────────────────────────────────────┐ │ │
+│  │  │ Ethereal orchestral, magical wonder, gentle piano          │ │ │
+│  │  └─────────────────────────────────────────────────────────────┘ │ │
+│  │                                                                   │ │
+│  │          [ ✨ Create Magic Video ]                                │ │
+│  └───────────────────────────────────────────────────────────────────┘ │
+│                                                                         │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+### Advanced Mode (Full Control)
+```
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│  🍌 Nano Banana Studio Pro              [Simple] [Advanced]         [+ New]        │
+├─────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                     │
+│  SCENE GALLERY                                                                      │
+│  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐                  │
+│  │ Scene 1  │ │ Scene 2  │ │ Scene 3  │ │ Scene 4  │ │ Scene 5  │                  │
+│  │ [img]    │ │ [img]    │ │ [img]    │ │ [img]    │ │ [img]    │                  │
+│  │ ✅ 5.0s  │ │ ✅ 4.5s  │ │ ⏳ 5.0s  │ │ ⏳ 3.5s  │ │ ❌ 5.0s  │                  │
+│  │ [✓] [✗]  │ │ [✓] [✗]  │ │ [✓] [✗]  │ │ [✓] [✗]  │ │ [✓] [✗]  │                  │
+│  └──────────┘ └──────────┘ └──────────┘ └──────────┘ └──────────┘                  │
+│                                                                                     │
+│  TIMELINE TRACK                                                     [Zoom: 100%]   │
+│  ┌─────────────────────────────────────────────────────────────────────────────┐   │
+│  │ 0:00    0:05    0:10    0:15    0:20    0:25    0:30    0:35    0:40       │   │
+│  │ ├───────┼───────┼───────┼───────┼───────┼───────┼───────┼───────┼          │   │
+│  │ │░░░░░░░│▓▓▓▓▓▓▓│░░░░░░░│▓▓▓▓▓▓▓│░░░░░░░│▓▓▓▓▓▓▓│░░░░░░░│▓▓▓▓▓▓▓│          │   │
+│  │ │ Sc.1  │ Sc.2  │ Sc.3  │ Sc.4  │ Sc.5  │ Sc.6  │ Sc.7  │ Sc.8  │          │   │
+│  │ └───────┴───────┴───────┴───────┴───────┴───────┴───────┴───────┴          │   │
+│  │ 🎵 ════════════════════════════════════════════════════════════            │   │
+│  └─────────────────────────────────────────────────────────────────────────────┘   │
+│                                                                                     │
+│  TOOLS                              │  RENDER                                       │
+│  ┌─────────────────────────────────┐│  ┌───────────────────────────────────────┐   │
+│  │ 🎬 Camera   [Pan ▼] [50%]       ││  │ Preset: [YouTube 1080p ▼]             │   │
+│  │ 🔀 Transition [Fade ▼] [0.5s]   ││  │ Total: 23 scenes | 01:45              │   │
+│  │ 🎨 Color    [Cinematic ▼]       ││  │ Approved: 20/23                       │   │
+│  │ ⚡ Speed    [1.0x]              ││  │                                       │   │
+│  │                                  ││  │ [ 🎬 Render Video ]                   │   │
+│  │ [↶ Undo] [↷ Redo]               ││  │ [ 📺 Upload to YouTube ]              │   │
+│  └─────────────────────────────────┘│  └───────────────────────────────────────┘   │
+│                                                                                     │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 📡 API Reference
+
+### Complete Endpoint Coverage (52 Endpoints)
+
+<details>
+<summary><b>📝 Prompt Enhancement</b></summary>
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/api/v1/enhance/concept` | Stage 1: Concept expansion |
+| `POST` | `/api/v1/enhance/full` | Full 7-stage pipeline |
+
+</details>
+
+<details>
+<summary><b>👤 Face & Character</b></summary>
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/api/v1/face/extract` | Extract face from image |
+| `POST` | `/api/v1/character/register` | Register new character |
+| `GET` | `/api/v1/character/{id}` | Get character details |
+| `POST` | `/api/v1/character/verify` | Verify character consistency |
+
+</details>
+
+<details>
+<summary><b>🎨 Image Generation</b></summary>
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/api/v1/generate/image` | Generate single image |
+| `POST` | `/api/v1/generate/batch` | Batch image generation |
+
+</details>
+
+<details>
+<summary><b>🎬 Animation</b></summary>
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/api/v1/animate/image` | Animate still image to video |
+
+</details>
+
+<details>
+<summary><b>🎵 Audio</b></summary>
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/api/v1/audio/analyze` | Analyze audio (beats, sections) |
+| `POST` | `/api/v1/audio/mix` | Mix multiple audio tracks |
+| `POST` | `/api/v1/suno/generate` | Generate AI music |
+
+</details>
+
+<details>
+<summary><b>🎬 Video & Storyboard</b></summary>
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/api/v1/storyboard/generate` | Generate AI storyboard |
+| `POST` | `/api/v1/video/assemble` | Assemble final video |
+
+</details>
+
+<details>
+<summary><b>📺 YouTube</b></summary>
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/api/v1/youtube/accounts` | List connected accounts |
+| `POST` | `/api/v1/youtube/accounts/add` | Add YouTube account |
+| `DELETE` | `/api/v1/youtube/accounts/{id}` | Remove account |
+| `POST` | `/api/v1/youtube/upload` | Upload video to YouTube |
+| `POST` | `/api/v1/youtube/quick-upload` | One-click upload |
+| `GET` | `/api/v1/youtube/playlists/{id}` | Get playlists |
+| `POST` | `/api/v1/youtube/playlists/{id}` | Create playlist |
+| `POST` | `/api/v1/youtube/generate-metadata` | Generate video metadata |
+| `GET` | `/api/v1/youtube/analytics/{acc}/{vid}` | Get video analytics |
+
+</details>
+
+<details>
+<summary><b>🎞️ Timeline Editor (25+ endpoints)</b></summary>
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/api/v1/timeline/quick-create` | One-click project creation |
+| `GET` | `/api/v1/timeline/{id}/preview-gallery` | Get scene previews |
+| `POST` | `/api/v1/timeline/{id}/scenes/{idx}/approve` | Approve scene |
+| `POST` | `/api/v1/timeline/{id}/scenes/{idx}/reject` | Reject & regenerate |
+| `POST` | `/api/v1/timeline/{id}/approve-all` | Approve all scenes |
+| `POST` | `/api/v1/timeline/{id}/render` | Render final video |
+| `POST` | `/api/v1/timeline/projects` | Create project |
+| `GET` | `/api/v1/timeline/projects` | List projects |
+| `GET` | `/api/v1/timeline/{id}` | Get project details |
+| `GET` | `/api/v1/timeline/{id}/timeline` | Get timeline view |
+| `POST` | `/api/v1/timeline/{id}/scenes` | Add new scene |
+| `POST` | `/api/v1/timeline/{id}/scenes/{idx}/regenerate` | Regenerate scene |
+| `POST` | `/api/v1/timeline/{id}/scenes/{idx}/style-transfer` | Apply style |
+| `POST` | `/api/v1/timeline/{id}/scenes/{idx}/camera` | Set camera movement |
+| `POST` | `/api/v1/timeline/{id}/scenes/{idx}/transition` | Set transition |
+| `POST` | `/api/v1/timeline/{id}/scenes/{idx}/color-grade` | Apply color grade |
+| `POST` | `/api/v1/timeline/{id}/scenes/{idx}/split` | Split scene |
+| `POST` | `/api/v1/timeline/{id}/scenes/{idx}/duplicate` | Duplicate scene |
+| `DELETE` | `/api/v1/timeline/{id}/scenes/{idx}` | Delete scene |
+| `POST` | `/api/v1/timeline/{id}/scenes/{idx}/speed` | Set playback speed |
+| `POST` | `/api/v1/timeline/{id}/undo` | Undo last action |
+| `POST` | `/api/v1/timeline/{id}/redo` | Redo action |
+| `POST` | `/api/v1/timeline/{id}/publish-youtube` | Publish to YouTube |
+
+</details>
+
+<details>
+<summary><b>📁 Files & Jobs</b></summary>
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/api/v1/upload/image` | Upload image file |
+| `POST` | `/api/v1/upload/audio` | Upload audio file |
+| `GET` | `/api/v1/download/{filename}` | Download file |
+| `POST` | `/api/v1/parse/markdown` | Parse markdown |
+| `GET` | `/api/v1/jobs/{id}` | Get job status |
+| `GET` | `/api/v1/jobs` | List all jobs |
+| `GET` | `/api/v1/workflow/status/{id}` | Get workflow status |
+| `WS` | `/ws/{job_id}` | Real-time job updates |
+
+</details>
 
 ---
 
@@ -158,423 +430,208 @@ Nano Banana Studio Pro is a comprehensive, self-hosted AI video production syste
 
 ### Option 1: Docker (Recommended)
 
-```powershell
+```bash
 # Clone repository
-git clone https://github.com/your-repo/nano-banana-studio.git
+git clone https://github.com/Ghenghis/nano-banana-studio.git
 cd nano-banana-studio
 
 # Copy environment template
-copy env\.env.example .env
+cp .env.example .env
 
-# Edit configuration
-notepad .env
+# Edit configuration (add your API keys)
+nano .env
 
 # Start all services
 docker compose up -d
 
 # Access services:
 # - API: http://localhost:8000
-# - n8n: http://localhost:5678
-# - Docs: http://localhost:8000/docs
+# - Frontend: http://localhost:3000
+# - API Docs: http://localhost:8000/docs
 ```
 
 ### Option 2: Local Development
 
+```bash
+# Backend
+pip install -r requirements.txt
+uvicorn backend.api.main:app --reload --port 8000
+
+# Frontend (new terminal)
+cd frontend
+npm install
+npm run dev
+```
+
+### Option 3: Windows PowerShell
+
 ```powershell
-# Setup environment
+# Setup
 .\scripts\setup.ps1
 
-# Activate virtual environment
-.\.venv\Scripts\activate
-
-# Start development server
+# Run development server
 .\scripts\run-dev.ps1
 ```
 
-### Option 3: Windows Native
-
-```powershell
-# Install dependencies
-pip install -r requirements.txt
-
-# Start FastAPI server
-uvicorn backend.api.main:app --reload --host 0.0.0.0 --port 8000
-
-# In another terminal, start n8n
-npx n8n start
-```
-
 ---
 
-## 🏗 Architecture
-
-```
-┌─────────────────────────────────────────────────────────────────────────────────┐
-│                            NANO BANANA STUDIO PRO                                │
-├─────────────────────────────────────────────────────────────────────────────────┤
-│                                                                                  │
-│  ┌─────────────────────────────────────────────────────────────────────────┐   │
-│  │                         USER INTERFACES                                  │   │
-│  │  ┌───────────────┐  ┌───────────────┐  ┌───────────────┐               │   │
-│  │  │  n8n Forms    │  │  REST API     │  │  WebSocket    │               │   │
-│  │  │  :5678        │  │  :8000        │  │  :8000/ws     │               │   │
-│  │  └───────────────┘  └───────────────┘  └───────────────┘               │   │
-│  └─────────────────────────────────────────────────────────────────────────┘   │
-│                                       │                                         │
-│  ┌─────────────────────────────────────────────────────────────────────────┐   │
-│  │                      ORCHESTRATION (n8n)                                 │   │
-│  │  • 14 Specialized Workflows    • Conditional Branching                  │   │
-│  │  • Parallel Execution          • Error Handling & Retry                 │   │
-│  └─────────────────────────────────────────────────────────────────────────┘   │
-│                                       │                                         │
-│  ┌─────────────────────────────────────────────────────────────────────────┐   │
-│  │                      PROCESSING SERVICES                                 │   │
-│  │  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐      │   │
-│  │  │ Prompt   │ │  Image   │ │  Face    │ │  Audio   │ │  Video   │      │   │
-│  │  │ Enhancer │ │Generator │ │ Service  │ │ Analyzer │ │ Assembler│      │   │
-│  │  └──────────┘ └──────────┘ └──────────┘ └──────────┘ └──────────┘      │   │
-│  └─────────────────────────────────────────────────────────────────────────┘   │
-│                                       │                                         │
-│  ┌─────────────────────────────────────────────────────────────────────────┐   │
-│  │                      AI MODEL LAYER                                      │   │
-│  │  ┌──────────────┐ ┌──────────────┐ ┌──────────────┐                     │   │
-│  │  │  LLM Pool    │ │  Vision      │ │  Audio       │                     │   │
-│  │  │  (Local/API) │ │  (Diffusers) │ │  (MusicGen)  │                     │   │
-│  │  └──────────────┘ └──────────────┘ └──────────────┘                     │   │
-│  └─────────────────────────────────────────────────────────────────────────┘   │
-│                                       │                                         │
-│  ┌─────────────────────────────────────────────────────────────────────────┐   │
-│  │                      INFRASTRUCTURE                                      │   │
-│  │  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐                    │   │
-│  │  │  Redis   │ │  SQLite  │ │  Cache   │ │  Storage │                    │   │
-│  │  │  :6379   │ │  (Local) │ │  (SHA256)│ │  /data/* │                    │   │
-│  │  └──────────┘ └──────────┘ └──────────┘ └──────────┘                    │   │
-│  └─────────────────────────────────────────────────────────────────────────┘   │
-│                                                                                  │
-└─────────────────────────────────────────────────────────────────────────────────┘
-```
-
-### Directory Structure
-
-```
-nano-banana-studio/
-├── 📁 backend/                  # Python backend services
-│   ├── 📁 api/                  # FastAPI application
-│   │   └── main.py              # Main API server (1,397 lines)
-│   ├── 📁 prompt_enhancers/     # 7-stage prompt system
-│   │   └── seven_stage_pipeline.py
-│   ├── 📁 services/             # Core services
-│   │   ├── captcha_solver.py    # 2Captcha integration
-│   │   ├── comfyui_service.py   # ComfyUI integration
-│   │   ├── face_service.py      # Face detection (780 lines)
-│   │   ├── ltx_video_service.py # LTX-Video generation
-│   │   ├── musicgen_service.py  # MusicGen local
-│   │   ├── suno_pip_client.py   # Suno pip wrapper
-│   │   ├── suno_service.py      # Suno REST client
-│   │   └── whisper_service.py   # Speech recognition
-│   └── 📁 workers/              # Background workers
-│       ├── audio_worker.py      # Audio processing
-│       └── video_worker.py      # Video assembly
-├── 📁 config/                   # Configuration files
-│   ├── models.yaml              # Model definitions
-│   ├── model_registry_complete.yaml
-│   ├── styles.yaml              # 14 style presets (344 lines)
-│   ├── transitions.yaml         # 25+ transitions (337 lines)
-│   └── 📁 prompts/              # System prompts
-│       ├── cinematic_system.txt
-│       ├── concept_system.txt
-│       ├── consistency_system.txt
-│       ├── narrative_system.txt
-│       ├── scene_system.txt
-│       ├── technical_system.txt
-│       └── visual_system.txt
-├── 📁 n8n/                      # n8n workflows
-│   └── 📁 workflows/            # 14 JSON workflows
-│       ├── 01_prompt_enhancer_master.json
-│       ├── 02_image_generation.json
-│       ├── 03_multi_asset_processor.json
-│       ├── 04_video_assembly_pro.json
-│       ├── 05_video_extender.json
-│       ├── 06_master_pipeline.json
-│       ├── 07_face_character_system.json
-│       ├── 08_suno_music_generator.json
-│       ├── 09_audio_beat_analyzer.json
-│       ├── 10_image_to_video_animation.json
-│       ├── 11_pdf_markdown_parser.json
-│       ├── 12_comfyui_integration.json
-│       ├── 13_suno_music_pipeline_v2.json
-│       └── 99_full_music_video_pipeline.json
-├── 📁 docker/                   # Docker configurations
-│   └── docker-compose.suno.yml
-├── 📁 scripts/                  # Automation scripts
-│   ├── download-all-models.ps1  # Model downloader
-│   ├── run-dev.ps1              # Development server
-│   ├── setup.ps1                # Initial setup
-│   ├── setup-suno.ps1           # Suno setup
-│   └── test-suno.ps1            # Suno testing
-├── 📁 docs/                     # Documentation
-│   ├── ARCHITECTURE.md
-│   ├── API_REFERENCE.md
-│   ├── FEATURES.md
-│   ├── GAP_ANALYSIS_ACTION_PLAN.md
-│   ├── MASTER_MILESTONE_PLAN_v2.md
-│   ├── SUNO_INTEGRATION_GUIDE.md
-│   └── SUNO_QUICKSTART.md
-├── 📁 data/                     # Runtime data
-│   ├── 📁 uploads/              # User uploads
-│   ├── 📁 outputs/              # Generated content
-│   └── 📁 cache/                # Cached results
-├── docker-compose.yml           # Main compose file
-├── Dockerfile                   # API container
-├── Dockerfile.ffmpeg            # FFmpeg container
-├── Dockerfile.gpu               # GPU-enabled container
-├── requirements.txt             # Python dependencies
-└── README.md                    # This file
-```
-
----
-
-## 📚 Documentation Index
-
-| Document | Description |
-|----------|-------------|
-| [README.md](README.md) | Project overview and quick start |
-| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | System architecture and components |
-| [docs/API_REFERENCE.md](docs/API_REFERENCE.md) | Complete API documentation |
-| [docs/FEATURES.md](docs/FEATURES.md) | Detailed feature descriptions |
-| [docs/WORKFLOWS.md](docs/WORKFLOWS.md) | n8n workflow documentation |
-| [docs/CONFIGURATION.md](docs/CONFIGURATION.md) | Configuration guide |
-| [docs/MODELS.md](docs/MODELS.md) | Supported AI models |
-| [docs/SUNO_INTEGRATION_GUIDE.md](docs/SUNO_INTEGRATION_GUIDE.md) | Suno music setup |
-| [docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md) | Common issues and solutions |
-
----
-
-## 🔑 Configuration
+## 🔧 Configuration
 
 ### Environment Variables
 
 ```env
-# =============================================================================
-# API KEYS (Cloud Services)
-# =============================================================================
-GOOGLE_API_KEY=your_google_api_key          # Gemini image generation
-OPENROUTER_API_KEY=your_openrouter_key      # Multi-model access
-OPENAI_API_KEY=your_openai_key              # GPT fallback
-ELEVENLABS_API_KEY=your_elevenlabs_key      # Premium TTS
-RUNWAY_API_KEY=your_runway_key              # Video generation fallback
+# AI Model API Keys (at least one required)
+OPENAI_API_KEY=sk-your-key
+ANTHROPIC_API_KEY=sk-ant-your-key
+GOOGLE_GENERATIVE_AI_API_KEY=your-key
 
-# =============================================================================
-# MUSIC GENERATION
-# =============================================================================
-SUNO_COOKIE=your_suno_cookie                # Suno AI music (required)
-TWOCAPTCHA_API_KEY=your_2captcha_key        # Optional: auto-CAPTCHA solving
+# Local LLM (optional)
+OLLAMA_API_BASE_URL=http://localhost:11434
+LMSTUDIO_API_BASE_URL=http://localhost:1234
 
-# =============================================================================
-# LOCAL SERVICES
-# =============================================================================
-LM_STUDIO_URL=http://localhost:1234/v1      # Local LLM
-OLLAMA_URL=http://localhost:11434           # Ollama server
-REDIS_URL=redis://localhost:6379            # Job queue
+# Music Generation
+SUNO_COOKIE=your-suno-cookie
 
-# =============================================================================
-# PATHS
-# =============================================================================
-UPLOAD_DIR=/app/data/uploads
-OUTPUT_DIR=/app/data/outputs
-CACHE_DIR=/app/data/cache
-MODEL_DIR=G:/models                         # AI model storage
+# Animation Providers (optional)
+RUNWAY_API_KEY=your-key
+KLING_API_KEY=your-key
+
+# TTS (optional)
+ELEVENLABS_API_KEY=your-key
+
+# Cache & Database
+REDIS_URL=redis://localhost:6379
 ```
 
 ---
 
-## 📡 API Reference
+## 📊 Service Modules (24 Total)
 
-### Base URL
-```
-http://localhost:8000/api/v1
-```
-
-### Endpoints Summary
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `POST` | `/enhance/full` | Full 7-stage prompt enhancement |
-| `POST` | `/enhance/concept` | Stage 1: Concept expansion |
-| `POST` | `/face/extract` | Extract face from image |
-| `POST` | `/character/register` | Register character identity |
-| `POST` | `/character/verify` | Verify character consistency |
-| `POST` | `/generate/image` | Generate image from prompt |
-| `POST` | `/generate/batch` | Batch image generation |
-| `POST` | `/animate/image` | Animate still image to video |
-| `POST` | `/audio/analyze` | Analyze audio for beats/lyrics |
-| `POST` | `/audio/mix` | Mix multiple audio tracks |
-| `POST` | `/suno/generate` | Generate AI music |
-| `POST` | `/video/assemble` | Assemble final video |
-| `GET`  | `/jobs/{job_id}` | Get job status |
-| `WS`   | `/ws/{job_id}` | WebSocket job updates |
-
-See [docs/API_REFERENCE.md](docs/API_REFERENCE.md) for complete documentation.
+| Category | Services |
+|----------|----------|
+| **Core AI** | FaceService, LLMProviderService, PromptEnhancer8K |
+| **Media** | AnimationService, AudioIntelligenceService, SceneAssemblyService |
+| **Generation** | ComfyUIService, LTXVideoService, MusicGenService |
+| **Audio** | WhisperService, TTSService, SunoService |
+| **Publishing** | YouTubeService, PublishingService, ThumbnailService |
+| **Editor** | TimelineEditorService, StoryboardService |
+| **Content** | ScreenplayService, PodcastService |
 
 ---
 
-## 🔄 n8n Workflows
+## 🎨 Supported Models
 
-### Available Workflows (14 Total)
+### Image Generation
+| Model | Provider | Notes |
+|-------|----------|-------|
+| Gemini Pro | Google | Fast, high quality |
+| FLUX.1 | Black Forest | Excellent composition |
+| SDXL | Stability AI | Highly customizable |
+| Midjourney | Midjourney | Via API |
 
-| # | Workflow | Trigger | Description |
-|---|----------|---------|-------------|
-| 01 | Prompt Enhancer Master | Webhook | 7-stage prompt enhancement |
-| 02 | Image Generation | Webhook | Multi-model image creation |
-| 03 | Multi-Asset Processor | Webhook | Batch file processing |
-| 04 | Video Assembly Pro | Webhook | Professional video rendering |
-| 05 | Video Extender | Webhook | Extend video duration |
-| 06 | Master Pipeline | Webhook | Full automation orchestration |
-| 07 | Face Character System | Webhook | Character consistency |
-| 08 | Suno Music Generator | Webhook | AI music creation |
-| 09 | Audio Beat Analyzer | Webhook | Beat detection & analysis |
-| 10 | Image-to-Video Animation | Webhook | Animate images |
-| 11 | PDF/Markdown Parser | Webhook | Document parsing |
-| 12 | ComfyUI Integration | Webhook | ComfyUI workflows |
-| 13 | Suno Pipeline v2 | Webhook | Enhanced Suno integration |
-| 99 | Full Music Video Pipeline | Webhook | Complete automation |
+### Video Animation
+| Model | Provider | Features |
+|-------|----------|----------|
+| LTX-Video | Lightricks | Keyframe control |
+| WanVideo | Wan | High quality |
+| SVD | Stability AI | Consistent motion |
+| Runway Gen-3 | Runway | Professional grade |
 
----
-
-## 🤖 Model Support
-
-### Video Generation Models
-| Model | VRAM | Quality | Speed | Local |
-|-------|------|---------|-------|-------|
-| LTX-Video 0.9.7-distilled | 12GB | ★★★★☆ | Fast | ✅ |
-| LTX-Video 0.9.8-13B | 24GB | ★★★★★ | Slow | ✅ |
-| WanVideo | 16GB | ★★★★★ | Medium | ✅ |
-| SVD-XT 1.1 | 16GB | ★★★★☆ | Medium | ✅ |
-
-### Music Generation Models
-| Model | VRAM | Quality | Local |
-|-------|------|---------|-------|
-| MusicGen-Large | 8GB | ★★★★★ | ✅ |
-| MusicGen-Melody | 6GB | ★★★★☆ | ✅ |
-| Suno (API) | N/A | ★★★★★ | ❌ |
-
-### TTS Models
-| Model | VRAM | Quality | Local |
-|-------|------|---------|-------|
-| Bark | 8GB | ★★★★☆ | ✅ |
-| XTTS-v2 | 4GB | ★★★★★ | ✅ |
-| ElevenLabs | N/A | ★★★★★ | ❌ |
+### LLM Providers
+| Provider | Models | Priority |
+|----------|--------|----------|
+| LM Studio | Llama 3.1, Mistral, Qwen | Local (1st) |
+| Ollama | Llama, Codellama | Local (2nd) |
+| OpenRouter | Gemini, GPT-4, Claude | Cloud (fallback) |
 
 ---
 
-## 🔧 Troubleshooting
+## 📁 Project Structure
 
-### Common Issues
-
-<details>
-<summary><b>Docker containers won't start</b></summary>
-
-```powershell
-# Check Docker status
-docker info
-
-# Ensure GPU support
-docker run --gpus all nvidia/cuda:12.1-base nvidia-smi
-
-# Rebuild containers
-docker compose down
-docker compose build --no-cache
-docker compose up -d
 ```
-</details>
-
-<details>
-<summary><b>Suno API returns errors</b></summary>
-
-1. Check cookie is valid (refresh from suno.com)
-2. Test connectivity: `.\scripts\test-suno.ps1`
-3. Check for CAPTCHA: Consider 2Captcha integration
-</details>
-
-<details>
-<summary><b>Out of GPU memory</b></summary>
-
-```powershell
-# Use quantized models
-.\scripts\download-all-models.ps1 -Category video
-
-# Enable CPU offload in config
-# Edit .env: ENABLE_CPU_OFFLOAD=true
+nano-banana-studio/
+├── backend/
+│   ├── api/
+│   │   ├── main.py              # FastAPI app (52 endpoints)
+│   │   └── middleware.py        # Error handling
+│   ├── services/                # 24 service modules
+│   │   ├── face_service.py      # Face detection & embedding
+│   │   ├── llm_provider_service.py  # Multi-LLM with fallback
+│   │   ├── audio_intelligence_service.py
+│   │   ├── timeline/            # Timeline editor
+│   │   └── ...
+│   └── workers/                 # Background workers
+├── frontend/
+│   ├── src/
+│   │   ├── App.jsx              # Main React app
+│   │   └── api.js               # API client (50+ methods)
+│   └── package.json
+├── config/
+│   ├── llm_providers.yaml       # LLM configuration
+│   ├── models.yaml              # Model registry
+│   ├── styles.yaml              # Style presets
+│   └── prompts/                 # 7-stage prompt templates
+├── n8n/workflows/               # 14 automation workflows
+├── docs/                        # 17 documentation files
+├── scripts/code-quality/        # Linting & auto-repair
+├── tests/                       # Test suite
+├── docker-compose.yml
+└── requirements.txt
 ```
-</details>
-
-<details>
-<summary><b>n8n workflows not working</b></summary>
-
-1. Ensure n8n is running: `docker logs nano-banana-n8n`
-2. Import workflows manually via n8n UI
-3. Check webhook URLs match your setup
-</details>
 
 ---
 
-## 📈 Roadmap
+## 🧪 Testing
 
-### Current Status: v2.0 (48% Complete)
-
-| Phase | Status | Progress |
-|-------|--------|----------|
-| Phase 1: Foundation | 🔄 In Progress | 70% |
-| Phase 2: Audio Intelligence | 🔄 In Progress | 60% |
-| Phase 3: Video Generation | 🔄 In Progress | 50% |
-| Phase 4: User Experience | 📋 Planned | 10% |
-| Phase 5: Production | 📋 Planned | 10% |
-
-### Upcoming Features
-- [x] ~~Web UI Dashboard~~ **DONE** - Timeline Editor Frontend (React + TailwindCSS)
-- [ ] Lip Sync Service
-- [ ] ComfyUI Node Pack
-- [x] ~~YouTube Publisher~~ **DONE** - End-to-end Timeline → YouTube workflow
-- [ ] A/B Testing Interface
-
-### NEW: Timeline Editor (10-Star Professional NLE)
-See [docs/TIMELINE_EDITOR.md](docs/TIMELINE_EDITOR.md) for complete guide.
-
-| Feature | Status |
-|---------|--------|
-| Simple Mode (One-Click) | ✅ |
-| Advanced Mode (53 Tools) | ✅ |
-| 8K Prompt Enhancer | ✅ |
-| Frontend UI | ✅ |
-| YouTube Integration | ✅ |
-
-**Quick Start:**
 ```bash
-# Backend
-uvicorn backend.api.main:app --reload
+# Run all tests
+pytest tests/ -v
 
-# Frontend
-cd frontend && npm install && npm run dev
+# Run specific test
+pytest tests/test_timeline_editor.py -v
+
+# Code quality checks
+.\scripts\code-quality\run-all-checks.ps1
 ```
+
+---
+
+## 📚 Documentation
+
+| Document | Description |
+|----------|-------------|
+| [API Reference](docs/API_REFERENCE.md) | Complete API documentation |
+| [Architecture](docs/ARCHITECTURE.md) | System design |
+| [Timeline Editor](docs/TIMELINE_EDITOR.md) | Editor guide |
+| [YouTube Publishing](docs/YOUTUBE_PUBLISHING.md) | YouTube integration |
+| [Suno Integration](docs/SUNO_INTEGRATION_GUIDE.md) | Music generation |
+| [Troubleshooting](docs/TROUBLESHOOTING.md) | Common issues |
+| [Code Quality](docs/CODE_QUALITY_STANDARDS.md) | Coding standards |
 
 ---
 
 ## 🤝 Contributing
 
-Contributions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
 ---
 
 ## 📄 License
 
-MIT License - see [LICENSE](LICENSE) for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
-<div align="center">
+<p align="center">
+  <b>Made with 🍌 by the Nano Banana Team</b><br>
+  <em>Transform your ideas into stunning videos with AI</em>
+</p>
 
-**Made with 🍌 by the Nano Banana Team**
-
-[Report Bug](https://github.com/your-repo/issues) • [Request Feature](https://github.com/your-repo/issues) • [Discussions](https://github.com/your-repo/discussions)
-
-</div>
+<p align="center">
+  <a href="https://github.com/Ghenghis/nano-banana-studio/issues">Report Bug</a> •
+  <a href="https://github.com/Ghenghis/nano-banana-studio/issues">Request Feature</a>
+</p>
