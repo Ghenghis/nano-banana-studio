@@ -6,6 +6,7 @@ import {
   ChevronDown, Layers, Film, Volume2, Sparkles
 } from 'lucide-react'
 import api from './api'
+import { YouTubePublisher, CharacterManager, AudioMixer, DraggableTimeline } from './components'
 
 // Header Component
 function Header({ mode, setMode, onNewProject }) {
@@ -420,6 +421,7 @@ export default function App() {
   const [selectedScene, setSelectedScene] = useState(null)
   const [loading, setLoading] = useState(false)
   const [zoom, setZoom] = useState(1)
+  const [showYouTubePublisher, setShowYouTubePublisher] = useState(false)
 
   // Load projects on mount
   useEffect(() => {
@@ -568,7 +570,7 @@ export default function App() {
               <RenderPanel
                 project={project}
                 onRender={handleRender}
-                onUploadYouTube={() => alert('YouTube upload coming soon!')}
+                onUploadYouTube={() => setShowYouTubePublisher(true)}
               />
             </div>
           </div>
@@ -608,6 +610,28 @@ export default function App() {
             </div>
           </div>
         </footer>
+      )}
+
+      {/* YouTube Publisher Modal */}
+      {showYouTubePublisher && (
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+          <div className="relative max-w-lg w-full mx-4">
+            <button
+              onClick={() => setShowYouTubePublisher(false)}
+              className="absolute -top-10 right-0 text-white hover:text-gray-300"
+            >
+              Close ✕
+            </button>
+            <YouTubePublisher
+              videoPath={project?.output_path}
+              projectTitle={project?.name || 'Untitled Project'}
+              onPublished={(result) => {
+                setShowYouTubePublisher(false)
+                alert(`Video published! URL: ${result.video_url || 'Check YouTube Studio'}`)
+              }}
+            />
+          </div>
+        </div>
       )}
     </div>
   )
