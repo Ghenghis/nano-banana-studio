@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1800 2800" width="1800" height="2800">
+  <defs>
+    <linearGradient id="headerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#ff6b35"/>
+      <stop offset="50%" style="stop-color:#f7c331"/>
+      <stop offset="100%" style="stop-color:#ff6b35"/>
+    </linearGradient>
+    <linearGradient id="currentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2ecc71"/>
+      <stop offset="100%" style="stop-color:#27ae60"/>
+    </linearGradient>
+    <linearGradient id="missingGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#e74c3c"/>
+      <stop offset="100%" style="stop-color:#c0392b"/>
+    </linearGradient>
+    <linearGradient id="upgradeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3498db"/>
+      <stop offset="100%" style="stop-color:#2980b9"/>
+    </linearGradient>
+    <linearGradient id="podcastGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#9b59b6"/>
+      <stop offset="100%" style="stop-color:#8e44ad"/>
+    </linearGradient>
+    <filter id="shadow">
+      <feDropShadow dx="4" dy="4" stdDeviation="4" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1800" height="2800" fill="#1a1a2e"/>
+  
+  <!-- Grid -->
+  <pattern id="grid" width="50" height="50" patternUnits="userSpaceOnUse">
+    <path d="M 50 0 L 0 0 0 50" fill="none" stroke="#ffffff" stroke-width="0.3" opacity="0.1"/>
+  </pattern>
+  <rect width="1800" height="2800" fill="url(#grid)"/>
+
+  <!-- HEADER -->
+  <rect x="50" y="30" width="1700" height="120" rx="20" fill="url(#headerGrad)" filter="url(#shadow)"/>
+  <text x="900" y="85" font-family="Arial Black" font-size="38" fill="#1a1a2e" text-anchor="middle" font-weight="bold">🎬 NANO BANANA STUDIO PRO</text>
+  <text x="900" y="125" font-family="Arial" font-size="22" fill="#1a1a2e" text-anchor="middle">Professional Movie Production Pipeline - What's Missing for Feature Films</text>
+
+  <!-- ==================== CURRENT CAPABILITY ==================== -->
+  <rect x="50" y="180" width="1700" height="220" rx="15" fill="#16213e" stroke="#2ecc71" stroke-width="3"/>
+  <text x="900" y="220" font-family="Arial Black" font-size="28" fill="#2ecc71" text-anchor="middle">✅ CURRENT CAPABILITY (What We Have)</text>
+  
+  <rect x="80" y="245" width="400" height="130" rx="10" fill="#1e3a5f"/>
+  <text x="280" y="275" font-family="Arial Bold" font-size="18" fill="#2ecc71" text-anchor="middle">Video Generation</text>
+  <text x="100" y="305" font-family="Arial" font-size="14" fill="#aaa">• Runway Gen-2/Gen-3: 4-10 sec</text>
+  <text x="100" y="330" font-family="Arial" font-size="14" fill="#aaa">• Kling AI: 5-10 sec</text>
+  <text x="100" y="355" font-family="Arial" font-size="14" fill="#aaa">• LTX-Video: 2-5 sec (local)</text>
+
+  <rect x="500" y="245" width="400" height="130" rx="10" fill="#1e3a5f"/>
+  <text x="700" y="275" font-family="Arial Bold" font-size="18" fill="#2ecc71" text-anchor="middle">Audio Generation</text>
+  <text x="520" y="305" font-family="Arial" font-size="14" fill="#aaa">• Suno: 4 min songs</text>
+  <text x="520" y="330" font-family="Arial" font-size="14" fill="#aaa">• MusicGen: 30 sec instrumental</text>
+  <text x="520" y="355" font-family="Arial" font-size="14" fill="#aaa">• Edge TTS: Basic voice</text>
+
+  <rect x="920" y="245" width="400" height="130" rx="10" fill="#1e3a5f"/>
+  <text x="1120" y="275" font-family="Arial Bold" font-size="18" fill="#2ecc71" text-anchor="middle">Image Generation</text>
+  <text x="940" y="305" font-family="Arial" font-size="14" fill="#aaa">• Flux/SDXL via ComfyUI</text>
+  <text x="940" y="330" font-family="Arial" font-size="14" fill="#aaa">• Face detection</text>
+  <text x="940" y="355" font-family="Arial" font-size="14" fill="#aaa">• Basic storyboard</text>
+
+  <rect x="1340" y="245" width="380" height="130" rx="10" fill="#1e3a5f"/>
+  <text x="1530" y="275" font-family="Arial Bold" font-size="18" fill="#2ecc71" text-anchor="middle">Assembly</text>
+  <text x="1360" y="305" font-family="Arial" font-size="14" fill="#aaa">• FFmpeg stitching</text>
+  <text x="1360" y="330" font-family="Arial" font-size="14" fill="#aaa">• Basic transitions</text>
+  <text x="1360" y="355" font-family="Arial" font-size="14" fill="#aaa">• n8n workflows</text>
+
+  <!-- Current output box -->
+  <rect x="650" y="380" width="500" height="50" rx="10" fill="#c0392b"/>
+  <text x="900" y="412" font-family="Arial Black" font-size="18" fill="white" text-anchor="middle">⚠️ MAX OUTPUT: 4-10 SECOND CLIPS</text>
+
+  <!-- ==================== THE GAP ==================== -->
+  <rect x="50" y="450" width="1700" height="100" rx="15" fill="#2c1810" stroke="#e74c3c" stroke-width="4"/>
+  <text x="900" y="510" font-family="Arial Black" font-size="32" fill="#e74c3c" text-anchor="middle">🚨 THE GAP: Why We Can't Make Movies Yet</text>
+
+  <!-- ==================== MISSING: VIDEO MODELS ==================== -->
+  <rect x="50" y="570" width="550" height="480" rx="15" fill="#1e1e30" stroke="#e74c3c" stroke-width="2"/>
+  <rect x="50" y="570" width="550" height="50" rx="15" fill="url(#missingGrad)"/>
+  <text x="325" y="605" font-family="Arial Black" font-size="22" fill="white" text-anchor="middle">❌ MISSING: Long-Form Video Models</text>
+  
+  <text x="70" y="655" font-family="Arial Bold" font-size="16" fill="#e74c3c">CLOUD MODELS NEEDED:</text>
+  <text x="70" y="685" font-family="Arial" font-size="14" fill="#fff">🌟 OpenAI Sora (60 sec) - NOT AVAILABLE YET</text>
+  <text x="70" y="710" font-family="Arial" font-size="14" fill="#fff">⭐ Runway Gen-3 Alpha Turbo (10 sec extend)</text>
+  <text x="70" y="735" font-family="Arial" font-size="14" fill="#fff">⭐ Kling AI 1.5 Pro (extended clips)</text>
+  <text x="70" y="760" font-family="Arial" font-size="14" fill="#fff">⭐ Luma Dream Machine (5 sec)</text>
+  <text x="70" y="785" font-family="Arial" font-size="14" fill="#fff">⭐ Pika Labs (3-4 sec)</text>
+  
+  <text x="70" y="820" font-family="Arial Bold" font-size="16" fill="#e74c3c">LOCAL MODELS NEEDED:</text>
+  <text x="70" y="850" font-family="Arial" font-size="14" fill="#3498db">🔧 CogVideoX-5B (6 sec, local, 24GB VRAM)</text>
+  <text x="70" y="875" font-family="Arial" font-size="14" fill="#3498db">🔧 Open-Sora 1.2 (16 sec, local)</text>
+  <text x="70" y="900" font-family="Arial" font-size="14" fill="#3498db">🔧 Mochi-1 by Genmo (10 sec, local)</text>
+  <text x="70" y="925" font-family="Arial" font-size="14" fill="#3498db">🔧 AnimateDiff (motion modules)</text>
+  <text x="70" y="950" font-family="Arial" font-size="14" fill="#3498db">🔧 SVD-XT (25 frames, local)</text>
+  
+  <rect x="70" y="980" width="510" height="50" rx="8" fill="#3d1a1a"/>
+  <text x="325" y="1012" font-family="Arial Bold" font-size="14" fill="#ff6b6b" text-anchor="middle">REALITY: No AI model makes 60+ sec video yet!</text>
+
+  <!-- ==================== MISSING: CHARACTER CONSISTENCY ==================== -->
+  <rect x="620" y="570" width="560" height="480" rx="15" fill="#1e1e30" stroke="#e74c3c" stroke-width="2"/>
+  <rect x="620" y="570" width="560" height="50" rx="15" fill="url(#missingGrad)"/>
+  <text x="900" y="605" font-family="Arial Black" font-size="22" fill="white" text-anchor="middle">❌ MISSING: Character Consistency</text>
+  
+  <text x="640" y="655" font-family="Arial Bold" font-size="16" fill="#e74c3c">THE PROBLEM:</text>
+  <text x="640" y="685" font-family="Arial" font-size="14" fill="#fff">Each AI-generated frame = different face!</text>
+  <text x="640" y="710" font-family="Arial" font-size="14" fill="#fff">Character changes appearance every scene</text>
+  <text x="640" y="735" font-family="Arial" font-size="14" fill="#fff">No way to maintain actor identity</text>
+  
+  <text x="640" y="775" font-family="Arial Bold" font-size="16" fill="#3498db">SOLUTIONS NEEDED:</text>
+  <text x="640" y="805" font-family="Arial" font-size="14" fill="#3498db">🔧 IP-Adapter FaceID (ComfyUI workflow)</text>
+  <text x="640" y="830" font-family="Arial" font-size="14" fill="#3498db">🔧 InstantID (single image → consistent char)</text>
+  <text x="640" y="855" font-family="Arial" font-size="14" fill="#3498db">🔧 PhotoMaker (character customization)</text>
+  <text x="640" y="880" font-family="Arial" font-size="14" fill="#3498db">🔧 LoRA Training Pipeline (custom actors)</text>
+  <text x="640" y="905" font-family="Arial" font-size="14" fill="#3498db">🔧 PuLID (portrait consistency)</text>
+  <text x="640" y="930" font-family="Arial" font-size="14" fill="#3498db">🔧 ConsistoryAI (story consistency)</text>
+  
+  <rect x="640" y="960" width="520" height="70" rx="8" fill="#1a3d1a"/>
+  <text x="900" y="985" font-family="Arial Bold" font-size="14" fill="#2ecc71" text-anchor="middle">SOLUTION: Train LoRA for each character</text>
+  <text x="900" y="1010" font-family="Arial" font-size="12" fill="#2ecc71" text-anchor="middle">+ Use IP-Adapter to inject face into every frame</text>
+
+  <!-- ==================== MISSING: MULTI-VOICE DIALOGUE ==================== -->
+  <rect x="1200" y="570" width="550" height="480" rx="15" fill="#1e1e30" stroke="#e74c3c" stroke-width="2"/>
+  <rect x="1200" y="570" width="550" height="50" rx="15" fill="url(#missingGrad)"/>
+  <text x="1475" y="605" font-family="Arial Black" font-size="22" fill="white" text-anchor="middle">❌ MISSING: Multi-Voice Dialogue</text>
+  
+  <text x="1220" y="655" font-family="Arial Bold" font-size="16" fill="#e74c3c">THE PROBLEM:</text>
+  <text x="1220" y="685" font-family="Arial" font-size="14" fill="#fff">Movies need 5-20 unique character voices</text>
+  <text x="1220" y="710" font-family="Arial" font-size="14" fill="#fff">Need emotional range (angry, sad, happy)</text>
+  <text x="1220" y="735" font-family="Arial" font-size="14" fill="#fff">Need lip sync with generated video</text>
+  
+  <text x="1220" y="775" font-family="Arial Bold" font-size="16" fill="#3498db">TTS MODELS NEEDED:</text>
+  <text x="1220" y="805" font-family="Arial" font-size="14" fill="#3498db">💰 ElevenLabs (best quality, $$$)</text>
+  <text x="1220" y="830" font-family="Arial" font-size="14" fill="#3498db">🔧 XTTS v2 (local, voice cloning)</text>
+  <text x="1220" y="855" font-family="Arial" font-size="14" fill="#3498db">🔧 Bark (expressive, local)</text>
+  <text x="1220" y="880" font-family="Arial" font-size="14" fill="#3498db">🔧 Fish Speech (latest open source)</text>
+  <text x="1220" y="905" font-family="Arial" font-size="14" fill="#3498db">🔧 OpenVoice (voice cloning)</text>
+  <text x="1220" y="930" font-family="Arial" font-size="14" fill="#3498db">🔧 RVC (voice conversion)</text>
+  
+  <text x="1220" y="970" font-family="Arial Bold" font-size="16" fill="#3498db">LIP SYNC NEEDED:</text>
+  <text x="1220" y="1000" font-family="Arial" font-size="14" fill="#3498db">🔧 Wav2Lip / SadTalker / MuseTalk</text>
+
+  <!-- ==================== LONG-FORM ASSEMBLY ==================== -->
+  <rect x="50" y="1070" width="850" height="380" rx="15" fill="#1e1e30" stroke="#3498db" stroke-width="2"/>
+  <rect x="50" y="1070" width="850" height="50" rx="15" fill="url(#upgradeGrad)"/>
+  <text x="475" y="1105" font-family="Arial Black" font-size="22" fill="white" text-anchor="middle">🔧 HOW TO MAKE LONG-FORM VIDEO (The Assembly Strategy)</text>
+  
+  <text x="70" y="1150" font-family="Arial Bold" font-size="18" fill="#3498db">THE ONLY WAY TO MAKE 10 MIN - 3 HOUR MOVIES:</text>
+  
+  <rect x="70" y="1170" width="810" height="250" rx="10" fill="#0d1b2a"/>
+  
+  <text x="90" y="1200" font-family="Arial" font-size="15" fill="#fff">1️⃣ SCRIPT → Break movie into 100-500 individual scenes</text>
+  <text x="90" y="1230" font-family="Arial" font-size="15" fill="#fff">2️⃣ STORYBOARD → Generate image for each scene</text>
+  <text x="90" y="1260" font-family="Arial" font-size="15" fill="#fff">3️⃣ ANIMATE → Convert each image to 4-10 sec video clip</text>
+  <text x="90" y="1290" font-family="Arial" font-size="15" fill="#fff">4️⃣ DIALOGUE → Generate character voices for each clip</text>
+  <text x="90" y="1320" font-family="Arial" font-size="15" fill="#fff">5️⃣ LIP SYNC → Apply lip sync to talking scenes</text>
+  <text x="90" y="1350" font-family="Arial" font-size="15" fill="#fff">6️⃣ ASSEMBLE → Stitch all clips with transitions</text>
+  <text x="90" y="1380" font-family="Arial" font-size="15" fill="#fff">7️⃣ MIX → Add music, SFX, dialogue tracks</text>
+  <text x="90" y="1410" font-family="Arial" font-size="15" fill="#fff">8️⃣ UPSCALE → 4K enhancement with Real-ESRGAN</text>
+
+  <!-- ==================== MULTI-AI PODCAST ==================== -->
+  <rect x="920" y="1070" width="830" height="380" rx="15" fill="#1e1e30" stroke="#9b59b6" stroke-width="2"/>
+  <rect x="920" y="1070" width="830" height="50" rx="15" fill="url(#podcastGrad)"/>
+  <text x="1335" y="1105" font-family="Arial Black" font-size="22" fill="white" text-anchor="middle">🎙️ MULTI-AI PODCAST (3+ AI Hosts)</text>
+  
+  <text x="940" y="1150" font-family="Arial Bold" font-size="16" fill="#9b59b6">HOW IT WORKS:</text>
+  
+  <!-- Host boxes -->
+  <rect x="940" y="1170" width="180" height="100" rx="10" fill="#2d1f3d"/>
+  <text x="1030" y="1200" font-family="Arial Bold" font-size="14" fill="#e74c3c" text-anchor="middle">🎤 HOST</text>
+  <text x="1030" y="1225" font-family="Arial" font-size="12" fill="#fff" text-anchor="middle">Voice: Deep, Warm</text>
+  <text x="1030" y="1250" font-family="Arial" font-size="12" fill="#fff" text-anchor="middle">Role: Ask questions</text>
+
+  <rect x="1140" y="1170" width="180" height="100" rx="10" fill="#1f2d3d"/>
+  <text x="1230" y="1200" font-family="Arial Bold" font-size="14" fill="#3498db" text-anchor="middle">🧠 EXPERT</text>
+  <text x="1230" y="1225" font-family="Arial" font-size="12" fill="#fff" text-anchor="middle">Voice: Clear, Pro</text>
+  <text x="1230" y="1250" font-family="Arial" font-size="12" fill="#fff" text-anchor="middle">Role: Facts/Data</text>
+
+  <rect x="1340" y="1170" width="180" height="100" rx="10" fill="#1f3d2d"/>
+  <text x="1430" y="1200" font-family="Arial Bold" font-size="14" fill="#2ecc71" text-anchor="middle">🎭 CREATIVE</text>
+  <text x="1430" y="1225" font-family="Arial" font-size="12" fill="#fff" text-anchor="middle">Voice: Energetic</text>
+  <text x="1430" y="1250" font-family="Arial" font-size="12" fill="#fff" text-anchor="middle">Role: Jokes/Ideas</text>
+
+  <rect x="1540" y="1170" width="180" height="100" rx="10" fill="#3d2d1f"/>
+  <text x="1630" y="1200" font-family="Arial Bold" font-size="14" fill="#f39c12" text-anchor="middle">🤔 SKEPTIC</text>
+  <text x="1630" y="1225" font-family="Arial" font-size="12" fill="#fff" text-anchor="middle">Voice: Thoughtful</text>
+  <text x="1630" y="1250" font-family="Arial" font-size="12" fill="#fff" text-anchor="middle">Role: Challenge</text>
+
+  <text x="940" y="1310" font-family="Arial Bold" font-size="16" fill="#9b59b6">GENERATION FLOW:</text>
+  <text x="940" y="1340" font-family="Arial" font-size="14" fill="#fff">1. LLM generates multi-party dialogue script</text>
+  <text x="940" y="1365" font-family="Arial" font-size="14" fill="#fff">2. Each speaker gets unique TTS voice</text>
+  <text x="940" y="1390" font-family="Arial" font-size="14" fill="#fff">3. Add natural reactions: "Mmhmm", "Exactly!", laughs</text>
+  <text x="940" y="1415" font-family="Arial" font-size="14" fill="#fff">4. Mix with music intro/outro → 15-60 min episodes</text>
+
+  <!-- ==================== MOVIE LENGTH BREAKDOWN ==================== -->
+  <rect x="50" y="1470" width="1700" height="320" rx="15" fill="#16213e" stroke="#f39c12" stroke-width="2"/>
+  <text x="900" y="1510" font-family="Arial Black" font-size="26" fill="#f39c12" text-anchor="middle">📊 MOVIE LENGTH BREAKDOWN - Clips Needed</text>
+  
+  <!-- Table header -->
+  <rect x="80" y="1540" width="1640" height="40" rx="5" fill="#0d1b2a"/>
+  <text x="200" y="1568" font-family="Arial Bold" font-size="16" fill="#f39c12" text-anchor="middle">Content Type</text>
+  <text x="400" y="1568" font-family="Arial Bold" font-size="16" fill="#f39c12" text-anchor="middle">Duration</text>
+  <text x="600" y="1568" font-family="Arial Bold" font-size="16" fill="#f39c12" text-anchor="middle">Scenes Needed</text>
+  <text x="850" y="1568" font-family="Arial Bold" font-size="16" fill="#f39c12" text-anchor="middle">Clips @ 5sec each</text>
+  <text x="1100" y="1568" font-family="Arial Bold" font-size="16" fill="#f39c12" text-anchor="middle">Render Time (1x3090)</text>
+  <text x="1400" y="1568" font-family="Arial Bold" font-size="16" fill="#f39c12" text-anchor="middle">Estimated Cost</text>
+  <text x="1600" y="1568" font-family="Arial Bold" font-size="16" fill="#f39c12" text-anchor="middle">Difficulty</text>
+
+  <!-- Music Video -->
+  <rect x="80" y="1585" width="1640" height="35" rx="3" fill="#1e3a5f"/>
+  <text x="200" y="1608" font-family="Arial" font-size="14" fill="#fff" text-anchor="middle">Music Video</text>
+  <text x="400" y="1608" font-family="Arial" font-size="14" fill="#2ecc71" text-anchor="middle">4 min</text>
+  <text x="600" y="1608" font-family="Arial" font-size="14" fill="#fff" text-anchor="middle">15-25 scenes</text>
+  <text x="850" y="1608" font-family="Arial" font-size="14" fill="#fff" text-anchor="middle">48 clips</text>
+  <text x="1100" y="1608" font-family="Arial" font-size="14" fill="#fff" text-anchor="middle">2-4 hours</text>
+  <text x="1400" y="1608" font-family="Arial" font-size="14" fill="#2ecc71" text-anchor="middle">$5-20</text>
+  <text x="1600" y="1608" font-family="Arial" font-size="14" fill="#2ecc71" text-anchor="middle">⭐⭐</text>
+
+  <!-- Short Film -->
+  <rect x="80" y="1625" width="1640" height="35" rx="3" fill="#162447"/>
+  <text x="200" y="1648" font-family="Arial" font-size="14" fill="#fff" text-anchor="middle">Short Film</text>
+  <text x="400" y="1648" font-family="Arial" font-size="14" fill="#3498db" text-anchor="middle">10 min</text>
+  <text x="600" y="1648" font-family="Arial" font-size="14" fill="#fff" text-anchor="middle">40-60 scenes</text>
+  <text x="850" y="1648" font-family="Arial" font-size="14" fill="#fff" text-anchor="middle">120 clips</text>
+  <text x="1100" y="1648" font-family="Arial" font-size="14" fill="#fff" text-anchor="middle">6-10 hours</text>
+  <text x="1400" y="1648" font-family="Arial" font-size="14" fill="#3498db" text-anchor="middle">$20-50</text>
+  <text x="1600" y="1648" font-family="Arial" font-size="14" fill="#3498db" text-anchor="middle">⭐⭐⭐</text>
+
+  <!-- Episode -->
+  <rect x="80" y="1665" width="1640" height="35" rx="3" fill="#1e3a5f"/>
+  <text x="200" y="1688" font-family="Arial" font-size="14" fill="#fff" text-anchor="middle">TV Episode</text>
+  <text x="400" y="1688" font-family="Arial" font-size="14" fill="#f39c12" text-anchor="middle">30 min</text>
+  <text x="600" y="1688" font-family="Arial" font-size="14" fill="#fff" text-anchor="middle">100-150 scenes</text>
+  <text x="850" y="1688" font-family="Arial" font-size="14" fill="#fff" text-anchor="middle">360 clips</text>
+  <text x="1100" y="1688" font-family="Arial" font-size="14" fill="#fff" text-anchor="middle">18-24 hours</text>
+  <text x="1400" y="1688" font-family="Arial" font-size="14" fill="#f39c12" text-anchor="middle">$50-150</text>
+  <text x="1600" y="1688" font-family="Arial" font-size="14" fill="#f39c12" text-anchor="middle">⭐⭐⭐⭐</text>
+
+  <!-- Feature Film -->
+  <rect x="80" y="1705" width="1640" height="35" rx="3" fill="#162447"/>
+  <text x="200" y="1728" font-family="Arial" font-size="14" fill="#fff" text-anchor="middle">Feature Film</text>
+  <text x="400" y="1728" font-family="Arial" font-size="14" fill="#e74c3c" text-anchor="middle">90 min</text>
+  <text x="600" y="1728" font-family="Arial" font-size="14" fill="#fff" text-anchor="middle">300-500 scenes</text>
+  <text x="850" y="1728" font-family="Arial" font-size="14" fill="#fff" text-anchor="middle">1,080 clips</text>
+  <text x="1100" y="1728" font-family="Arial" font-size="14" fill="#fff" text-anchor="middle">3-5 days</text>
+  <text x="1400" y="1728" font-family="Arial" font-size="14" fill="#e74c3c" text-anchor="middle">$200-500</text>
+  <text x="1600" y="1728" font-family="Arial" font-size="14" fill="#e74c3c" text-anchor="middle">⭐⭐⭐⭐⭐</text>
+
+  <!-- Epic -->
+  <rect x="80" y="1745" width="1640" height="35" rx="3" fill="#1e3a5f"/>
+  <text x="200" y="1768" font-family="Arial" font-size="14" fill="#fff" text-anchor="middle">Epic (3 hours)</text>
+  <text x="400" y="1768" font-family="Arial" font-size="14" fill="#9b59b6" text-anchor="middle">180 min</text>
+  <text x="600" y="1768" font-family="Arial" font-size="14" fill="#fff" text-anchor="middle">600-1000 scenes</text>
+  <text x="850" y="1768" font-family="Arial" font-size="14" fill="#fff" text-anchor="middle">2,160 clips</text>
+  <text x="1100" y="1768" font-family="Arial" font-size="14" fill="#fff" text-anchor="middle">7-14 days</text>
+  <text x="1400" y="1768" font-family="Arial" font-size="14" fill="#9b59b6" text-anchor="middle">$500-1500</text>
+  <text x="1600" y="1768" font-family="Arial" font-size="14" fill="#9b59b6" text-anchor="middle">⭐⭐⭐⭐⭐⭐</text>
+
+  <!-- ==================== RECOMMENDED VIDEO MODELS ==================== -->
+  <rect x="50" y="1810" width="850" height="450" rx="15" fill="#1e1e30" stroke="#2ecc71" stroke-width="2"/>
+  <rect x="50" y="1810" width="850" height="50" rx="15" fill="url(#currentGrad)"/>
+  <text x="475" y="1845" font-family="Arial Black" font-size="22" fill="white" text-anchor="middle">✅ RECOMMENDED VIDEO MODELS TO INSTALL</text>
+  
+  <!-- Local Models -->
+  <text x="70" y="1895" font-family="Arial Bold" font-size="18" fill="#2ecc71">LOCAL MODELS (Your RTX 3090 24GB):</text>
+  
+  <rect x="70" y="1915" width="810" height="70" rx="8" fill="#0d2818"/>
+  <text x="90" y="1940" font-family="Arial Bold" font-size="15" fill="#2ecc71">1. CogVideoX-5B (BEST for local)</text>
+  <text x="90" y="1965" font-family="Arial" font-size="13" fill="#aaa">6 sec @ 720p | 24GB VRAM | Docker: docker pull cogvideox</text>
+  
+  <rect x="70" y="1995" width="810" height="70" rx="8" fill="#0d2818"/>
+  <text x="90" y="2020" font-family="Arial Bold" font-size="15" fill="#2ecc71">2. Open-Sora 1.2 (longest local)</text>
+  <text x="90" y="2045" font-family="Arial" font-size="13" fill="#aaa">16 sec @ 512p | 16GB VRAM | github.com/hpcaitech/Open-Sora</text>
+  
+  <rect x="70" y="2075" width="810" height="70" rx="8" fill="#0d2818"/>
+  <text x="90" y="2100" font-family="Arial Bold" font-size="15" fill="#2ecc71">3. Mochi-1 by Genmo (newest)</text>
+  <text x="90" y="2125" font-family="Arial" font-size="13" fill="#aaa">10 sec @ 480p | 24GB VRAM | github.com/genmoai/mochi</text>
+  
+  <rect x="70" y="2155" width="810" height="70" rx="8" fill="#0d2818"/>
+  <text x="90" y="2180" font-family="Arial Bold" font-size="15" fill="#2ecc71">4. AnimateDiff + SVD-XT (ComfyUI)</text>
+  <text x="90" y="2205" font-family="Arial" font-size="13" fill="#aaa">25 frames | 12GB VRAM | Integrate with existing ComfyUI</text>
+
+  <!-- ==================== CLOUD APIS ==================== -->
+  <rect x="920" y="1810" width="830" height="450" rx="15" fill="#1e1e30" stroke="#3498db" stroke-width="2"/>
+  <rect x="920" y="1810" width="830" height="50" rx="15" fill="url(#upgradeGrad)"/>
+  <text x="1335" y="1845" font-family="Arial Black" font-size="22" fill="white" text-anchor="middle">☁️ CLOUD APIs FOR QUALITY</text>
+  
+  <text x="940" y="1895" font-family="Arial Bold" font-size="18" fill="#3498db">CLOUD VIDEO APIS:</text>
+  
+  <rect x="940" y="1915" width="790" height="60" rx="8" fill="#0d1b2a"/>
+  <text x="960" y="1940" font-family="Arial Bold" font-size="15" fill="#3498db">Runway Gen-3 Alpha - BEST QUALITY</text>
+  <text x="960" y="1960" font-family="Arial" font-size="13" fill="#aaa">10 sec | $0.05/sec | runwayml.com/api</text>
+  
+  <rect x="940" y="1985" width="790" height="60" rx="8" fill="#0d1b2a"/>
+  <text x="960" y="2010" font-family="Arial Bold" font-size="15" fill="#3498db">Kling AI 1.5 Pro - GOOD VALUE</text>
+  <text x="960" y="2030" font-family="Arial" font-size="13" fill="#aaa">10 sec | $0.02/sec | klingai.com</text>
+  
+  <rect x="940" y="2055" width="790" height="60" rx="8" fill="#0d1b2a"/>
+  <text x="960" y="2080" font-family="Arial Bold" font-size="15" fill="#3498db">Luma Dream Machine - FAST</text>
+  <text x="960" y="2100" font-family="Arial" font-size="13" fill="#aaa">5 sec | $0.03/sec | lumalabs.ai</text>
+  
+  <text x="940" y="2150" font-family="Arial Bold" font-size="18" fill="#f39c12">COMING SOON (2025):</text>
+  <rect x="940" y="2170" width="790" height="60" rx="8" fill="#2d1f0a"/>
+  <text x="960" y="2195" font-family="Arial Bold" font-size="15" fill="#f39c12">OpenAI Sora - THE GAME CHANGER</text>
+  <text x="960" y="2215" font-family="Arial" font-size="13" fill="#aaa">60 sec native | TBD pricing | NOT YET AVAILABLE</text>
+
+  <!-- ==================== ACTION PLAN ==================== -->
+  <rect x="50" y="2280" width="1700" height="480" rx="15" fill="#0d1b2a" stroke="#f7c331" stroke-width="3"/>
+  <rect x="50" y="2280" width="1700" height="50" rx="15" fill="url(#headerGrad)"/>
+  <text x="900" y="2315" font-family="Arial Black" font-size="26" fill="#1a1a2e" text-anchor="middle">🚀 ACTION PLAN - Making Professional Movies Possible</text>
+  
+  <!-- Phase 1 -->
+  <rect x="80" y="2350" width="520" height="180" rx="10" fill="#1a3a1a" stroke="#2ecc71" stroke-width="2"/>
+  <text x="340" y="2380" font-family="Arial Black" font-size="18" fill="#2ecc71" text-anchor="middle">PHASE 1: Foundation (Week 1-2)</text>
+  <text x="100" y="2410" font-family="Arial" font-size="14" fill="#fff">□ Install CogVideoX-5B Docker</text>
+  <text x="100" y="2435" font-family="Arial" font-size="14" fill="#fff">□ Set up IP-Adapter FaceID in ComfyUI</text>
+  <text x="100" y="2460" font-family="Arial" font-size="14" fill="#fff">□ Install XTTS v2 for local TTS</text>
+  <text x="100" y="2485" font-family="Arial" font-size="14" fill="#fff">□ Configure scene assembly pipeline</text>
+  <text x="100" y="2510" font-family="Arial" font-size="14" fill="#fff">□ Test 10-minute short film</text>
+
+  <!-- Phase 2 -->
+  <rect x="620" y="2350" width="520" height="180" rx="10" fill="#1a2a3a" stroke="#3498db" stroke-width="2"/>
+  <text x="880" y="2380" font-family="Arial Black" font-size="18" fill="#3498db" text-anchor="middle">PHASE 2: Scale (Week 3-4)</text>
+  <text x="640" y="2410" font-family="Arial" font-size="14" fill="#fff">□ Add Runway/Kling API integration</text>
+  <text x="640" y="2435" font-family="Arial" font-size="14" fill="#fff">□ Implement LoRA training pipeline</text>
+  <text x="640" y="2460" font-family="Arial" font-size="14" fill="#fff">□ Build multi-voice dialogue system</text>
+  <text x="640" y="2485" font-family="Arial" font-size="14" fill="#fff">□ Add lip sync (Wav2Lip)</text>
+  <text x="640" y="2510" font-family="Arial" font-size="14" fill="#fff">□ Test 30-minute episode</text>
+
+  <!-- Phase 3 -->
+  <rect x="1160" y="2350" width="560" height="180" rx="10" fill="#2a1a3a" stroke="#9b59b6" stroke-width="2"/>
+  <text x="1440" y="2380" font-family="Arial Black" font-size="18" fill="#9b59b6" text-anchor="middle">PHASE 3: Production (Week 5-8)</text>
+  <text x="1180" y="2410" font-family="Arial" font-size="14" fill="#fff">□ Distributed render farm (Redis+Celery)</text>
+  <text x="1180" y="2435" font-family="Arial" font-size="14" fill="#fff">□ 4K upscaling pipeline</text>
+  <text x="1180" y="2460" font-family="Arial" font-size="14" fill="#fff">□ Professional color grading</text>
+  <text x="1180" y="2485" font-family="Arial" font-size="14" fill="#fff">□ Multi-AI podcast system</text>
+  <text x="1180" y="2510" font-family="Arial" font-size="14" fill="#fff">□ First 90-minute feature film</text>
+
+  <!-- Hardware Requirements -->
+  <rect x="80" y="2550" width="800" height="180" rx="10" fill="#1e1e30"/>
+  <text x="480" y="2580" font-family="Arial Bold" font-size="18" fill="#f39c12" text-anchor="middle">💻 HARDWARE REQUIREMENTS</text>
+  <text x="100" y="2615" font-family="Arial" font-size="14" fill="#2ecc71">✓ Your Setup: RTX 3090 24GB + 128GB RAM = PERFECT</text>
+  <text x="100" y="2645" font-family="Arial" font-size="14" fill="#fff">• Short films (10 min): 1x RTX 3090 = 6-10 hours render</text>
+  <text x="100" y="2670" font-family="Arial" font-size="14" fill="#fff">• Episodes (30 min): 1x RTX 3090 = 18-24 hours render</text>
+  <text x="100" y="2695" font-family="Arial" font-size="14" fill="#fff">• Features (90 min): Add Tesla P40 = 3-5 days render</text>
+  <text x="100" y="2720" font-family="Arial" font-size="14" fill="#aaa">• Or use cloud APIs to accelerate</text>
+
+  <!-- Key Insight Box -->
+  <rect x="900" y="2550" width="820" height="180" rx="10" fill="#2d1f0a" stroke="#f7c331" stroke-width="2"/>
+  <text x="1310" y="2585" font-family="Arial Black" font-size="20" fill="#f7c331" text-anchor="middle">💡 KEY INSIGHT</text>
+  <text x="920" y="2625" font-family="Arial" font-size="15" fill="#fff">AI video is still 4-10 seconds per clip.</text>
+  <text x="920" y="2655" font-family="Arial" font-size="15" fill="#fff">The SECRET to long-form content is:</text>
+  <text x="920" y="2690" font-family="Arial Bold" font-size="18" fill="#f7c331">INTELLIGENT ASSEMBLY of many short clips</text>
+  <text x="920" y="2720" font-family="Arial" font-size="15" fill="#fff">+ Character consistency + Professional audio</text>
+
+  <!-- Footer -->
+  <rect x="50" y="2750" width="1700" height="30" rx="5" fill="#1a1a2e"/>
+  <text x="900" y="2772" font-family="Arial" font-size="14" fill="#666" text-anchor="middle">Nano Banana Studio Pro © 2024 | From 4-second clips to 3-hour movies through intelligent assembly</text>
+  
+</svg>

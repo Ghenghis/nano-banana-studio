@@ -1,0 +1,307 @@
+{
+  "name": "01 - Master Prompt Enhancer (7-Stage Pipeline)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "enhance-prompt",
+        "responseMode": "responseNode",
+        "options": {
+          "rawBody": true
+        }
+      },
+      "id": "webhook-trigger",
+      "name": "Webhook Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [200, 300],
+      "webhookId": "prompt-enhancer-v1"
+    },
+    {
+      "parameters": {
+        "formTitle": "🍌 Nano Banana Prompt Enhancer",
+        "formDescription": "Enter your concept and get a professionally enhanced prompt through our 7-stage AI enhancement pipeline.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Your Concept",
+              "fieldType": "textarea",
+              "requiredField": true,
+              "placeholder": "e.g., A person walking through a forest at sunset"
+            },
+            {
+              "fieldLabel": "Enhancement Level",
+              "fieldType": "dropdown",
+              "requiredField": true,
+              "fieldOptions": {
+                "values": [
+                  { "option": "Quick (Stages 1-3)" },
+                  { "option": "Standard (Stages 1-5)" },
+                  { "option": "Full (All 7 Stages)" },
+                  { "option": "Custom (Select Stages)" }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Target Platform",
+              "fieldType": "dropdown",
+              "requiredField": true,
+              "fieldOptions": {
+                "values": [
+                  { "option": "YouTube (16:9)" },
+                  { "option": "YouTube Shorts (9:16)" },
+                  { "option": "TikTok (9:16)" },
+                  { "option": "Instagram Reel (9:16)" },
+                  { "option": "Instagram Post (1:1)" },
+                  { "option": "Cinematic (2.39:1)" },
+                  { "option": "Custom" }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Style Preset",
+              "fieldType": "dropdown",
+              "requiredField": false,
+              "fieldOptions": {
+                "values": [
+                  { "option": "None - Let AI Decide" },
+                  { "option": "Cinematic" },
+                  { "option": "Photorealistic" },
+                  { "option": "Documentary" },
+                  { "option": "Artistic/Painterly" },
+                  { "option": "Anime/Animation" },
+                  { "option": "Vintage/Retro" },
+                  { "option": "Neon/Cyberpunk" },
+                  { "option": "Minimalist" },
+                  { "option": "Dark/Moody" },
+                  { "option": "Bright/Cheerful" }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Include Negative Prompt",
+              "fieldType": "dropdown",
+              "requiredField": true,
+              "fieldOptions": {
+                "values": [
+                  { "option": "Yes - Full negative prompt" },
+                  { "option": "Yes - Minimal negative prompt" },
+                  { "option": "No" }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Output Format",
+              "fieldType": "dropdown",
+              "requiredField": true,
+              "fieldOptions": {
+                "values": [
+                  { "option": "Final Prompt Only" },
+                  { "option": "All Stage Outputs" },
+                  { "option": "Detailed Analysis + Prompt" }
+                ]
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "form-trigger",
+      "name": "Enhancement Form",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [200, 500],
+      "webhookId": "prompt-form-v1"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineAll",
+        "options": {}
+      },
+      "id": "merge-triggers",
+      "name": "Merge Triggers",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [400, 400]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse input from either webhook or form\nconst input = $input.all()[0].json;\n\n// Normalize the input\nconst concept = input.body?.concept || input['Your Concept'] || input.concept || '';\nconst level = input.body?.level || input['Enhancement Level'] || 'Full (All 7 Stages)';\nconst platform = input.body?.platform || input['Target Platform'] || 'YouTube (16:9)';\nconst style = input.body?.style || input['Style Preset'] || 'None - Let AI Decide';\nconst includeNegative = input.body?.includeNegative || input['Include Negative Prompt'] || 'Yes - Full negative prompt';\nconst outputFormat = input.body?.outputFormat || input['Output Format'] || 'Final Prompt Only';\n\n// Determine which stages to run\nlet stages = [];\nif (level.includes('Quick')) {\n  stages = [1, 2, 3];\n} else if (level.includes('Standard')) {\n  stages = [1, 2, 3, 4, 5];\n} else {\n  stages = [1, 2, 3, 4, 5, 6, 7];\n}\n\n// Platform aspect ratios\nconst platformSettings = {\n  'YouTube (16:9)': { aspect: '16:9', width: 1920, height: 1080 },\n  'YouTube Shorts (9:16)': { aspect: '9:16', width: 1080, height: 1920 },\n  'TikTok (9:16)': { aspect: '9:16', width: 1080, height: 1920 },\n  'Instagram Reel (9:16)': { aspect: '9:16', width: 1080, height: 1920 },\n  'Instagram Post (1:1)': { aspect: '1:1', width: 1080, height: 1080 },\n  'Cinematic (2.39:1)': { aspect: '2.39:1', width: 1920, height: 803 },\n  'Custom': { aspect: '16:9', width: 1920, height: 1080 }\n};\n\nconst settings = platformSettings[platform] || platformSettings['YouTube (16:9)'];\n\n// Generate job ID\nconst jobId = `enhance_${Date.now()}_${Math.random().toString(36).substring(7)}`;\n\nreturn {\n  jobId,\n  concept,\n  stages,\n  level,\n  platform,\n  platformSettings: settings,\n  style,\n  includeNegative: includeNegative.includes('Yes'),\n  negativeLevel: includeNegative.includes('Full') ? 'full' : 'minimal',\n  outputFormat,\n  timestamp: new Date().toISOString(),\n  stageOutputs: {}\n};"
+      },
+      "id": "parse-input",
+      "name": "Parse Input",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [600, 400]
+    },
+    {
+      "parameters": {
+        "model": "gpt-4o-mini",
+        "options": {
+          "temperature": 0.7,
+          "maxTokens": 1000
+        },
+        "messages": {
+          "values": [
+            {
+              "role": "system",
+              "content": "You are an expert creative director specializing in visual storytelling. Your role is to transform basic concepts into rich, multi-dimensional creative briefs.\n\nTake the user's initial concept and expand it into:\n1. Enhanced concept (2-3 sentences)\n2. Core theme (1 sentence)\n3. Mood profile (3-5 adjectives)\n4. Emotional journey keywords (5-7 words)\n5. Visual metaphors to explore (2-3 ideas)\n\nPreserve the user's original intent while adding depth.\n\nRespond ONLY with valid JSON in this exact format:\n{\n  \"enhanced_concept\": \"...\",\n  \"core_theme\": \"...\",\n  \"mood_profile\": [\"adj1\", \"adj2\", \"adj3\"],\n  \"emotional_keywords\": [\"word1\", \"word2\", \"word3\"],\n  \"visual_metaphors\": [\"metaphor1\", \"metaphor2\"]\n}"
+            },
+            {
+              "role": "user",
+              "content": "=Enhance this concept: {{ $json.concept }}\n\nStyle preference: {{ $json.style }}"
+            }
+          ]
+        }
+      },
+      "id": "stage1-concept",
+      "name": "Stage 1: Concept Enhancer",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [800, 400],
+      "credentials": {
+        "openAiApi": {
+          "id": "openai-cred",
+          "name": "OpenAI API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.all()[0].json;\nconst prevData = $('Parse Input').first().json;\n\n// Parse Stage 1 response\nlet stage1Output;\ntry {\n  const content = input.message?.content || input.content || input.text || JSON.stringify(input);\n  // Clean the response - remove markdown code blocks if present\n  const cleaned = content.replace(/```json\\n?/g, '').replace(/```\\n?/g, '').trim();\n  stage1Output = JSON.parse(cleaned);\n} catch (e) {\n  stage1Output = {\n    enhanced_concept: input.message?.content || 'Enhancement failed',\n    core_theme: 'Visual storytelling',\n    mood_profile: ['cinematic', 'engaging', 'professional'],\n    emotional_keywords: ['discovery', 'wonder', 'impact'],\n    visual_metaphors: ['journey', 'transformation']\n  };\n}\n\nreturn {\n  ...prevData,\n  stageOutputs: {\n    ...prevData.stageOutputs,\n    stage1: stage1Output\n  },\n  currentEnhancement: stage1Output.enhanced_concept\n};"
+      },
+      "id": "parse-stage1",
+      "name": "Parse Stage 1",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1000, 400]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "check-stage2",
+              "leftValue": "={{ $json.stages.includes(2) }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "if-stage2",
+      "name": "Run Stage 2?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1200, 400]
+    },
+    {
+      "parameters": {
+        "model": "gpt-4o-mini",
+        "options": {
+          "temperature": 0.7,
+          "maxTokens": 1200
+        },
+        "messages": {
+          "values": [
+            {
+              "role": "system",
+              "content": "You are a master production designer with expertise in film and visual arts. Transform concepts into vivid scene descriptions.\n\nCreate:\n1. Primary setting (1-2 sentences)\n2. Environmental details (5-7 specifics)\n3. Atmospheric conditions (3-4 descriptors)\n4. Spatial layers (foreground/middle/background)\n5. Time context (specific time indication)\n6. Props/elements (3-5 items)\n\nRespond ONLY with valid JSON:\n{\n  \"primary_setting\": \"...\",\n  \"environmental_details\": [\"detail1\", \"detail2\", ...],\n  \"atmospheric_conditions\": [\"condition1\", \"condition2\", ...],\n  \"spatial_layers\": {\n    \"foreground\": \"...\",\n    \"middle\": \"...\",\n    \"background\": \"...\"\n  },\n  \"time_context\": \"...\",\n  \"props_elements\": [\"prop1\", \"prop2\", ...]\n}"
+            },
+            {
+              "role": "user",
+              "content": "=Create scene description for: {{ $json.currentEnhancement }}\n\nMood profile: {{ $json.stageOutputs.stage1.mood_profile.join(', ') }}\nVisual metaphors: {{ $json.stageOutputs.stage1.visual_metaphors.join(', ') }}"
+            }
+          ]
+        }
+      },
+      "id": "stage2-scene",
+      "name": "Stage 2: Scene Enhancer",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [1400, 300],
+      "credentials": {
+        "openAiApi": {
+          "id": "openai-cred",
+          "name": "OpenAI API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.all()[0].json;\nconst prevData = $('Parse Stage 1').first().json;\n\nlet stage2Output;\ntry {\n  const content = input.message?.content || input.content || JSON.stringify(input);\n  const cleaned = content.replace(/```json\\n?/g, '').replace(/```\\n?/g, '').trim();\n  stage2Output = JSON.parse(cleaned);\n} catch (e) {\n  stage2Output = {\n    primary_setting: 'Cinematic environment',\n    environmental_details: ['atmospheric lighting', 'rich textures', 'depth layers'],\n    atmospheric_conditions: ['evocative', 'immersive'],\n    spatial_layers: { foreground: 'detail elements', middle: 'main subject', background: 'environment' },\n    time_context: 'Golden hour',\n    props_elements: ['natural elements', 'ambient details']\n  };\n}\n\nreturn {\n  ...prevData,\n  stageOutputs: {\n    ...prevData.stageOutputs,\n    stage2: stage2Output\n  },\n  currentEnhancement: `${prevData.currentEnhancement}. Setting: ${stage2Output.primary_setting}`\n};"
+      },
+      "id": "parse-stage2",
+      "name": "Parse Stage 2",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1600, 300]
+    }
+  ],
+  "connections": {
+    "Webhook Trigger": {
+      "main": [
+        [{ "node": "Merge Triggers", "type": "main", "index": 0 }]
+      ]
+    },
+    "Enhancement Form": {
+      "main": [
+        [{ "node": "Merge Triggers", "type": "main", "index": 1 }]
+      ]
+    },
+    "Merge Triggers": {
+      "main": [
+        [{ "node": "Parse Input", "type": "main", "index": 0 }]
+      ]
+    },
+    "Parse Input": {
+      "main": [
+        [{ "node": "Stage 1: Concept Enhancer", "type": "main", "index": 0 }]
+      ]
+    },
+    "Stage 1: Concept Enhancer": {
+      "main": [
+        [{ "node": "Parse Stage 1", "type": "main", "index": 0 }]
+      ]
+    },
+    "Parse Stage 1": {
+      "main": [
+        [{ "node": "Run Stage 2?", "type": "main", "index": 0 }]
+      ]
+    },
+    "Run Stage 2?": {
+      "main": [
+        [{ "node": "Stage 2: Scene Enhancer", "type": "main", "index": 0 }],
+        []
+      ]
+    },
+    "Stage 2: Scene Enhancer": {
+      "main": [
+        [{ "node": "Parse Stage 2", "type": "main", "index": 0 }]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    { "name": "nano-banana" },
+    { "name": "prompt-enhancement" },
+    { "name": "ai-pipeline" }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2024-12-17T00:00:00.000Z",
+  "versionId": "1"
+}

@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="1200" height="800">
+  <defs>
+    <linearGradient id="n8nGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#ff6d5a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ff9472;stop-opacity:1" />
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="2" dy="2" stdDeviation="2" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1200" height="800" fill="#0d1117"/>
+  
+  <!-- Title -->
+  <rect x="0" y="0" width="1200" height="50" fill="url(#n8nGrad)"/>
+  <text x="600" y="35" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" font-weight="bold" fill="white">
+    🔄 n8n WORKFLOW ECOSYSTEM - 14 WORKFLOWS
+  </text>
+  
+  <!-- Entry Workflows Section -->
+  <rect x="40" y="70" width="360" height="220" rx="10" fill="#1a1b26" stroke="#f97316" stroke-width="2" filter="url(#shadow)"/>
+  <text x="220" y="95" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#f97316">ENTRY WORKFLOWS</text>
+  <text x="220" y="115" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#6b7280">User-facing form triggers</text>
+  
+  <rect x="60" y="130" width="150" height="50" rx="6" fill="#2d2d3d" stroke="#22c55e" stroke-width="1"/>
+  <text x="135" y="150" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#22c55e">01</text>
+  <text x="135" y="168" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#9ca3af">Prompt Enhancer Master</text>
+  
+  <rect x="230" y="130" width="150" height="50" rx="6" fill="#2d2d3d" stroke="#22c55e" stroke-width="1"/>
+  <text x="305" y="150" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#22c55e">08</text>
+  <text x="305" y="168" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#9ca3af">Suno Music Generator</text>
+  
+  <rect x="60" y="195" width="150" height="50" rx="6" fill="#2d2d3d" stroke="#22c55e" stroke-width="1"/>
+  <text x="135" y="215" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#22c55e">13</text>
+  <text x="135" y="233" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#9ca3af">Suno Pipeline V2</text>
+  
+  <rect x="230" y="195" width="150" height="50" rx="6" fill="#2d2d3d" stroke="#ec4899" stroke-width="2"/>
+  <text x="305" y="215" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#ec4899">99</text>
+  <text x="305" y="233" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#9ca3af">Full Music Video</text>
+  
+  <!-- Processing Workflows Section -->
+  <rect x="420" y="70" width="360" height="220" rx="10" fill="#1a1b26" stroke="#3b82f6" stroke-width="2" filter="url(#shadow)"/>
+  <text x="600" y="95" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#3b82f6">PROCESSING WORKFLOWS</text>
+  <text x="600" y="115" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#6b7280">Core generation & assembly</text>
+  
+  <rect x="440" y="130" width="100" height="45" rx="6" fill="#2d2d3d" stroke="#60a5fa" stroke-width="1"/>
+  <text x="490" y="148" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#60a5fa">02</text>
+  <text x="490" y="163" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="#9ca3af">Image Gen</text>
+  
+  <rect x="550" y="130" width="100" height="45" rx="6" fill="#2d2d3d" stroke="#60a5fa" stroke-width="1"/>
+  <text x="600" y="148" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#60a5fa">03</text>
+  <text x="600" y="163" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="#9ca3af">Multi-Asset</text>
+  
+  <rect x="660" y="130" width="100" height="45" rx="6" fill="#2d2d3d" stroke="#60a5fa" stroke-width="1"/>
+  <text x="710" y="148" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#60a5fa">04</text>
+  <text x="710" y="163" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="#9ca3af">Video Assembly</text>
+  
+  <rect x="440" y="185" width="100" height="45" rx="6" fill="#2d2d3d" stroke="#60a5fa" stroke-width="1"/>
+  <text x="490" y="203" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#60a5fa">05</text>
+  <text x="490" y="218" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="#9ca3af">Video Extender</text>
+  
+  <rect x="550" y="185" width="100" height="45" rx="6" fill="#2d2d3d" stroke="#60a5fa" stroke-width="1"/>
+  <text x="600" y="203" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#60a5fa">06</text>
+  <text x="600" y="218" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="#9ca3af">Master Pipeline</text>
+  
+  <rect x="660" y="185" width="100" height="45" rx="6" fill="#2d2d3d" stroke="#60a5fa" stroke-width="1"/>
+  <text x="710" y="203" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#60a5fa">07</text>
+  <text x="710" y="218" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="#9ca3af">Face Character</text>
+  
+  <rect x="550" y="240" width="100" height="45" rx="6" fill="#2d2d3d" stroke="#60a5fa" stroke-width="1"/>
+  <text x="600" y="258" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#60a5fa">12</text>
+  <text x="600" y="273" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="#9ca3af">ComfyUI</text>
+  
+  <!-- Analysis Workflows Section -->
+  <rect x="800" y="70" width="360" height="220" rx="10" fill="#1a1b26" stroke="#8b5cf6" stroke-width="2" filter="url(#shadow)"/>
+  <text x="980" y="95" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#8b5cf6">ANALYSIS WORKFLOWS</text>
+  <text x="980" y="115" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#6b7280">Data extraction & analysis</text>
+  
+  <rect x="820" y="130" width="150" height="50" rx="6" fill="#2d2d3d" stroke="#a78bfa" stroke-width="1"/>
+  <text x="895" y="150" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#a78bfa">09</text>
+  <text x="895" y="168" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#9ca3af">Audio Beat Analyzer</text>
+  
+  <rect x="990" y="130" width="150" height="50" rx="6" fill="#2d2d3d" stroke="#a78bfa" stroke-width="1"/>
+  <text x="1065" y="150" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#a78bfa">11</text>
+  <text x="1065" y="168" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#9ca3af">PDF/MD Parser</text>
+  
+  <rect x="905" y="195" width="150" height="50" rx="6" fill="#2d2d3d" stroke="#a78bfa" stroke-width="1"/>
+  <text x="980" y="215" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#a78bfa">10</text>
+  <text x="980" y="233" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#9ca3af">Image-to-Video Animation</text>
+  
+  <!-- Full Pipeline Flow -->
+  <rect x="40" y="310" width="1120" height="280" rx="10" fill="#1a1b26" stroke="#22c55e" stroke-width="2" filter="url(#shadow)"/>
+  <text x="600" y="335" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#22c55e">WORKFLOW 99: FULL MUSIC VIDEO PIPELINE</text>
+  
+  <!-- Pipeline Steps -->
+  <rect x="60" y="360" width="130" height="70" rx="8" fill="#2d2d3d" stroke="#f97316" stroke-width="2"/>
+  <text x="125" y="385" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#f97316">1. INPUT</text>
+  <text x="125" y="405" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#6b7280">Music + Images</text>
+  <text x="125" y="420" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#6b7280">+ Style Config</text>
+  
+  <line x1="190" y1="395" x2="220" y2="395" stroke="#667eea" stroke-width="2"/>
+  <polygon points="220,390 230,395 220,400" fill="#667eea"/>
+  
+  <rect x="240" y="360" width="130" height="70" rx="8" fill="#2d2d3d" stroke="#eab308" stroke-width="2"/>
+  <text x="305" y="385" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#eab308">2. ANALYZE</text>
+  <text x="305" y="405" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#6b7280">Beat Detection</text>
+  <text x="305" y="420" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#6b7280">BPM + Markers</text>
+  
+  <line x1="370" y1="395" x2="400" y2="395" stroke="#667eea" stroke-width="2"/>
+  <polygon points="400,390 410,395 400,400" fill="#667eea"/>
+  
+  <rect x="420" y="360" width="130" height="70" rx="8" fill="#2d2d3d" stroke="#22c55e" stroke-width="2"/>
+  <text x="485" y="385" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#22c55e">3. ENHANCE</text>
+  <text x="485" y="405" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#6b7280">7-Stage Prompts</text>
+  <text x="485" y="420" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#6b7280">Style DNA</text>
+  
+  <line x1="550" y1="395" x2="580" y2="395" stroke="#667eea" stroke-width="2"/>
+  <polygon points="580,390 590,395 580,400" fill="#667eea"/>
+  
+  <rect x="600" y="360" width="130" height="70" rx="8" fill="#2d2d3d" stroke="#06b6d4" stroke-width="2"/>
+  <text x="665" y="385" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#06b6d4">4. GENERATE</text>
+  <text x="665" y="405" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#6b7280">Images → Video</text>
+  <text x="665" y="420" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#6b7280">LTX-Video</text>
+  
+  <line x1="730" y1="395" x2="760" y2="395" stroke="#667eea" stroke-width="2"/>
+  <polygon points="760,390 770,395 760,400" fill="#667eea"/>
+  
+  <rect x="780" y="360" width="130" height="70" rx="8" fill="#2d2d3d" stroke="#8b5cf6" stroke-width="2"/>
+  <text x="845" y="385" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#8b5cf6">5. ASSEMBLE</text>
+  <text x="845" y="405" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#6b7280">Beat-Sync Cuts</text>
+  <text x="845" y="420" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#6b7280">Transitions</text>
+  
+  <line x1="910" y1="395" x2="940" y2="395" stroke="#667eea" stroke-width="2"/>
+  <polygon points="940,390 950,395 940,400" fill="#667eea"/>
+  
+  <rect x="960" y="360" width="130" height="70" rx="8" fill="#2d2d3d" stroke="#ec4899" stroke-width="2"/>
+  <text x="1025" y="385" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#ec4899">6. OUTPUT</text>
+  <text x="1025" y="405" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#6b7280">Final MP4</text>
+  <text x="1025" y="420" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#6b7280">1080p/4K</text>
+  
+  <!-- Sub-workflows called -->
+  <text x="600" y="470" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#9ca3af">SUB-WORKFLOWS CALLED:</text>
+  
+  <rect x="100" y="490" width="100" height="35" rx="5" fill="#2d2d3d" stroke="#374151" stroke-width="1"/>
+  <text x="150" y="513" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#6b7280">01: Enhancer</text>
+  
+  <rect x="220" y="490" width="100" height="35" rx="5" fill="#2d2d3d" stroke="#374151" stroke-width="1"/>
+  <text x="270" y="513" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#6b7280">02: Image Gen</text>
+  
+  <rect x="340" y="490" width="100" height="35" rx="5" fill="#2d2d3d" stroke="#374151" stroke-width="1"/>
+  <text x="390" y="513" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#6b7280">04: Assembly</text>
+  
+  <rect x="460" y="490" width="100" height="35" rx="5" fill="#2d2d3d" stroke="#374151" stroke-width="1"/>
+  <text x="510" y="513" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#6b7280">07: Face</text>
+  
+  <rect x="580" y="490" width="100" height="35" rx="5" fill="#2d2d3d" stroke="#374151" stroke-width="1"/>
+  <text x="630" y="513" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#6b7280">08: Suno</text>
+  
+  <rect x="700" y="490" width="100" height="35" rx="5" fill="#2d2d3d" stroke="#374151" stroke-width="1"/>
+  <text x="750" y="513" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#6b7280">09: Beat Detect</text>
+  
+  <rect x="820" y="490" width="100" height="35" rx="5" fill="#2d2d3d" stroke="#374151" stroke-width="1"/>
+  <text x="870" y="513" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#6b7280">10: Animate</text>
+  
+  <rect x="940" y="490" width="100" height="35" rx="5" fill="#2d2d3d" stroke="#374151" stroke-width="1"/>
+  <text x="990" y="513" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#6b7280">12: ComfyUI</text>
+  
+  <!-- Stats -->
+  <rect x="40" y="610" width="1120" height="80" rx="10" fill="#1a1b26" stroke="#374151" stroke-width="1"/>
+  <text x="600" y="635" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#9ca3af">WORKFLOW STATISTICS</text>
+  
+  <text x="150" y="665" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#6b7280">14 Total Workflows</text>
+  <text x="350" y="665" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#6b7280">4 Entry Points</text>
+  <text x="550" y="665" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#6b7280">7 Processing</text>
+  <text x="750" y="665" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#6b7280">3 Analysis</text>
+  <text x="950" y="665" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#6b7280">~5000 Total Nodes</text>
+  
+  <!-- Access -->
+  <text x="600" y="720" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#4b5563">
+    Access n8n: http://localhost:5678 | Workflows: n8n/workflows/*.json
+  </text>
+  
+  <!-- Footer -->
+  <text x="600" y="780" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#374151">
+    Nano Banana Studio Pro v2.0 - n8n Workflow Architecture
+  </text>
+</svg>

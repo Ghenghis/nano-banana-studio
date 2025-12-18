@@ -1,0 +1,71 @@
+# Nano Banana Studio Pro - Python Dependencies
+# =============================================
+# Install with: pip install -r requirements.txt
+
+# Core Framework
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+pydantic>=2.5.0
+
+# HTTP Client
+httpx>=0.25.0
+aiohttp>=3.9.0
+
+# Redis for caching and job queue
+redis>=5.0.0
+
+# Database
+aiosqlite>=0.19.0
+
+# Image Processing
+Pillow>=10.1.0
+opencv-python>=4.8.0
+
+# Face Detection & Embeddings
+mediapipe>=0.10.0
+# insightface>=0.7.3  # Optional: GPU-accelerated face embeddings
+# onnxruntime-gpu>=1.16.0  # Optional: GPU support for InsightFace
+
+# Audio Processing
+# librosa>=0.10.0  # Optional: Advanced audio analysis
+# aubio>=0.4.9  # Optional: Beat detection
+soundfile>=0.12.0
+
+# Video Processing (FFmpeg wrapper)
+ffmpeg-python>=0.2.0
+
+# LLM Integration
+openai>=1.3.0  # For OpenAI-compatible APIs
+
+# YAML/Config
+pyyaml>=6.0.0
+
+# Whisper for transcription
+# openai-whisper>=20231117  # Optional: Local whisper model
+# faster-whisper>=0.9.0  # Optional: Faster whisper implementation
+
+# Text-to-Speech
+# TTS>=0.20.0  # Optional: Coqui TTS
+# elevenlabs>=0.2.0  # Optional: ElevenLabs API
+
+# YouTube API
+google-api-python-client>=2.100.0
+google-auth>=2.23.0
+google-auth-oauthlib>=1.1.0
+google-auth-httplib2>=0.1.0
+
+# Utilities
+python-multipart>=0.0.6
+python-dotenv>=1.0.0
+numpy>=1.24.0
+
+# Development
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
+black>=23.11.0
+isort>=5.12.0
+
+# Optional: MusicGen for local music generation
+# transformers>=4.35.0
+# torch>=2.1.0
+# torchaudio>=2.1.0

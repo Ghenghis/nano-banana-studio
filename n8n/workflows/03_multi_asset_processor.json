@@ -1,0 +1,311 @@
+{
+  "name": "03 - Multi-Asset Processor",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "🍌 Multi-Asset Upload & Processing",
+        "formDescription": "Upload multiple images, audio files, or a markdown script to create professional videos.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Upload Mode",
+              "fieldType": "dropdown",
+              "requiredField": true,
+              "fieldOptions": {
+                "values": [
+                  { "option": "Multiple Images" },
+                  { "option": "Multiple Audio Files" },
+                  { "option": "Markdown Script" },
+                  { "option": "Combined (Images + Audio)" },
+                  { "option": "Full Package (Script + Images + Audio)" }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Images",
+              "fieldType": "file",
+              "requiredField": false,
+              "acceptFileTypes": ".png,.jpg,.jpeg,.webp,.gif",
+              "multipleFiles": true
+            },
+            {
+              "fieldLabel": "Audio Files",
+              "fieldType": "file",
+              "requiredField": false,
+              "acceptFileTypes": ".mp3,.wav,.m4a,.aac,.ogg",
+              "multipleFiles": true
+            },
+            {
+              "fieldLabel": "Markdown Script",
+              "fieldType": "file",
+              "requiredField": false,
+              "acceptFileTypes": ".md,.txt,.markdown"
+            },
+            {
+              "fieldLabel": "Audio Mix Mode",
+              "fieldType": "dropdown",
+              "requiredField": true,
+              "fieldOptions": {
+                "values": [
+                  { "option": "Layer All (Simultaneous)" },
+                  { "option": "Sequence (One After Another)" },
+                  { "option": "Smart Mix (Narration + Background)" },
+                  { "option": "Ducking (Lower background during speech)" }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Image Sequence Mode",
+              "fieldType": "dropdown",
+              "requiredField": true,
+              "fieldOptions": {
+                "values": [
+                  { "option": "Filename Order" },
+                  { "option": "Upload Order" },
+                  { "option": "Random" },
+                  { "option": "AI Suggested (by content)" }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Default Scene Duration (seconds)",
+              "fieldType": "number",
+              "requiredField": true,
+              "fieldOptions": {
+                "numberMin": 1,
+                "numberMax": 30,
+                "numberDefault": 5
+              }
+            },
+            {
+              "fieldLabel": "Target Video Duration (seconds, 0 = auto)",
+              "fieldType": "number",
+              "requiredField": false,
+              "fieldOptions": {
+                "numberMin": 0,
+                "numberMax": 600,
+                "numberDefault": 0
+              }
+            },
+            {
+              "fieldLabel": "Output Platform",
+              "fieldType": "dropdown",
+              "requiredField": true,
+              "fieldOptions": {
+                "values": [
+                  { "option": "YouTube (16:9)" },
+                  { "option": "YouTube Shorts (9:16)" },
+                  { "option": "TikTok (9:16)" },
+                  { "option": "Instagram Reel (9:16)" },
+                  { "option": "Instagram Post (1:1)" },
+                  { "option": "Cinematic (2.39:1)" }
+                ]
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "form-trigger",
+      "name": "Multi-Asset Form",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [200, 300],
+      "webhookId": "multi-asset-v1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse form data and uploaded files\nconst input = $input.first().json;\n\nconst uploadMode = input['Upload Mode'] || 'Multiple Images';\nconst audioMixMode = input['Audio Mix Mode'] || 'Layer All (Simultaneous)';\nconst imageSeqMode = input['Image Sequence Mode'] || 'Filename Order';\nconst defaultDuration = parseFloat(input['Default Scene Duration (seconds)']) || 5;\nconst targetDuration = parseFloat(input['Target Video Duration (seconds, 0 = auto)']) || 0;\nconst platform = input['Output Platform'] || 'YouTube (16:9)';\n\n// Platform settings\nconst platformSettings = {\n  'YouTube (16:9)': { aspect: '16:9', width: 1920, height: 1080 },\n  'YouTube Shorts (9:16)': { aspect: '9:16', width: 1080, height: 1920 },\n  'TikTok (9:16)': { aspect: '9:16', width: 1080, height: 1920 },\n  'Instagram Reel (9:16)': { aspect: '9:16', width: 1080, height: 1920 },\n  'Instagram Post (1:1)': { aspect: '1:1', width: 1080, height: 1080 },\n  'Cinematic (2.39:1)': { aspect: '2.39:1', width: 1920, height: 803 }\n};\n\n// Process uploaded files\nconst images = [];\nconst audioFiles = [];\nlet markdownContent = null;\n\n// Handle binary data from file uploads\nif ($binary) {\n  for (const key of Object.keys($binary)) {\n    const file = $binary[key];\n    const ext = (file.fileName || '').toLowerCase().split('.').pop();\n    \n    if (['png', 'jpg', 'jpeg', 'webp', 'gif'].includes(ext)) {\n      images.push({\n        filename: file.fileName,\n        mimeType: file.mimeType,\n        data: file.data,\n        size: file.fileSize\n      });\n    } else if (['mp3', 'wav', 'm4a', 'aac', 'ogg'].includes(ext)) {\n      audioFiles.push({\n        filename: file.fileName,\n        mimeType: file.mimeType,\n        data: file.data,\n        size: file.fileSize\n      });\n    } else if (['md', 'txt', 'markdown'].includes(ext)) {\n      markdownContent = Buffer.from(file.data, 'base64').toString('utf8');\n    }\n  }\n}\n\n// Sort images based on mode\nif (imageSeqMode === 'Filename Order') {\n  images.sort((a, b) => a.filename.localeCompare(b.filename));\n} else if (imageSeqMode === 'Random') {\n  images.sort(() => Math.random() - 0.5);\n}\n\n// Calculate durations\nconst totalAudioDuration = 0; // Will be calculated after audio processing\nconst imageCount = images.length;\nlet sceneDuration = defaultDuration;\n\nif (targetDuration > 0 && imageCount > 0) {\n  sceneDuration = targetDuration / imageCount;\n}\n\n// Generate job ID\nconst jobId = `multiasset_${Date.now()}_${Math.random().toString(36).substring(7)}`;\n\nreturn {\n  jobId,\n  uploadMode,\n  audioMixMode,\n  imageSeqMode,\n  defaultDuration,\n  targetDuration,\n  sceneDuration,\n  platform,\n  platformSettings: platformSettings[platform],\n  images: images.map((img, idx) => ({ ...img, index: idx, duration: sceneDuration })),\n  audioFiles: audioFiles.map((aud, idx) => ({ ...aud, index: idx })),\n  markdownContent,\n  hasMarkdown: !!markdownContent,\n  imageCount,\n  audioCount: audioFiles.length,\n  timestamp: new Date().toISOString()\n};"
+      },
+      "id": "parse-uploads",
+      "name": "Parse Uploads",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [400, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "check-markdown",
+              "leftValue": "={{ $json.hasMarkdown }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "if-markdown",
+      "name": "Has Markdown?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [600, 300]
+    },
+    {
+      "parameters": {
+        "model": "gpt-4o-mini",
+        "options": {
+          "temperature": 0.3,
+          "maxTokens": 2000
+        },
+        "messages": {
+          "values": [
+            {
+              "role": "system",
+              "content": "You are a video production script parser. Extract structured scene information from markdown scripts.\n\nParse the script and return JSON with:\n{\n  \"title\": \"Video title\",\n  \"settings\": {\n    \"duration\": number (total seconds),\n    \"style\": \"style name\",\n    \"aspect\": \"16:9 or 9:16 etc\",\n    \"quality\": \"draft/standard/high/maximum\"\n  },\n  \"scenes\": [\n    {\n      \"index\": 1,\n      \"duration\": number (seconds),\n      \"visual\": \"Visual description for image generation\",\n      \"narration\": \"Narration text (optional)\",\n      \"music\": \"Music description (optional)\",\n      \"transition\": \"Transition type (optional)\",\n      \"notes\": \"Additional notes (optional)\"\n    }\n  ],\n  \"audio\": {\n    \"narration\": true/false,\n    \"backgroundMusic\": \"Description or null\",\n    \"soundEffects\": []\n  }\n}\n\nIf information is missing, use sensible defaults."
+            },
+            {
+              "role": "user",
+              "content": "=Parse this video script:\n\n{{ $json.markdownContent }}"
+            }
+          ]
+        }
+      },
+      "id": "parse-markdown",
+      "name": "Parse Markdown Script",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [800, 200],
+      "credentials": {
+        "openAiApi": {
+          "id": "openai-cred",
+          "name": "OpenAI API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first().json;\nconst prevData = $('Parse Uploads').first().json;\n\nlet scriptData;\ntry {\n  const content = input.message?.content || input.content || '';\n  const cleaned = content.replace(/```json\\n?/g, '').replace(/```\\n?/g, '').trim();\n  scriptData = JSON.parse(cleaned);\n} catch (e) {\n  // Default structure if parsing fails\n  scriptData = {\n    title: 'Untitled Video',\n    settings: { duration: 60, style: 'Cinematic', aspect: '16:9', quality: 'high' },\n    scenes: [{ index: 1, duration: 5, visual: 'Default scene', narration: '', transition: 'dissolve' }],\n    audio: { narration: false, backgroundMusic: null, soundEffects: [] }\n  };\n}\n\n// Merge with existing images if uploaded\nif (prevData.imageCount > 0) {\n  // Assign images to scenes\n  scriptData.scenes = scriptData.scenes.map((scene, idx) => ({\n    ...scene,\n    assignedImage: prevData.images[idx] || null\n  }));\n}\n\nreturn {\n  ...prevData,\n  scriptData,\n  scenes: scriptData.scenes,\n  videoTitle: scriptData.title,\n  videoSettings: scriptData.settings,\n  audioSettings: scriptData.audio,\n  fromMarkdown: true\n};"
+      },
+      "id": "process-script",
+      "name": "Process Script",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1000, 200]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Create scene structure from images alone\nconst prevData = $input.first().json;\n\nconst scenes = prevData.images.map((img, idx) => ({\n  index: idx + 1,\n  duration: prevData.sceneDuration,\n  visual: `Scene ${idx + 1}`,\n  assignedImage: img,\n  transition: idx === 0 ? 'fade' : 'dissolve',\n  narration: '',\n  music: 'continue'\n}));\n\nreturn {\n  ...prevData,\n  scenes,\n  videoTitle: `Video ${prevData.jobId}`,\n  videoSettings: {\n    duration: prevData.targetDuration || prevData.sceneDuration * prevData.imageCount,\n    style: 'Cinematic',\n    aspect: prevData.platformSettings.aspect,\n    quality: 'high'\n  },\n  audioSettings: {\n    narration: prevData.audioCount > 0,\n    backgroundMusic: prevData.audioCount > 1 ? 'Multiple tracks' : 'Single track',\n    soundEffects: []\n  },\n  fromMarkdown: false\n};"
+      },
+      "id": "create-scenes",
+      "name": "Create Scenes from Images",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1000, 400]
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineAll",
+        "options": {}
+      },
+      "id": "merge-processing",
+      "name": "Merge Processing",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [1200, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Process audio files for mixing\nconst data = $input.first().json;\n\nif (data.audioCount === 0) {\n  return {\n    ...data,\n    audioMix: null,\n    audioProcessed: false\n  };\n}\n\n// Determine audio roles based on mix mode\nconst audioTracks = [];\n\nswitch (data.audioMixMode) {\n  case 'Smart Mix (Narration + Background)':\n    // First audio is narration, rest are background\n    data.audioFiles.forEach((file, idx) => {\n      audioTracks.push({\n        ...file,\n        role: idx === 0 ? 'narration' : 'background',\n        volume: idx === 0 ? 1.0 : 0.3,\n        fadeIn: idx === 0 ? 0.5 : 1.0,\n        fadeOut: idx === 0 ? 0.5 : 2.0\n      });\n    });\n    break;\n    \n  case 'Ducking (Lower background during speech)':\n    data.audioFiles.forEach((file, idx) => {\n      audioTracks.push({\n        ...file,\n        role: idx === 0 ? 'narration' : 'background',\n        volume: idx === 0 ? 1.0 : 0.4,\n        ducking: idx > 0,\n        duckLevel: 0.15,\n        fadeIn: 1.0,\n        fadeOut: 2.0\n      });\n    });\n    break;\n    \n  case 'Sequence (One After Another)':\n    let offset = 0;\n    data.audioFiles.forEach((file, idx) => {\n      audioTracks.push({\n        ...file,\n        role: 'sequence',\n        volume: 1.0,\n        startTime: offset,\n        fadeIn: 0.5,\n        fadeOut: 0.5\n      });\n      offset += 30; // Placeholder duration, would need actual audio duration\n    });\n    break;\n    \n  default: // Layer All (Simultaneous)\n    data.audioFiles.forEach((file, idx) => {\n      audioTracks.push({\n        ...file,\n        role: 'layer',\n        volume: 1.0 / data.audioCount, // Equal mix\n        startTime: 0,\n        fadeIn: 1.0,\n        fadeOut: 2.0\n      });\n    });\n}\n\nreturn {\n  ...data,\n  audioTracks,\n  audioProcessed: true\n};"
+      },
+      "id": "process-audio",
+      "name": "Process Audio Mix",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1400, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Generate final asset manifest for video assembly\nconst data = $input.first().json;\n\n// Create comprehensive manifest\nconst manifest = {\n  jobId: data.jobId,\n  title: data.videoTitle,\n  created: data.timestamp,\n  \n  // Platform & Quality\n  platform: data.platform,\n  dimensions: data.platformSettings,\n  quality: data.videoSettings?.quality || 'high',\n  \n  // Scene Configuration\n  scenes: data.scenes.map(scene => ({\n    index: scene.index,\n    duration: scene.duration,\n    visual: scene.visual,\n    transition: scene.transition || 'dissolve',\n    transitionDuration: 0.5,\n    hasImage: !!scene.assignedImage,\n    imageData: scene.assignedImage?.data || null,\n    imageFilename: scene.assignedImage?.filename || null,\n    narration: scene.narration || null,\n    kenBurns: {\n      enabled: true,\n      effect: scene.index % 2 === 0 ? 'zoom_in' : 'zoom_out',\n      intensity: 0.1\n    }\n  })),\n  \n  // Audio Configuration\n  audio: {\n    hasAudio: data.audioProcessed,\n    tracks: data.audioTracks || [],\n    mixMode: data.audioMixMode,\n    masterVolume: 1.0\n  },\n  \n  // Processing Flags\n  fromMarkdown: data.fromMarkdown,\n  totalDuration: data.scenes.reduce((sum, s) => sum + s.duration, 0),\n  sceneCount: data.scenes.length,\n  imageCount: data.imageCount,\n  audioCount: data.audioCount,\n  \n  // Ready for assembly\n  readyForAssembly: data.scenes.every(s => s.assignedImage || s.visual),\n  needsImageGeneration: data.scenes.some(s => !s.assignedImage && s.visual),\n  scenesNeedingImages: data.scenes.filter(s => !s.assignedImage).map(s => s.index)\n};\n\nreturn manifest;"
+      },
+      "id": "create-manifest",
+      "name": "Create Asset Manifest",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1600, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {}
+      },
+      "id": "respond",
+      "name": "Respond",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [1800, 300]
+    }
+  ],
+  "connections": {
+    "Multi-Asset Form": {
+      "main": [
+        [{ "node": "Parse Uploads", "type": "main", "index": 0 }]
+      ]
+    },
+    "Parse Uploads": {
+      "main": [
+        [{ "node": "Has Markdown?", "type": "main", "index": 0 }]
+      ]
+    },
+    "Has Markdown?": {
+      "main": [
+        [{ "node": "Parse Markdown Script", "type": "main", "index": 0 }],
+        [{ "node": "Create Scenes from Images", "type": "main", "index": 0 }]
+      ]
+    },
+    "Parse Markdown Script": {
+      "main": [
+        [{ "node": "Process Script", "type": "main", "index": 0 }]
+      ]
+    },
+    "Process Script": {
+      "main": [
+        [{ "node": "Merge Processing", "type": "main", "index": 0 }]
+      ]
+    },
+    "Create Scenes from Images": {
+      "main": [
+        [{ "node": "Merge Processing", "type": "main", "index": 1 }]
+      ]
+    },
+    "Merge Processing": {
+      "main": [
+        [{ "node": "Process Audio Mix", "type": "main", "index": 0 }]
+      ]
+    },
+    "Process Audio Mix": {
+      "main": [
+        [{ "node": "Create Asset Manifest", "type": "main", "index": 0 }]
+      ]
+    },
+    "Create Asset Manifest": {
+      "main": [
+        [{ "node": "Respond", "type": "main", "index": 0 }]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": [
+    { "name": "nano-banana" },
+    { "name": "multi-asset" },
+    { "name": "video-production" }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2024-12-17T00:00:00.000Z",
+  "versionId": "1"
+}

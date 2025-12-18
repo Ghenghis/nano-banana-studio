@@ -1,0 +1,474 @@
+{
+  "name": "12_comfyui_integration",
+  "nodes": [
+    {
+      "id": "c2b9f8a0-0001-4000-8000-000000000001",
+      "name": "ComfyUI Integration",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [240, 300],
+      "parameters": {
+        "formTitle": "🎨 ComfyUI Advanced Generation",
+        "formDescription": "Generate images/videos using ComfyUI with Nano Banana Pro, LTX-Video, SDXL, and more",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Generation Type",
+              "fieldType": "dropdown",
+              "requiredField": true,
+              "fieldOptions": {
+                "values": [
+                  {"option": "Text to Image (Nano Banana Pro)"},
+                  {"option": "Image to Image (Nano Banana Pro)"},
+                  {"option": "Multi-Reference Character (14 images)"},
+                  {"option": "Image to Video (LTX-Video 0.9.5)"},
+                  {"option": "Keyframe Video (LTX-Video)"},
+                  {"option": "Text to Image (SDXL Local)"},
+                  {"option": "Text to Image (Flux Schnell)"}
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Prompt",
+              "fieldType": "textarea",
+              "requiredField": true,
+              "placeholder": "Describe what you want to generate..."
+            },
+            {
+              "fieldLabel": "Negative Prompt",
+              "fieldType": "textarea",
+              "requiredField": false,
+              "placeholder": "What to avoid (optional)"
+            },
+            {
+              "fieldLabel": "Reference Image(s)",
+              "fieldType": "file",
+              "requiredField": false,
+              "acceptFileTypes": ".jpg,.jpeg,.png,.webp",
+              "multipleFiles": true
+            },
+            {
+              "fieldLabel": "Resolution",
+              "fieldType": "dropdown",
+              "requiredField": true,
+              "fieldOptions": {
+                "values": [
+                  {"option": "1920x1080 (16:9 YouTube)"},
+                  {"option": "1080x1920 (9:16 Shorts/TikTok)"},
+                  {"option": "1080x1080 (1:1 Instagram)"},
+                  {"option": "3840x2160 (4K)"},
+                  {"option": "2560x1440 (2K)"},
+                  {"option": "1024x1024 (Square)"}
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Video Duration (seconds)",
+              "fieldType": "number",
+              "requiredField": false,
+              "placeholder": "4"
+            },
+            {
+              "fieldLabel": "Use Enhanced Prompts",
+              "fieldType": "dropdown",
+              "requiredField": true,
+              "fieldOptions": {
+                "values": [
+                  {"option": "Yes - Full 7-Stage Enhancement"},
+                  {"option": "Yes - Quick Enhancement"},
+                  {"option": "No - Use Raw Prompt"}
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Style Preset",
+              "fieldType": "dropdown",
+              "requiredField": false,
+              "fieldOptions": {
+                "values": [
+                  {"option": "Cinematic"},
+                  {"option": "Photorealistic"},
+                  {"option": "Anime"},
+                  {"option": "3D Render"},
+                  {"option": "Neon Cyberpunk"},
+                  {"option": "Vintage Film"},
+                  {"option": "Minimalist"},
+                  {"option": "Fantasy"},
+                  {"option": "Christmas/Holiday"}
+                ]
+              }
+            }
+          ]
+        },
+        "options": {
+          "responseMode": "onReceived"
+        }
+      }
+    },
+    {
+      "id": "c2b9f8a0-0002-4000-8000-000000000002",
+      "name": "Parse Resolution",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [460, 300],
+      "parameters": {
+        "mode": "manual",
+        "duplicateItem": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "width",
+              "name": "width",
+              "value": "={{ parseInt($json.Resolution.split('x')[0]) }}",
+              "type": "number"
+            },
+            {
+              "id": "height",
+              "name": "height",
+              "value": "={{ parseInt($json.Resolution.split('x')[1].split(' ')[0]) }}",
+              "type": "number"
+            },
+            {
+              "id": "generation_type",
+              "name": "generation_type",
+              "value": "={{ $json['Generation Type'] }}",
+              "type": "string"
+            },
+            {
+              "id": "prompt",
+              "name": "prompt",
+              "value": "={{ $json.Prompt }}",
+              "type": "string"
+            },
+            {
+              "id": "negative_prompt",
+              "name": "negative_prompt",
+              "value": "={{ $json['Negative Prompt'] || '' }}",
+              "type": "string"
+            },
+            {
+              "id": "style",
+              "name": "style",
+              "value": "={{ $json['Style Preset'] || 'Cinematic' }}",
+              "type": "string"
+            },
+            {
+              "id": "video_duration",
+              "name": "video_duration",
+              "value": "={{ $json['Video Duration (seconds)'] || 4 }}",
+              "type": "number"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "c2b9f8a0-0003-4000-8000-000000000003",
+      "name": "Route by Type",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [680, 300],
+      "parameters": {
+        "rules": {
+          "rules": [
+            {
+              "outputKey": "nano_t2i",
+              "conditions": {
+                "options": {"version": 2},
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.generation_type }}",
+                    "rightValue": "Text to Image (Nano Banana Pro)",
+                    "operator": {"type": "string", "operation": "contains"}
+                  }
+                ]
+              }
+            },
+            {
+              "outputKey": "nano_i2i",
+              "conditions": {
+                "options": {"version": 2},
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.generation_type }}",
+                    "rightValue": "Image to Image",
+                    "operator": {"type": "string", "operation": "contains"}
+                  }
+                ]
+              }
+            },
+            {
+              "outputKey": "multi_ref",
+              "conditions": {
+                "options": {"version": 2},
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.generation_type }}",
+                    "rightValue": "Multi-Reference",
+                    "operator": {"type": "string", "operation": "contains"}
+                  }
+                ]
+              }
+            },
+            {
+              "outputKey": "ltx_video",
+              "conditions": {
+                "options": {"version": 2},
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.generation_type }}",
+                    "rightValue": "LTX-Video",
+                    "operator": {"type": "string", "operation": "contains"}
+                  }
+                ]
+              }
+            },
+            {
+              "outputKey": "sdxl",
+              "conditions": {
+                "options": {"version": 2},
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.generation_type }}",
+                    "rightValue": "SDXL",
+                    "operator": {"type": "string", "operation": "contains"}
+                  }
+                ]
+              }
+            },
+            {
+              "outputKey": "flux",
+              "conditions": {
+                "options": {"version": 2},
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.generation_type }}",
+                    "rightValue": "Flux",
+                    "operator": {"type": "string", "operation": "contains"}
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "fallbackOutput": "none"
+      }
+    },
+    {
+      "id": "c2b9f8a0-0004-4000-8000-000000000004",
+      "name": "Check ComfyUI Health",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [900, 200],
+      "parameters": {
+        "method": "GET",
+        "url": "http://comfyui:8188/system_stats",
+        "options": {
+          "timeout": 5000
+        }
+      }
+    },
+    {
+      "id": "c2b9f8a0-0005-4000-8000-000000000005",
+      "name": "ComfyUI Nano Banana T2I",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1120, 100],
+      "parameters": {
+        "method": "POST",
+        "url": "http://comfyui:8188/prompt",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"prompt\": {\n    \"1\": {\n      \"class_type\": \"NanoBananaPro\",\n      \"inputs\": {\n        \"prompt\": \"{{ $json.prompt }}\",\n        \"negative_prompt\": \"{{ $json.negative_prompt }}\",\n        \"width\": {{ $json.width }},\n        \"height\": {{ $json.height }},\n        \"seed\": -1,\n        \"output_format\": \"png\"\n      }\n    },\n    \"2\": {\n      \"class_type\": \"SaveImage\",\n      \"inputs\": {\n        \"images\": [\"1\", 0],\n        \"filename_prefix\": \"nano_banana\"\n      }\n    }\n  },\n  \"client_id\": \"nano-banana-n8n\"\n}",
+        "options": {
+          "timeout": 120000
+        }
+      }
+    },
+    {
+      "id": "c2b9f8a0-0006-4000-8000-000000000006",
+      "name": "ComfyUI LTX Video",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1120, 400],
+      "parameters": {
+        "method": "POST",
+        "url": "http://comfyui:8188/prompt",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"prompt\": {\n    \"1\": {\n      \"class_type\": \"LoadImage\",\n      \"inputs\": {\n        \"image\": \"input.png\"\n      }\n    },\n    \"2\": {\n      \"class_type\": \"LTXVideoModelLoader\",\n      \"inputs\": {\n        \"model_name\": \"ltx-video-0.9.5.safetensors\",\n        \"precision\": \"fp16\"\n      }\n    },\n    \"3\": {\n      \"class_type\": \"LTXVideoSampler\",\n      \"inputs\": {\n        \"model\": [\"2\", 0],\n        \"image\": [\"1\", 0],\n        \"prompt\": \"{{ $json.prompt }}\",\n        \"num_frames\": {{ Math.round($json.video_duration * 24) + 1 }},\n        \"fps\": 24,\n        \"motion_strength\": 0.8,\n        \"seed\": -1,\n        \"steps\": 30,\n        \"cfg\": 7.0\n      }\n    },\n    \"4\": {\n      \"class_type\": \"SaveAnimatedWEBP\",\n      \"inputs\": {\n        \"images\": [\"3\", 0],\n        \"filename_prefix\": \"ltx_video\",\n        \"fps\": 24,\n        \"quality\": 95\n      }\n    }\n  },\n  \"client_id\": \"nano-banana-n8n\"\n}",
+        "options": {
+          "timeout": 600000
+        }
+      }
+    },
+    {
+      "id": "c2b9f8a0-0007-4000-8000-000000000007",
+      "name": "Poll for Completion",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1340, 300],
+      "parameters": {
+        "method": "GET",
+        "url": "=http://comfyui:8188/history/{{ $json.prompt_id }}",
+        "options": {
+          "timeout": 10000
+        }
+      }
+    },
+    {
+      "id": "c2b9f8a0-0008-4000-8000-000000000008",
+      "name": "Get Output Image",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1560, 300],
+      "parameters": {
+        "method": "GET",
+        "url": "=http://comfyui:8188/view?filename={{ $json.outputs[0].filename }}&subfolder={{ $json.outputs[0].subfolder }}&type=output",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "c2b9f8a0-0009-4000-8000-000000000009",
+      "name": "Save to Output",
+      "type": "n8n-nodes-base.moveFile",
+      "typeVersion": 1,
+      "position": [1780, 300],
+      "parameters": {
+        "operation": "save",
+        "fileName": "=comfyui_output_{{ Date.now() }}.png",
+        "filePath": "/data/outputs/"
+      }
+    },
+    {
+      "id": "c2b9f8a0-0010-4000-8000-000000000010",
+      "name": "Return Result",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [2000, 300],
+      "parameters": {
+        "mode": "manual",
+        "assignments": {
+          "assignments": [
+            {
+              "id": "status",
+              "name": "status",
+              "value": "success",
+              "type": "string"
+            },
+            {
+              "id": "message",
+              "name": "message",
+              "value": "ComfyUI generation complete",
+              "type": "string"
+            },
+            {
+              "id": "output_path",
+              "name": "output_path",
+              "value": "={{ $json.filePath }}",
+              "type": "string"
+            },
+            {
+              "id": "generation_type",
+              "name": "generation_type",
+              "value": "={{ $('Parse Resolution').item.json.generation_type }}",
+              "type": "string"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "c2b9f8a0-0011-4000-8000-000000000011",
+      "name": "Fallback to API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1120, 600],
+      "parameters": {
+        "method": "POST",
+        "url": "http://api:8000/api/v1/generate/image",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"prompt\": \"{{ $json.prompt }}\",\n  \"negative_prompt\": \"{{ $json.negative_prompt }}\",\n  \"width\": {{ $json.width }},\n  \"height\": {{ $json.height }},\n  \"style\": \"{{ $json.style }}\"\n}",
+        "options": {
+          "timeout": 120000
+        }
+      }
+    }
+  ],
+  "connections": {
+    "ComfyUI Integration": {
+      "main": [
+        [{"node": "Parse Resolution", "type": "main", "index": 0}]
+      ]
+    },
+    "Parse Resolution": {
+      "main": [
+        [{"node": "Route by Type", "type": "main", "index": 0}]
+      ]
+    },
+    "Route by Type": {
+      "main": [
+        [{"node": "Check ComfyUI Health", "type": "main", "index": 0}],
+        [{"node": "Check ComfyUI Health", "type": "main", "index": 0}],
+        [{"node": "Check ComfyUI Health", "type": "main", "index": 0}],
+        [{"node": "Check ComfyUI Health", "type": "main", "index": 0}],
+        [{"node": "Check ComfyUI Health", "type": "main", "index": 0}],
+        [{"node": "Check ComfyUI Health", "type": "main", "index": 0}]
+      ]
+    },
+    "Check ComfyUI Health": {
+      "main": [
+        [
+          {"node": "ComfyUI Nano Banana T2I", "type": "main", "index": 0},
+          {"node": "ComfyUI LTX Video", "type": "main", "index": 0}
+        ]
+      ]
+    },
+    "ComfyUI Nano Banana T2I": {
+      "main": [
+        [{"node": "Poll for Completion", "type": "main", "index": 0}]
+      ]
+    },
+    "ComfyUI LTX Video": {
+      "main": [
+        [{"node": "Poll for Completion", "type": "main", "index": 0}]
+      ]
+    },
+    "Poll for Completion": {
+      "main": [
+        [{"node": "Get Output Image", "type": "main", "index": 0}]
+      ]
+    },
+    "Get Output Image": {
+      "main": [
+        [{"node": "Save to Output", "type": "main", "index": 0}]
+      ]
+    },
+    "Save to Output": {
+      "main": [
+        [{"node": "Return Result", "type": "main", "index": 0}]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": ["comfyui", "generation", "video", "nano-banana"],
+  "triggerCount": 0,
+  "updatedAt": "2025-12-17T00:00:00.000Z",
+  "versionId": "1"
+}

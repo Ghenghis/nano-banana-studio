@@ -1,0 +1,277 @@
+{
+  "name": "09 - Audio Beat Analyzer & Scene Sync",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "🎵 Audio Analyzer - Beat Detection & Scene Sync",
+        "formDescription": "Analyze audio files to detect beats, tempo, energy levels, and sections. Use this data to sync video transitions perfectly with the music.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Audio File",
+              "fieldType": "file",
+              "requiredField": true,
+              "acceptFileTypes": ".mp3,.wav,.m4a,.ogg,.flac"
+            },
+            {
+              "fieldLabel": "Analysis Depth",
+              "fieldType": "dropdown",
+              "requiredField": true,
+              "fieldOptions": {
+                "values": [
+                  { "option": "Basic (BPM + beats only)" },
+                  { "option": "Standard (+ energy curve + sections)" },
+                  { "option": "Full (+ chord progression + mood)" },
+                  { "option": "Pro (+ lyrics extraction with Whisper)" }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Target Scene Duration (seconds)",
+              "fieldType": "number",
+              "requiredField": false,
+              "fieldOptions": {
+                "numberMin": 2,
+                "numberMax": 30,
+                "numberDefault": 5
+              }
+            },
+            {
+              "fieldLabel": "Sync Strategy",
+              "fieldType": "dropdown",
+              "requiredField": true,
+              "fieldOptions": {
+                "values": [
+                  { "option": "Transition on Downbeats (every 4 beats)" },
+                  { "option": "Transition on Every Beat" },
+                  { "option": "Transition on Section Changes" },
+                  { "option": "Energy-Based (high energy = fast cuts)" },
+                  { "option": "Custom Beat Pattern" }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Custom Beat Pattern (if selected)",
+              "fieldType": "text",
+              "requiredField": false,
+              "placeholder": "e.g., 1,5,9,13 or every:8 or section:verse,chorus"
+            },
+            {
+              "fieldLabel": "Extract Lyrics (Whisper)",
+              "fieldType": "dropdown",
+              "requiredField": true,
+              "fieldOptions": {
+                "values": [
+                  { "option": "No" },
+                  { "option": "Yes - English" },
+                  { "option": "Yes - Auto-detect language" },
+                  { "option": "Yes - With timestamps (for karaoke)" }
+                ]
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "form-trigger",
+      "name": "Audio Analyzer Form",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [200, 300],
+      "webhookId": "audio-analyzer-v1"
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first().json;\n\nconst analysisDepth = input['Analysis Depth'];\nconst targetSceneDuration = parseInt(input['Target Scene Duration (seconds)']) || 5;\nconst syncStrategy = input['Sync Strategy'];\nconst customPattern = input['Custom Beat Pattern (if selected)'] || '';\nconst extractLyrics = input['Extract Lyrics (Whisper)'];\n\n// Get audio binary\nlet audioData = null;\nlet audioFilename = 'audio.mp3';\nif ($binary && $binary.data) {\n  audioData = $binary.data.data;\n  audioFilename = $binary.data.fileName || 'audio.mp3';\n}\n\nconst jobId = `audio_${Date.now()}_${Math.random().toString(36).substring(7)}`;\n\nreturn {\n  jobId,\n  audioData,\n  audioFilename,\n  analysisDepth,\n  depthLevel: ['Basic', 'Standard', 'Full', 'Pro'].findIndex(d => analysisDepth.startsWith(d)) + 1,\n  targetSceneDuration,\n  syncStrategy,\n  customPattern,\n  extractLyrics: extractLyrics !== 'No',\n  lyricsLanguage: extractLyrics.includes('English') ? 'en' : 'auto',\n  withTimestamps: extractLyrics.includes('timestamps'),\n  timestamp: new Date().toISOString()\n};"
+      },
+      "id": "parse-input",
+      "name": "Parse Input",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [400, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api:8000/api/v1/audio/analyze",
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "audio_base64",
+              "value": "={{ $json.audioData }}"
+            },
+            {
+              "name": "extract_lyrics",
+              "value": "={{ $json.extractLyrics }}"
+            },
+            {
+              "name": "detect_beats",
+              "value": "true"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 120000
+        }
+      },
+      "id": "analyze-audio-api",
+      "name": "Analyze Audio API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [600, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Process audio analysis and calculate scene sync points\nconst analysis = $input.first().json;\nconst config = $('Parse Input').first().json;\n\nconst bpm = analysis.bpm || 120;\nconst beats = analysis.beats || [];\nconst duration = analysis.duration || 60;\nconst sections = analysis.sections || [];\nconst energyCurve = analysis.energy_curve || [];\n\n// Calculate beat interval\nconst beatInterval = 60 / bpm; // seconds per beat\nconst beatsPerScene = Math.round(config.targetSceneDuration / beatInterval);\n\n// Generate sync points based on strategy\nlet syncPoints = [];\n\nswitch (config.syncStrategy) {\n  case 'Transition on Downbeats (every 4 beats)':\n    // Every 4th beat (assuming 4/4 time)\n    syncPoints = beats.filter((_, idx) => idx % 4 === 0);\n    break;\n    \n  case 'Transition on Every Beat':\n    syncPoints = beats;\n    break;\n    \n  case 'Transition on Section Changes':\n    syncPoints = sections.map(s => s.start);\n    break;\n    \n  case 'Energy-Based (high energy = fast cuts)':\n    // Find energy peaks\n    const avgEnergy = energyCurve.reduce((a, b) => a + b, 0) / energyCurve.length;\n    syncPoints = [];\n    let lastSync = 0;\n    \n    for (let i = 0; i < energyCurve.length; i++) {\n      const time = (i / energyCurve.length) * duration;\n      const minGap = energyCurve[i] > avgEnergy * 1.2 ? 2 : 5; // Fast cuts on high energy\n      \n      if (time - lastSync >= minGap) {\n        syncPoints.push(time);\n        lastSync = time;\n      }\n    }\n    break;\n    \n  case 'Custom Beat Pattern':\n    if (config.customPattern.startsWith('every:')) {\n      const interval = parseInt(config.customPattern.split(':')[1]);\n      syncPoints = beats.filter((_, idx) => idx % interval === 0);\n    } else if (config.customPattern.startsWith('section:')) {\n      const sectionTypes = config.customPattern.split(':')[1].split(',');\n      syncPoints = sections.filter(s => sectionTypes.includes(s.name)).map(s => s.start);\n    } else {\n      // Comma-separated beat indices\n      const indices = config.customPattern.split(',').map(n => parseInt(n.trim()) - 1);\n      syncPoints = indices.map(i => beats[i]).filter(Boolean);\n    }\n    break;\n    \n  default:\n    // Default: every N beats based on target duration\n    syncPoints = beats.filter((_, idx) => idx % beatsPerScene === 0);\n}\n\n// Ensure we have at least start and end\nif (syncPoints.length === 0 || syncPoints[0] > 0) {\n  syncPoints.unshift(0);\n}\nif (syncPoints[syncPoints.length - 1] < duration - 1) {\n  syncPoints.push(duration);\n}\n\n// Create scene definitions\nconst scenes = [];\nfor (let i = 0; i < syncPoints.length - 1; i++) {\n  const start = syncPoints[i];\n  const end = syncPoints[i + 1];\n  const sceneDuration = end - start;\n  \n  // Calculate average energy for this scene\n  const startIdx = Math.floor((start / duration) * energyCurve.length);\n  const endIdx = Math.floor((end / duration) * energyCurve.length);\n  const sceneEnergy = energyCurve.slice(startIdx, endIdx);\n  const avgSceneEnergy = sceneEnergy.length > 0 \n    ? sceneEnergy.reduce((a, b) => a + b, 0) / sceneEnergy.length \n    : 0.5;\n  \n  // Find which section this belongs to\n  const section = sections.find(s => start >= s.start && start < s.end) || { name: 'main', energy: 'medium' };\n  \n  scenes.push({\n    index: i + 1,\n    start_time: start,\n    end_time: end,\n    duration: sceneDuration,\n    energy_level: avgSceneEnergy > 0.7 ? 'high' : avgSceneEnergy > 0.4 ? 'medium' : 'low',\n    section: section.name,\n    transition_type: avgSceneEnergy > 0.7 ? 'cut' : 'dissolve',\n    recommended_motion: avgSceneEnergy > 0.7 ? 'dynamic' : 'subtle'\n  });\n}\n\nreturn {\n  jobId: config.jobId,\n  status: 'analyzed',\n  \n  audio: {\n    filename: config.audioFilename,\n    duration: duration,\n    bpm: bpm,\n    beat_count: beats.length,\n    section_count: sections.length\n  },\n  \n  sync: {\n    strategy: config.syncStrategy,\n    sync_point_count: syncPoints.length,\n    sync_points: syncPoints,\n    scene_count: scenes.length\n  },\n  \n  scenes: scenes,\n  \n  sections: sections,\n  \n  lyrics: analysis.lyrics || null,\n  \n  raw_data: {\n    beats: beats.slice(0, 50), // First 50 beats for reference\n    energy_sample: energyCurve.slice(0, 100) // Sample of energy curve\n  },\n  \n  next_steps: [\n    'Use this analysis with Storyboard Generator',\n    'Scenes are pre-calculated for beat-sync transitions',\n    'Each scene has recommended motion and transition types'\n  ]\n};"
+      },
+      "id": "calculate-sync",
+      "name": "Calculate Scene Sync Points",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [800, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "has-lyrics",
+              "leftValue": "={{ $json.lyrics }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "if-has-lyrics",
+      "name": "Has Lyrics?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1000, 300]
+    },
+    {
+      "parameters": {
+        "model": "gpt-4o-mini",
+        "options": {
+          "temperature": 0.7,
+          "maxTokens": 2000
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=You are a music video storyboard assistant. Given these lyrics and scene timing, suggest visual themes for each scene that match the lyrics.\n\nLyrics:\n{{ $json.lyrics }}\n\nScenes (with timing):\n{{ JSON.stringify($json.scenes.slice(0, 15), null, 2) }}\n\nFor each scene, suggest:\n1. Visual theme based on lyrics at that timestamp\n2. Mood/emotion to capture\n3. Suggested imagery\n\nReturn JSON array with scene suggestions."
+            }
+          ]
+        }
+      },
+      "id": "enhance-with-lyrics",
+      "name": "Enhance Scenes with Lyrics",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.4,
+      "position": [1200, 200],
+      "credentials": {
+        "openAiApi": {
+          "id": "openai-cred",
+          "name": "OpenAI API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Merge lyrics-enhanced suggestions back\nconst analysis = $('Calculate Scene Sync Points').first().json;\nconst enhanced = $input.first().json;\n\nlet enhancedScenes = analysis.scenes;\n\ntry {\n  const suggestions = JSON.parse(enhanced.text?.replace(/```json|```/g, '') || '[]');\n  \n  enhancedScenes = analysis.scenes.map((scene, idx) => ({\n    ...scene,\n    lyrics_suggestion: suggestions[idx] || null\n  }));\n} catch (e) {\n  // Keep original scenes if parsing fails\n}\n\nreturn {\n  ...analysis,\n  scenes: enhancedScenes,\n  lyrics_enhanced: true\n};"
+      },
+      "id": "merge-lyrics-enhancement",
+      "name": "Merge Lyrics Enhancement",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1400, 200]
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineAll",
+        "options": {}
+      },
+      "id": "merge-paths",
+      "name": "Merge Paths",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [1600, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {}
+      },
+      "id": "respond",
+      "name": "Respond",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [1800, 300]
+    }
+  ],
+  "connections": {
+    "Audio Analyzer Form": {
+      "main": [
+        [{ "node": "Parse Input", "type": "main", "index": 0 }]
+      ]
+    },
+    "Parse Input": {
+      "main": [
+        [{ "node": "Analyze Audio API", "type": "main", "index": 0 }]
+      ]
+    },
+    "Analyze Audio API": {
+      "main": [
+        [{ "node": "Calculate Scene Sync Points", "type": "main", "index": 0 }]
+      ]
+    },
+    "Calculate Scene Sync Points": {
+      "main": [
+        [{ "node": "Has Lyrics?", "type": "main", "index": 0 }]
+      ]
+    },
+    "Has Lyrics?": {
+      "main": [
+        [{ "node": "Enhance Scenes with Lyrics", "type": "main", "index": 0 }],
+        [{ "node": "Merge Paths", "type": "main", "index": 1 }]
+      ]
+    },
+    "Enhance Scenes with Lyrics": {
+      "main": [
+        [{ "node": "Merge Lyrics Enhancement", "type": "main", "index": 0 }]
+      ]
+    },
+    "Merge Lyrics Enhancement": {
+      "main": [
+        [{ "node": "Merge Paths", "type": "main", "index": 0 }]
+      ]
+    },
+    "Merge Paths": {
+      "main": [
+        [{ "node": "Respond", "type": "main", "index": 0 }]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": [
+    { "name": "nano-banana" },
+    { "name": "audio" },
+    { "name": "beat-detection" }
+  ]
+}

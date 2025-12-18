@@ -1,0 +1,2085 @@
+# Storytelling Prompts:
+
+Hi!
+
+Welcome to this prompt guide. 
+
+I wish you the best with your projects!
+
+Input each prompt with your initial “BASE” image
+
+---
+
+## Foundational image prompt
+
+Ultra-realistic waist-up cinematic portrait of [CHARACTER] in [ENVIRONMENT].
+
+Wearing [OUTFIT DETAILS] with [ACCESSORIES].
+
+[AGE / ETHNICITY / FEATURES], natural skin texture and subtle imperfections.
+
+Facing the camera with an intentional expression.
+
+Cinematic lighting with clear key light and rim separation.
+
+Shot on [LENS TYPE], shallow depth, softly blurred background.
+
+Film-inspired color grade, high dynamic range, subtle grain.
+
+Grounded realism, accurate proportions, no distortion.
+
+## Foundational image prompt (Example)
+
+Ultra-realistic waist-up cinematic portrait of a fierce tribal huntress standing on a sunlit cliff overlooking the sea at golden hour.
+
+Wearing a weathered, sweat-stained leather crop top, braided leather arm wraps, a strap harness across her chest, and layered necklaces and beads. Quiver of arrows on her back, small feathers and charms woven into her braids.
+
+Mid-20s, Mediterranean or mixed ethnicity, athletic build, braided hair with loose strands, war paint across her face, intense eyes, natural skin texture with dirt, sweat, and subtle imperfections.
+
+Facing the camera with a strong, focused, intentional expression.
+
+Cinematic lighting with warm golden key light from the side and subtle rim light highlighting her silhouette.
+
+Shot on a 50mm cinema lens, shallow depth of field, softly blurred coastal landscape in the background.
+
+Film-inspired color grade, high dynamic range, warm tones, subtle grain.
+
+Grounded realism, accurate proportions, no distortion.
+
+---
+
+## Version 1
+
+<instruction>
+Analyze the entire composition of the input image. Identify ALL key subjects present (whether it's a single person, a group/couple, a vehicle, or a specific object) and their spatial relationship/interaction.
+
+Generate a cohesive 3x3 grid "Cinematic Contact Sheet" featuring 9 distinct camera shots of exactly these subjects in the same environment.
+
+You must adapt the standard cinematic shot types to fit the content (e.g., if a group, keep the group together; if an object, frame the whole object):
+
+**Row 1 (Establishing Context):**
+
+1. **Extreme Long Shot (ELS):** The subject(s) are seen small within the vast environment.
+2. **Long Shot (LS):** The complete subject(s) or group is visible from top to bottom (head to toe / wheels to roof).
+3. **Medium Long Shot (American/3-4):** Framed from knees up (for people) or a 3/4 view (for objects).
+
+**Row 2 (The Core Coverage):**
+4. **Medium Shot (MS):** Framed from the waist up (or the central core of the object). Focus on interaction/action.
+5. **Medium Close-Up (MCU):** Framed from chest up. Intimate framing of the main subject(s).
+6. **Close-Up (CU):** Tight framing on the face(s) or the "front" of the object.
+
+**Row 3 (Details & Angles):**
+7. **Extreme Close-Up (ECU):** Macro detail focusing intensely on a key feature (eyes, hands, logo, texture).
+8. **Low Angle Shot (Worm's Eye):** Looking up at the subject(s) from the ground (imposing/heroic).
+9. **High Angle Shot (Bird's Eye):** Looking down on the subject(s) from above.
+
+Ensure strict consistency: The same people/objects, same clothes, and same lighting across all 9 panels. The depth of field should shift realistically (bokeh in close-ups).
+</instruction>
+
+A professional 3x3 cinematic storyboard grid containing 9 panels.
+
+The grid showcases the specific subject/scene from the input image in a comprehensive range of focal lengths.
+
+**Top Row:** Wide environmental shot, Full view, 3/4 cut.
+
+**Middle Row:** Waist-up view, Chest-up view, Face/Front close-up.
+
+**Bottom Row:** Macro detail, Low Angle, High Angle.
+
+All frames feature photorealistic textures, consistent cinematic color grading, and correct framing for the specific number of subjects or objects analyzed.
+
+extract the still x.y
+
+---
+
+## Version 2
+
+<role>
+You are an award-winning trailer director + cinematographer + storyboard artist. Your job: turn ONE reference image into a cohesive cinematic short sequence, then output AI-video-ready keyframes.
+</role>
+
+<input>
+User provides: one reference image (image).
+</input>
+
+<non-negotiable rules - continuity & truthfulness>
+
+1. First, analyze the full composition: identify ALL key subjects (person/group/vehicle/object/animal/props/environment elements) and describe spatial relationships and interactions (left/right/foreground/background, facing direction, what each is doing).
+2. Do NOT guess real identities, exact real-world locations, or brand ownership. Stick to visible facts. Mood/atmosphere inference is allowed, but never present it as real-world truth.
+3. Strict continuity across ALL shots: same subjects, same wardrobe/appearance, same environment, same time-of-day and lighting style. Only action, expression, blocking, framing, angle, and camera movement may change.
+4. Depth of field must be realistic: deeper in wides, shallower in close-ups with natural bokeh. Keep ONE consistent cinematic color grade across the entire sequence.
+5. Do NOT introduce new characters/objects not present in the reference image. If you need tension/conflict, imply it off-screen (shadow, sound, reflection, occlusion, gaze).
+</non-negotiable rules - continuity & truthfulness>
+
+<goal>
+Expand the image into a 10–20 second cinematic clip with a clear theme and emotional progression (setup → build → turn → payoff).
+The user will generate video clips from your keyframes and stitch them into a final sequence.
+</goal>
+
+<step 1 - scene breakdown>
+Output (with clear subheadings):
+
+- Subjects: list each key subject (A/B/C…), describe visible traits (wardrobe/material/form), relative positions, facing direction, action/state, and any interaction.
+- Environment & Lighting: interior/exterior, spatial layout, background elements, ground/walls/materials, light direction & quality (hard/soft; key/fill/rim), implied time-of-day, 3–8 vibe keywords.
+- Visual Anchors: list 3–6 visual traits that must stay constant across all shots (palette, signature prop, key light source, weather/fog/rain, grain/texture, background markers).
+</step 1 - scene breakdown>
+
+<step 2 - theme & story>
+From the image, propose:
+
+- Theme: one sentence.
+- Logline: one restrained trailer-style sentence grounded in what the image can support.
+- Emotional Arc: 4 beats (setup/build/turn/payoff), one line each.
+</step 2 - theme & story>
+
+<step 3 - cinematic approach>
+Choose and explain your filmmaking approach (must include):
+
+- Shot progression strategy: how you move from wide to close (or reverse) to serve the beats
+- Camera movement plan: push/pull/pan/dolly/track/orbit/handheld micro-shake/gimbal—and WHY
+- Lens & exposure suggestions: focal length range (18/24/35/50/85mm etc.), DoF tendency (shallow/medium/deep), shutter “feel” (cinematic vs documentary)
+- Light & color: contrast, key tones, material rendering priorities, optional grain (must match the reference style)
+</step 3 - cinematic approach>
+
+<step 4 - keyframes for AI video (primary deliverable)>
+Output a Keyframe List: default 9–12 frames (later assembled into ONE master grid). These frames must stitch into a coherent 10–20s sequence with a clear 4-beat arc.
+Each frame must be a plausible continuation within the SAME environment.
+
+Use this exact format per frame:
+
+[KF# | suggested duration (sec) | shot type (ELS/LS/MLS/MS/MCU/CU/ECU/Low/Worm’s-eye/High/Bird’s-eye/Insert)]
+
+- Composition: subject placement, foreground/mid/background, leading lines, gaze direction
+- Action/beat: what visibly happens (simple, executable)
+- Camera: height, angle, movement (e.g., slow 5% push-in / 1m lateral move / subtle handheld)
+- Lens/DoF: focal length (mm), DoF (shallow/medium/deep), focus target
+- Lighting & grade: keep consistent; call out highlight/shadow emphasis
+- Sound/atmos (optional): one line (wind, city hum, footsteps, metal creak) to support editing rhythm
+
+Hard requirements:
+
+- Must include: 1 environment-establishing wide, 1 intimate close-up, 1 extreme detail ECU, and 1 power-angle shot (low or high).
+- Ensure edit-motivated continuity between shots (eyeline match, action continuation, consistent screen direction / axis).
+</step 4 - keyframes for AI video>
+
+<step 5 - contact sheet output (MUST OUTPUT ONE BIG GRID IMAGE)>
+You MUST additionally output ONE single master image: a Cinematic Contact Sheet / Storyboard Grid containing ALL keyframes in one large image.
+
+- Default grid: 3x3. If more than 9 keyframes, use 4x3 or 5x3 so every keyframe fits into ONE image.
+Requirements:
+1. The single master image must include every keyframe as a separate panel (one shot per cell) for easy selection.
+2. Each panel must be clearly labeled: KF number + shot type + suggested duration (labels placed in safe margins, never covering the subject).
+3. Strict continuity across ALL panels: same subjects, same wardrobe/appearance, same environment, same lighting & same cinematic color grade; only action/expression/blocking/framing/movement changes.
+4. DoF shifts realistically: shallow in close-ups, deeper in wides; photoreal textures and consistent grading.
+5. After the master grid image, output the full text breakdown for each KF in order so the user can regenerate any single frame at higher quality.
+</step 5 - contact sheet output>
+
+<final output format>
+Output in this order:
+A) Scene Breakdown
+B) Theme & Story
+C) Cinematic Approach
+D) Keyframes (KF# list)
+E) ONE Master Contact Sheet Image (All KFs in one grid)
+</final output format>
+
+Extract frame KF1
+
+---
+
+Sometimes it creates the image entirely, but it works better if it makes the prompt first
+
+## Version 3 (My director’s cut)
+
+Input your story here: ***A woman walks to a dark temple and meets a crazy shaman who blesses her***
+
+STORY-TO-STORYBOARD META-PROMPT
+
+IMPORTANT: Do not create the image, create the detailed prompt for the image.
+
+The image prompt must make reference to the story and reference image provided by user, the prompt must follow wxactly the details of the image prompt
+
+When the user provides a short story synopsis, follow these steps:
+
+Analyze the synopsis and identify:
+
+The main subject(s) (person, pair, group, creature, vehicle, object)
+
+Their appearance and defining traits
+
+The environment and tone
+
+The emotional or narrative beat
+
+Lighting/mood implied by the story
+
+Create a full 3×3 cinematic storyboard grid with 9 distinct shots of the same subject(s) in the same environment, using consistent wardrobe, lighting, and atmosphere.
+
+Output a single cohesive AI image prompt that includes all 9 frames (labeled 1–9), using the following structure:
+
+OUTPUT FORMAT
+
+Cinematic 3×3 Storyboard Prompt
+
+Story Synopsis (interpreted):
+
+<one-sentence interpretation of the user’s synopsis>
+
+Create a professional 3×3 cinematic storyboard grid featuring the same subject(s) from the synopsis in the same environment.
+
+Maintain total consistency in appearance, clothing, lighting, mood, and environmental details.
+
+Each panel represents a distinct camera shot following cinematic conventions.
+
+Row 1 — Establishing Context
+
+Extreme Long Shot (ELS):
+
+Full environment revealed, subject(s) small in frame. Match the story’s setting, lighting, and mood.
+
+Long Shot (LS):
+
+Entire subject(s) visible head-to-toe (or full object/vehicle), standing naturally within the environment.
+
+Medium Long Shot (MLS / 3-4 / American Shot):
+
+Subject(s) framed from knees up (or 3/4 angle for objects), showing stance, posture, and core emotion.
+
+Row 2 — Core Coverage
+
+Medium Shot (MS):
+
+Waist-up framing. Capture the key action, attitude, or emotional beat implied by the story.
+
+Medium Close-Up (MCU):
+
+Chest-up. Focus on emotion, expression, micro-interaction, or narrative tension.
+
+Close-Up (CU):
+
+Tight shot of the face (or front detail of an object). Cinematic depth of field, emotional clarity.
+
+Row 3 — Details & Angles
+
+Extreme Close-Up (ECU):
+
+Macro detail: eyes, hands, symbolic object, texture, or a key story element.
+
+Low Angle Shot (Worm’s Eye):
+
+Camera looking up at the subject(s) from below. Dramatic, heroic, or imposing based on the story’s tone.
+
+High Angle Shot (Bird’s Eye):
+
+Camera looking down from above. Spatial clarity, vulnerability, or overview of action.
+
+Global Requirements
+
+Same subject from image prompt(s) in all 9 frames
+
+Same clothing, hairstyle, props, weapons, or accessories
+
+Same lighting conditions and color grading
+
+Consistent environment and weather
+
+Correct realism and cinematic depth of field per shot
+
+Photorealistic textures
+
+Cinematic camera behavior and focal-length accuracy
+
+Final Line (technical):
+
+Extract the still x.y
+
+(Where x.y refers to the grid coordinate or still number the user later requests.)
+
+Example of How This Works with a Synopsis
+
+User input:
+
+“A lone desert scout tracks a signal across a ruined canyon at sunset.”
+
+Output (shortened example):
+
+Story Synopsis: A lone desert scout navigates a canyon wasteland at sunset while tracking a mysterious signal.
+
+ELS: small figure against vast ruined canyon
+
+LS: scout silhouetted in sunset light
+
+MLS: knees-up shot with gear visible
+
+MS: waist-up, scanning horizon
+
+MCU: chest-up, focused expression
+
+CU: dust-covered face, tracking device glow
+
+ECU: close-up of the device display
+
+Low Angle: heroic stance on canyon ridge
+
+High Angle: scout from above, canyon below
+
+0:00
+AI images can look incredible, but the
+0:03
+moment you try to build out a sequence,
+0:05
+they fall apart. Nano Banana Pro and
+0:09
+Gemini 3 change that. Today, I'll show
+0:11
+you how you can take a single image and
+0:14
+export an infinite amount of consistent
+0:16
+angles using just a single prompt. You
+0:20
+get the same character, the same world,
+0:22
+the same style shot after shot. And of
+0:25
+course, once we can do that, we finally
+0:27
+unlock the possibility to create
+0:28
+sequences that feel real. I'm AI Samson
+The 3-level system for real AI storytelling
+0:32
+and welcome back to the channel. We're
+0:33
+going to build this up in three levels.
+0:36
+And with each level, you gain more
+0:38
+control. Now, the first step on our
+Level 1: Creating a strong base character
+0:41
+escapade of storytelling is to create
+0:43
+our character. This is the base image
+0:46
+that is going to inform the entire
+0:48
+process of our film. And for this, I can
+0:51
+recommend you show your character at
+0:53
+least upper body, clear lighting, a
+0:56
+clear pose, an informative background.
+0:58
+Make sure the face is fully visible and
+1:00
+as much of the body as possible. Now,
+1:02
+you can create this base image in any
+1:05
+image model that you like. You can start
+1:07
+off with Nano Banana Pro, but you can
+1:10
+also use MidJourney, which is one of my
+1:12
+favorite AI image generators because I
+1:15
+love the core aesthetic of this. Now, to
+1:17
+make this process as easy as possible
+Free foundational prompt for consistent characters
+1:19
+for you, I've put together a
+1:21
+foundational base prompt that you can
+1:23
+use to generate images like this, you
+1:26
+can simply switch out any of the
+1:28
+variables you'll like, and you'll
+1:29
+definitely get an image that's going to
+1:31
+work with this process. Now, I'm going
+1:33
+to leave a link to every single prompt
+1:35
+that I use in this video in the link in
+1:37
+the description below, and you can
+1:38
+download all of those entirely for free.
+1:41
+That's just my small gift to you this
+1:43
+holiday season. So you can take this
+1:45
+prompt. It will work across multiple AI
+1:47
+image generators. Now I will be using
+1:50
+the following image. I have this
+1:52
+beautiful warrior princess from the
+1:54
+Amazon who will be leading our
+1:57
+adventures. So now the next step is to
+One prompt to generate multi-angle shots
+1:59
+use Nano Banana Pro to generate a whole
+2:03
+series of images with just a single
+2:05
+prompt. Now there is a very useful
+2:07
+prompt for this that we are using and
+2:10
+it's along and you simply need to copy
+2:13
+and paste it from the document that I'm
+2:14
+providing into the prompt bar. So you
+2:18
+can come into the prompt. This is
+2:21
+version one of the prompt that we're
+2:23
+looking at. This was originally created
+2:25
+by the creator on X called Tech Hala. So
+2:29
+shout out to him for his wonderful work
+2:31
+on this front. Now, I will be using
+Running Nano Banana Pro (paid + free options)
+2:33
+Google Flow for Nano Banana Pro, but
+2:35
+I'll also show you a way that you can
+2:37
+try this out entirely for free. So, pop
+2:39
+the prompt in. The next step is to make
+2:42
+sure we include our reference image. So,
+2:44
+we just go to upload and we pop in the
+2:46
+image of our protagonist. There she
+2:49
+blows. Now, what I like about Google
+2:50
+Flow is that you can select up to four
+2:52
+image outputs at once. And this is great
+2:55
+because it allows us to get a whole
+2:58
+different array of images and we can
+3:01
+select our favorites. So go ahead and
+3:03
+pop that in. Whilst that's loading, I'll
+3:04
+show you the alternative free way to use
+3:06
+this, which is using this inside of
+3:08
+Gemini. So you can use Nano Banana Pro
+3:11
+for free inside Gemini. Simply pop it
+3:14
+straight into the prompt box. Upload the
+3:17
+image just the same. I'll do a slightly
+3:20
+different image for variety here. Let me
+3:22
+show you it with a animated shot. This
+3:24
+is the other great thing that this works
+3:26
+perfectly well with animation too. And
+3:28
+send that in. Now my version of this
+3:30
+image got rejected and that was because
+3:32
+I had slightly too much of the human
+3:34
+skin displaying. So I've gone ahead and
+3:36
+rerun it with a slightly less revealing
+3:38
+outfit. Now if you are interested in
+3:41
+uncensored models after this video,
+3:43
+watch this one which is all about the
+3:45
+latest completely uncensored AI image
+3:48
+models. But for now, let's return to
+3:49
+today's main agenda. And you can see
+How the grid-shot system actually works
+3:51
+we've got every single shot here laid
+3:53
+out beautifully. Now to give you a
+3:56
+little bit more context about what's
+3:57
+going on behind the scenes with this
+3:58
+prompt is that it analyzes the
+4:00
+composition of the image and then it
+4:02
+creates a grid of this image with it in
+4:06
+different scenarios. So it gives very
+4:09
+specific sets of shots. we get an
+4:12
+extreme long shot which is the first
+4:14
+shot in the top left followed by a long
+4:15
+shot and then a medium long shot and
+4:18
+then we have further shots that are
+4:21
+outlaid in a grid format. This means
+4:23
+that we have a whole variety of
+4:26
+different angles of our beautiful
+4:29
+protagonist and we can then use these to
+4:33
+generate fulls size images of each of
+4:36
+the scenes. Now you can see I outputed
+4:38
+four versions of this. And one key thing
+4:41
+to note is that sometimes it doesn't
+4:43
+output the annotations on the shots. And
+4:46
+these are quite important because it
+4:48
+really helps us on the next step which
+4:50
+is where we export each of these frames
+4:53
+individually.
+4:54
+So if that happens just go ahead and
+4:56
+rerun it. You can also pick out your
+4:58
+favorite. Now I quite like this one in
+5:01
+particular. And the next step is to add
+5:03
+this to the prompt. Now the next step is
+Extracting clean stills from the grid
+5:05
+to extract the shots that we like and we
+5:08
+can use that with a simple prompt which
+5:11
+is extract the still and then you can
+5:13
+put in the name of the frame using the
+5:17
+annotations.
+5:19
+So I would quite like to get out the low
+5:22
+angle shot. Now again we can get out
+5:24
+multiple versions of this. Pop that in.
+5:26
+And just while that is loading, let me
+5:28
+show you how well this came out in
+5:30
+Gemini Pro as well with our animated
+5:34
+version. We have Senor Flower Pot here
+5:37
+in all of his different situations. Now,
+5:39
+as you can see here, we have an
+5:42
+absolutely stunning image and it
+5:45
+maintains exact coherence to the
+5:48
+original prompt and to our base image.
+5:51
+Now, just to note that this doesn't work
+5:53
+100% of the time, just to let you know
+5:55
+in case you have any issues and you're a
+5:56
+bit confused as why it's happening,
+5:57
+especially if you're just running one
+5:59
+image at a time. You can see that out of
+6:02
+these four, two were, I would say, 99%
+6:06
+accurate. One was about 70% accurate,
+6:08
+and one I would say is a bit of a
+6:10
+failure. Now, I can run this again,
+6:11
+asking for a different image. And you
+6:14
+can do this as many times as you like.
+6:15
+The whole idea is really to go through
+6:17
+and export all of these images that you
+6:19
+want to then turn into your final
+6:21
+sequence. And there we have it. Now we
+Turning still images into video
+6:23
+have this medium long shot. And this is
+6:26
+where things get exciting because now
+6:27
+what we can do is we can turn these
+6:29
+images into video. And the best way to
+6:32
+do this is using a start frame in our
+6:35
+video creation. And that means we define
+6:38
+exactly how our video starts. Now I will
+6:40
+show you how to do this in both a
+6:42
+premium tool and a free one. So let's
+6:44
+start off with a premium tool and that's
+6:45
+going to be Google V3.1 and we're using
+6:48
+that inside Google flow again. So the
+6:50
+way to use that is to go to frames to
+6:53
+video and then we simply add the first
+6:56
+frame. So I'll be using this lady. You
+6:58
+can add in a prompt to define the
+7:00
+action. I recommend here thinking about
+7:03
+the character movement, the camera
+7:05
+movement and also any atmospheric
+7:09
+movement. For example, trees swaying. So
+7:12
+we can pop in the prompt woman shoots
+7:13
+bow static shot and send that in making
+7:16
+sure that the first frame is the one of
+7:18
+course that we have generated. Now to do
+7:20
+this entirely for free I recommend using
+Free vs premium AI video tools compared
+7:23
+grock imagine which very kindly gives us
+7:26
+a opportunity to create videos entirely
+7:28
+for free at the moment. And to do that,
+7:30
+all you have to do is come to
+7:31
+grock.com/immagion,
+7:34
+go to upload file, insert the extracted
+7:37
+still, make sure you have video
+7:39
+selected, and what's great about Grock
+7:41
+is one is that it's very fast, it's
+7:43
+free, and it also has much lower
+7:45
+censorship than Google V3.1. And if you
+7:48
+interested in Grock Imagine, there is a
+7:50
+video I've got on that which you can
+7:52
+watch after this video, too. Links are
+7:53
+all in the description. So, let's take a
+7:56
+look at these together. Just to compare
+7:57
+the outputs between the free and premium
+7:59
+version. First of all, we have Grock. It
+8:01
+works well. There is good physics. It
+8:03
+maintains the scene effectively. The
+8:05
+only thing I would point out is that she
+8:07
+doesn't really look like she's holding
+8:08
+the bow correctly here. She's just
+8:11
+slightly holding in between the two, but
+8:13
+it works very well. Now, for the premium
+8:16
+version, for those who are looking for
+8:19
+luxurious AI videos, and as you can see,
+8:21
+certainly the details are finer. Though
+8:23
+I would say that there is a little bit
+8:24
+of uh physics issues here with shooting
+8:26
+the bow. You can see that as it looks
+8:28
+like she goes to shoot, the arrow does
+8:30
+not go. And if this happens suddenly, I
+8:33
+suggest that you rerun the video, which
+8:35
+I will do, and you get out an entirely
+8:37
+different output. Now, here's where
+Seamless transitions with first + last frame
+8:39
+things get very exciting. And what takes
+8:41
+this method to the next level is being
+8:44
+able to animate from one shot to
+8:47
+another. And we do that using first and
+8:50
+last frame. Now, this feature is
+8:52
+currently only available in VO 3.1 and
+8:55
+other premium AI video models. It's not
+8:57
+available in Gro Imagine, but what it
+8:59
+does do is it gives us complete control
+9:01
+of the cinematic techniques that we're
+9:04
+using. Let me show you exactly how to do
+9:06
+it. So, what you need to do is you need
+9:07
+to start off with a first image that's
+9:09
+going to start us off. So, we're going
+9:10
+to use this shot that we extracted as
+9:12
+the first frame and then we're going to
+9:13
+use this one as the last frame. So, with
+9:15
+Google Flow, you can simply press add to
+9:17
+prompt. And you can see here we've got
+9:19
+this as the first and this as the final.
+9:21
+Then you can simply enter in a basic
+9:23
+prompt even just transition between the
+9:25
+two and go ahead and send that in to and
+9:29
+when we do that we get this.
+9:33
+And the next step is to repeat this
+9:35
+process for different shots. Now we can
+9:39
+continue to use the first and last frame
+9:41
+approach which then allows us to combine
+9:44
+clips seamlessly together. So the
+9:47
+important thing to do there is to make
+9:49
+sure that you use the last frame of the
+9:53
+previous sequence as the first frame of
+9:55
+the next sequence. That way when you put
+9:58
+these two clips together like this,
+10:00
+there is no obvious cut and we get this
+10:02
+smooth oneshot storytelling dynamic that
+10:05
+is so immersive and powerful. This is
+10:08
+the dawn of real AI cinematography.
+10:11
+We're moving beyond just pretty images
+10:13
+and now we have real film making
+10:15
+grammar. Wide, medium, close-up story
+10:18
+beats and continuity. But that's not all
+10:21
+because we can take this further. We can
+10:23
+add a extra layer of complexity that
+10:26
+gives us more storytelling
+10:29
+power. So what's the issue here? Well,
+Level 2: Adding narrative structure
+10:32
+we have a series of rather disparate
+10:34
+shots. These are of the same character
+10:37
+that are of the same scene, but there's
+10:39
+no connective narrative that brings us
+10:41
+from one shot to the next and through
+10:43
+the sequence. They seem somewhat
+10:45
+unrelated. It's more like a montage
+10:48
+rather than a true story. And for that,
+10:50
+we're going to use version two of this
+10:52
+prompt. And what this does is it adds a
+10:54
+sequence of specific compositions for
+10:58
+each of these shots, which gives us a
+11:00
+much stronger storytelling narrative.
+11:03
+Now, this prompt was in taken from
+11:05
+Techala and enhanced by an individual
+11:07
+called Underwood. So, let's go ahead pop
+11:09
+that into our prompt bar and repeat the
+11:12
+process. So, we're going to use a
+11:15
+slightly different image to start off,
+11:16
+but the same character and I'm going to
+11:18
+send that into the machine. Sit back and
+11:21
+relax as AI does all the work. Now,
+11:23
+what's going on under the hood here is
+11:25
+that it is leveraging the power of
+11:28
+Gemini 3 to define and create a story
+11:31
+just from our first image and then use
+11:33
+those to define the exact frames that
+11:36
+are going into our final sequence. So,
+11:38
+it's taking the image, it's creating a
+11:40
+story, then it's breaking that story
+11:42
+down into nine different shots that will
+11:44
+tell that story more fully. So instead
+11:47
+of just having multiple angles of one
+11:49
+character in one scenario, it creates a
+11:51
+much more fullyfledged piece of
+11:55
+narrative. So now we have this shot
+11:58
+sequence outputed. And as you can see,
+12:00
+it gives us much better storytelling
+12:02
+capabilities. Each of these shots starts
+12:05
+to give us a little bit more of a sense
+12:08
+of where this story is going. We also
+12:12
+get better uses of zooming into parts of
+12:16
+the character and scenario to explain
+12:19
+what's going on. I put this in for a few
+12:21
+ones. This one is probably my favorite.
+12:23
+So, we'll export a couple of frames from
+12:25
+this using the same method. You can
+12:27
+reference the annotations. So, we'll do
+12:30
+that. Extract. And then we can animate
+12:32
+between a couple of these and we get out
+12:35
+this beautiful sequence.
+12:40
+Now, before we dive into the most
+12:42
+advanced method, I'd love to introduce
+12:44
+you to another approach to this entire
+12:47
+problem. Now, this is a different
+12:49
+workflow, but it gives you an extra
+12:52
+opportunity to explore this concept as
+12:55
+well as the chance to do it daily with
+12:57
+free credits. Now, this method is
+12:59
+particularly good if you're looking to
+13:00
+include it with graphic design related
+13:02
+work. And that is today's sponsor. Let
+13:06
+me introduce you to Idoggram. This is an
+13:08
+AI image generator that helps keep your
+13:10
+characters perfectly consistent across
+13:12
+every scene and project. Let's take a
+13:15
+look at an example together. I created a
+13:17
+character. Let's call her Mary. I placed
+13:19
+Mary in completely different settings
+13:21
+from a futuristic Tokyo skyline to a
+13:23
+cozy coffee shop in Seattle. And her
+13:25
+look stayed identical, even to this
+13:28
+delicate mole above her cheek. No
+13:30
+manuals tweaks, no guesswork, just one
+13:32
+character seamlessly appearing across
+13:34
+all my work. Whether it's for social
+13:36
+posts, website visuals, or branded
+13:38
+assets, or even an AI influencer,
+13:41
+idiogram lets you generate the same
+13:42
+character across multiple environments
+13:44
+with total consistency. It's perfect for
+13:47
+maintaining brand identity and
+13:48
+storytelling continuity, saving you
+13:51
+hours so you can focus on bigger,
+13:54
+better, more creative projects. Now, if
+13:56
+you're ready to elevate your workflow,
+13:58
+then try for free and see how easy
+14:00
+character consistency can be. But of
+14:03
+course we can take this further. Why not
+Level 3: Director’s Cut (full story control)
+14:05
+level up and bring in more power and
+14:08
+that is by actually defining the precise
+14:11
+story that we want to tell. And for that
+14:13
+I have crafted my very own prompt which
+14:15
+allows us to put in a short synopsis of
+14:18
+a tale and ask Nano Banana Pro to then
+14:23
+export us nine images that give us the
+14:27
+main coverage of this story. Now the key
+14:30
+here is that it maintains the character
+14:32
+consistency but it also builds out a
+14:35
+fullyfledged narrative arc for us. And
+14:37
+this means that we can take our
+14:39
+concepts, our ideas and put them in. Now
+14:42
+the way this prompt works is first use
+14:46
+it in Gemini 3 to write the prompt and
+14:49
+then we export that prompt and use it in
+14:51
+Nano Banana Pro to create the images. So
+14:54
+let's do that together. For this
+14:55
+process, the most advanced it requires
+14:58
+two inputs. The first of course is the
+15:00
+base image and the second now is a short
+15:02
+synopsis. So for my synopsis I have a
+15:05
+tribal woman from South America is
+15:07
+walking along a coastal path when she
+15:09
+comes across a large gigantic python.
+15:12
+She then battles with a python before
+15:14
+impaling it with an arrow. She then
+15:16
+takes the carcass of the snake back to
+15:19
+her village. So we have a few story
+15:20
+beats here for our young heroine. Now
+15:23
+you can put this in at the start of the
+15:25
+prompt. This is the third prompt from
+15:28
+the guide, which is version three, which
+15:32
+is my director's cut prompt. And you can
+15:34
+basically post your synopsis at the
+15:36
+start and then the prompt afterwards. I
+15:38
+recommend putting this into Gemini. Now,
+15:40
+you'll then get out a massive prompt
+15:43
+like this, which will have all of our
+15:45
+different shots defined. We can take
+15:48
+this and create our image with it using
+15:51
+the same process. Put prompt in followed
+15:53
+by our foundational image. Send that in.
+15:56
+And now this is where things get so
+15:58
+unbelievably exciting because we have
+15:59
+the entire epic mapped out here with
+16:02
+each of the shots perfectly exquisitely
+16:05
+defined. So we have her walking along
+16:07
+the coastal path. We then see her
+16:09
+engaging with this gigantic python and
+16:12
+we get that lovely moment of true
+16:15
+satisfaction where she punctures the
+16:17
+snake's skin with the arrow and this
+16:20
+lovely overarching high shot of the
+16:23
+snake dead before dragging it behind her
+16:28
+to showcase it to her tribe. So, let's
+16:30
+take this and animate it and put it all
+16:31
+together for a final epic. And this is
+16:34
+exactly how it turns out.
+Automation tools + full workflow recap
+16:54
+Now, you're probably wondering, can any
+16:56
+of this be automated? And that's where
+16:59
+things get interesting. And something I
+17:01
+want to share with you is a tool by the
+17:04
+door brothers who are fantastic AI
+17:06
+individuals. And what they've done is
+17:08
+they've created this tool which
+17:09
+automates part of this process for
+17:11
+generating different story boards. Now
+17:15
+you simply upload an image and go to
+17:17
+storyboard, ask it to generate a grid
+17:20
+and it will create a set of images like
+17:23
+this. Now what's good about this is it
+17:26
+automates the process a little bit. But
+17:28
+the downside is is that you don't have
+17:30
+as much control as you do with prompting
+17:32
+it yourself. But I wanted to show it to
+17:34
+you because it's definitely a nod of
+17:35
+what's to come where we get these
+17:37
+automated processes for creating complex
+17:39
+workflows like this. What we've done is
+17:41
+found a foundational image, a base image
+17:44
+of our main protagonist, showcasing them
+17:46
+in their elegant form. We've then taken
+17:48
+that to create a number of different
+17:51
+shots using the power of Nano Banana
+17:53
+Pro. We elaborated on this process by
+17:56
+bringing in some story structure before
+17:59
+bringing it all together with our
+18:01
+director's cut prompt, which allows us
+18:04
+to define the base image and a story
+18:06
+structure and get out nine accurate
+18:09
+beats that maintain coherence between
+18:11
+our characters, our locations, and our
+18:14
+stylistic intent.
+18:16
+We explored how we can then use start
+18:18
+and last frame to animate sequentially
+18:21
+between these different shots and make
+18:23
+sure that we get a lovely oneshot
+18:25
+sequence that tells an entire story. And
+18:29
+that's the power we now have. One image
+18:31
+can become an entire scene, an entire
+18:34
+story, an entire world. Now go build
+18:37
+something wild. And if you are not
+18:39
+subscribed, I do invite you to join the
+18:41
+channel. It will be a pleasure to have
+18:42
+you along for the journey and watch this
+18:45
+video next which is all about uncensored
+18:48
+AI image models because one issue with
+18:50
+this is that there's a great limit to
+18:53
+what we can get out. But most of all, I
+18:55
+want to say thank you so much for
+18:56
+watching. Thank you for watching to the
+18:57
+end and I want to wish you a delightful
+
+https://github.com/Ghenghis/Z-Image
+
+0:00
+I found a free open-source AI image
+0:02
+generator with virtually zero
+0:05
+censorship. It creates incredibly
+0:07
+realistic photos like this. And best of
+0:10
+all, it generates these in just a single
+0:12
+second. Here's why this actually
+0:14
+matters. Closed source models have been
+0:16
+leading the way, but open- source models
+0:18
+are catching up fast, and that means we
+0:20
+can create them for free on our own
+0:23
+machine, meaning that we get extra
+0:25
+privacy and complete control over what
+0:28
+we create. Z image is trained on a
+0:30
+massive multi-dommain data set and
+0:32
+that's why it nails realism, handles
+0:34
+text, and keeps consistent styles across
+0:36
+a whole series. It's the first open-
+0:39
+source model that actually feels
+0:40
+competitive with the big players like
+0:42
+Nano Banana Pro or Midjourney. So,
+0:44
+instead of me telling you about how good
+0:46
+this is, let me show you just how well
+0:48
+it handles these racy prompts. Here's
+0:51
+Midjourney rejecting our prompt. And the
+0:54
+same thing with Nano Banana Pro. And now
+0:56
+here here's Z image generating it on the
+0:59
+very first try without any debate at
+1:02
+all. This is the gap we're talking
+1:04
+about. Models that block you and models
+1:07
+that deliver. Now of course with great
+1:09
+power comes a great responsibility. And
+1:12
+with this low censorship model we have
+1:15
+the opportunity to create a great number
+1:17
+of things that were not before possible.
+1:19
+So I invite you to use it responsibly.
+1:22
+Now, the model is capable of creating
+1:23
+incredibly realistic and coherent images
+1:27
+like this. And best of all, it's
+1:29
+entirely open- source and free. It
+1:32
+creates up to 2K images, and it's
+1:34
+unbelievably fast, generating images in
+1:36
+just a few seconds. No more waiting for
+1:39
+up to a minute to get out your
+1:41
+creations. Now, the prompt adherence is
+1:43
+incredibly strong, and essentially, it
+1:46
+has pretty much zero censorship. Now,
+1:48
+some of the things you might ask it to
+1:50
+create do not render out effectively
+1:52
+well, and that's mainly due to the
+1:54
+amount of training data it has around
+1:56
+certain scenarios, but I will show you
+1:59
+deep testing on that later on. Now, even
+2:01
+for realism, this is objectively a
+2:04
+standout model. You can see here just
+2:06
+how wonderfully it executes this
+2:09
+close-up shot. And we have a couple of
+2:11
+complex features here. First, we have
+2:12
+the hands that are out of focus, but
+2:15
+also the fine lines on the lips here.
+2:18
+Now, just for reference, the text
+2:21
+readability on this model is exquisite.
+2:23
+And you can see here with fine elements
+2:26
+of text that have been rendered out
+2:28
+without a single obvious spelling
+2:30
+mistake. And what's incredibly
+2:31
+interesting about this is that it can
+2:34
+run on as little as 16 GB of VRAM. Now
+2:37
+this model has excellent real world
+2:39
+understanding meaning you can ask it to
+2:41
+create content on your behalf. Now the
+2:43
+detail of this model is absolutely
+2:46
+beautiful and it works across a whole
+2:48
+range of different mediums if you're
+2:49
+looking to create photo realism but also
+2:51
+for animated content. Now we all know
+2:54
+the situation. You're in Nana Banana Pro
+2:56
+or MidJourney and you enter in a fairly
+2:59
+inconspicuous prompt and immediately
+3:01
+you're met with moderation. Now, there
+3:03
+can be fairly tame and innocuous ideas
+3:06
+that can trigger this extreme
+3:08
+censorship,
+3:09
+but broadly they fall into four main
+3:12
+categories. The first is using famous
+3:14
+people. So, if you enter in a prompt as
+3:17
+simple as Taylor Swift or Donald Trump,
+3:19
+you are explicitly rejected from the
+3:21
+system. But it's not only famous people.
+3:24
+It's also copyrighted material. But
+3:26
+that's not all because the third
+3:28
+category of censorship is one that is
+3:30
+incredibly gray and has many legitimate
+3:34
+uses and that of course is action or
+3:37
+violence even in sporting contexts. Now
+3:40
+of course the final module of censorship
+3:43
+comes from those men and women of
+3:44
+culture who are looking to explore the
+3:46
+beauty of human anatomy. Now, for
+3:49
+purposes of maintaining adherence to the
+3:53
+guidelines of the platform that we are
+3:54
+on, I will describe a lot of what is
+3:57
+going on rather than explicitly showing
+3:59
+you because some of this is not allowed
+4:02
+to be shown on here. Now, all of the
+4:05
+prompts that I've used in this testing
+4:07
+were rejected from Nano Banana Pro and
+4:11
+from Midjourney. So I went through and
+4:14
+tested out a series of prompts and you
+4:15
+can see that every single one was not
+4:18
+allowed. Now there are a number of ways
+4:20
+to use this model but I will be using it
+4:23
+online in this website which gives you a
+4:27
+very generous amount of free credits to
+4:29
+try out. Now of course we will explore a
+4:32
+little bit later on what are the
+4:34
+possibilities for running this locally
+4:35
+and also in other locations. Now the
+4:38
+prompt I'll be using is one that we can
+4:40
+demonstrate is immediately rejected from
+4:43
+Google Nano Banana Pro.
+4:46
+Couldn't generate that image. Try again
+4:47
+later. But if we're here inside of Z
+4:51
+image, we can enter it. Now we will
+4:54
+select this to be generated in 2K. And
+4:56
+the prompt we are using is a
+4:58
+photorealistic highresolution image of
+5:00
+Elon Musk sitting alone on a park bench
+5:03
+in the pouring rain. There he is eating
+5:06
+a soggy hot dog looking with great
+5:08
+grimace. Now let's try a different
+5:11
+celebrity. I'll showcase this with
+5:13
+Taylor Swift in mid Journey. It is
+5:15
+rejected. Pop it into the image. And
+5:17
+here we are. Taylor serving up some
+5:20
+greasy delights. Download the local
+5:23
+diner. Now, one little tip for working
+5:25
+with this on this website is you get a
+5:26
+number of different style selectors that
+5:29
+you can try out. And I do recommend
+5:32
+using one of these with your
+5:34
+generations. Next up, we're taking a
+5:36
+look at copyrighted material. And this
+5:38
+is where we're using figures from
+5:40
+wellknown brands and franchises. So,
+5:44
+first up, we have Mario looking
+5:46
+dejected, sitting on the doorstep of a
+5:48
+derelic pub or bar. There he is
+5:52
+questioning his life choices. Damn, I
+5:54
+wish I didn't put it all on Red Monty.
+5:57
+Next up, we have an image depicting
+5:59
+Ronald McDonald facing the law inside of
+6:02
+a courtroom drama. And you can see that
+6:05
+he is fully rendered out with true
+6:09
+appreciation of the original branded
+6:12
+material. Next up, we're looking at
+6:14
+sporting situations. And for this, I've
+6:16
+asked for a prompt depicting two MMA
+6:19
+fighters. And we're absolutely able to
+6:22
+get out this type of content. As you can
+6:24
+see, we get this perfectly outputed.
+6:26
+Now, another entirely legitimate way to
+6:29
+be exploring AI art is to be depicting
+6:32
+historical scenes. And this can be
+6:35
+important for enhancing our
+6:36
+understanding of the past and for the
+6:39
+realities of human capabilities. So, for
+6:43
+this, we'll be looking at depicting war
+6:45
+scenes. Now the whole argument here is
+6:47
+that of course we need some degree of
+6:49
+censorship but right now the level of
+6:52
+censorship is frankly alarmist and
+6:55
+dangerous. Now I will leave this image
+6:58
+off uh but I will leave a link to all of
+7:00
+my educational scientific tests below
+7:03
+and this includes testing this to its
+7:06
+limits of ethical possibilities. Next up
+7:09
+is the final frontier of censorship and
+7:11
+that of course is the human biology. We
+7:14
+are nothing but men and women of science
+7:16
+on this channel and we endeavor to
+7:18
+explore everything for educational,
+7:20
+scientific, andformational purposes. And
+7:23
+for that, I will be displaying these
+7:25
+prompts on screen and informing you of
+7:27
+their success rather than giving you
+7:29
+full explicit showcases of this
+7:33
+wonderful array of assets. So, we'll be
+7:36
+using the following prompt. Pop that in.
+7:38
+And this is generated with great, what
+7:42
+would I say? Excellent adherence to
+7:45
+detail. Fine complimentary
+7:48
+expressions of the human figure.
+7:51
+Beautiful. Absolutely. Now, of course,
+7:54
+we will be equal on this channel and we
+7:56
+will also explore a prompt depicting the
+7:59
+human male form. Now, one interesting
+8:02
+element of this is that the amount of
+8:04
+censorship for male and female anatomy
+8:07
+is vastly different on each platform.
+8:10
+that often it is the female figurine
+8:13
+that is much more strongly censored. But
+8:16
+as you can see, if we pop in a prompt
+8:17
+like this, we get that out entirely
+8:20
+accurately. Now, the important thing to
+8:22
+recognize here is that this model is not
+8:24
+just interesting because of its low
+8:26
+censorship, but also in its own right
+8:29
+for realism and prompt adherence. Now
+8:32
+here you can see a collage of elements
+8:34
+of incredibly realistic images that work
+8:38
+for highly detailed situations and its
+8:41
+ability to create images that are
+8:43
+frankly at the height of realism is
+8:46
+extremely impressive. Not only that, but
+8:49
+the text rendering is incredible. It is
+8:52
+allowing us extremely dense amounts of
+8:55
+text on our images, which opens up the
+8:57
+door for complex graphic design. Now,
+8:59
+this model also has the ability to edit
+9:02
+images, allowing us to create specific
+9:05
+changes like we can with Nano Banana.
+9:07
+For example, you can see here this cat
+9:10
+poster is changed into one of a dog, but
+9:12
+maintains the exact graphic style from
+9:16
+each image. We can also render out
+9:18
+images from different angles or place
+9:20
+outfits on characters. Now, before we
+9:23
+move on to what else this model is
+9:24
+capable of, here is an incredibly handy
+9:26
+list of words that are banned in
+9:29
+midjourney. Now, you can use this list
+9:31
+to work out why your prompts are getting
+9:34
+banned and moderated and make sure that
+9:36
+you remove those words. Now, this list
+9:38
+includes some quite innocuous words such
+9:40
+as shaft and even clad or clear. Now,
+9:43
+some of these are used contextually, but
+9:45
+even using a word like clear can often
+9:48
+trigger the moderation. Now I've left a
+9:50
+link to this in the description below
+9:52
+for you. Now if you are not subscribed I
+9:54
+invite you to join the channel. It will
+9:56
+be a pleasure to have you aboard. Now Z
+9:58
+image is a great model but one of the
+10:00
+biggest challenges with it is getting
+10:02
+out high quality results. It requires
+10:05
+exceptionally detailed prompt writing
+10:08
+and this can be a laborious process and
+10:11
+it can be challenging to get out
+10:12
+consistent results within a specific
+10:14
+aesthetic. Now, if you are looking to
+10:16
+get out high-quality, consistent
+10:18
+aesthetic images fast, I want to
+10:20
+introduce you to a tool, and that is
+10:22
+today's sponsor. I've been testing out
+10:24
+Verve, which is a brand new AI video
+10:27
+tool for creating highly aesthetic AI
+10:30
+ads like these. Now, what truly sets
+10:33
+Verve apart is its art direction, and it
+10:35
+allows you to create extremely
+10:37
+professional and beautiful ads in a very
+10:39
+simple workflow. Now, let me show you
+10:41
+exactly how that works. If you come to
+10:44
+verve.f FM. What you can do is go ahead
+10:46
+and upload a shot of your product. Now,
+10:49
+I'm going to be using this duffel bag
+10:51
+that I created. Now, once you pop that
+10:53
+in, you have the option to add a prompt,
+10:55
+but the key thing here is selecting art
+10:57
+direction because we have a whole host
+11:00
+of predetermined styles that we can use
+11:03
+to generate images with. So, you get
+11:06
+everything from lux glam all the way
+11:07
+through to futuristic tech. So, I'm
+11:09
+going to select cinematic 16 mm. You can
+11:12
+see it has this wonderful vintage film
+11:15
+effect. I can simply select use this art
+11:17
+direction. Go to create my images and
+11:20
+after a couple of minutes you get out
+11:21
+some wonderful images. Just take a look
+11:24
+at these stunning shots and as you can
+11:25
+see it has this specific aesthetic
+11:28
+already applied and each of the images
+11:31
+works cohesively well with the others.
+11:34
+Now to turn these into videos is
+11:36
+incredibly simple because we simply go
+11:37
+to turn into video. Now, we have the
+11:40
+option to add a prompt if we want to
+11:42
+define the direction, but you can also
+11:44
+leave this empty. So, I've put in a
+11:46
+cinematic high fashion product ad in the
+11:48
+style of Vogue. I can go ahead and press
+11:51
+create video. Sit back and relax. And
+11:54
+let's take a look at how that turned
+11:55
+out. Now, as you can see, we've got a
+11:57
+beautiful aesthetic video showcasing
+11:59
+this product in high detail. Now, what's
+12:02
+great is that you can use these to
+12:03
+create your own adverts or simply as
+12:07
+clips to showcase on your website the
+12:10
+different looks and aesthetic
+12:12
+applications of your own work. Now, I
+12:15
+created a few other clips in this exact
+12:17
+same style. And as we can see, we've got
+12:19
+a beautiful consistent appeal here,
+12:22
+particularly like this one. This slow
+12:24
+zoom in, it really shows the wonderful
+12:27
+quality of the fabric. Now, you can do
+12:29
+this for any type of product you like.
+12:31
+It also works incredibly well with water
+12:34
+bottles. And for this, I will have a go
+12:36
+at the Tokyo scene art direction. I'll
+12:40
+go ahead and generate this. And here are
+12:42
+the images that I got out for that. As
+12:44
+you can see, we've got a completely
+12:46
+different style. And yet, these new
+12:48
+images fit coherently together. And here
+12:51
+is a video showcasing what this style
+12:53
+can look like. Just look at how well
+12:57
+this video reflects the light on the
+12:59
+metallic surface here. Now, the most
+13:01
+interesting thing about this is all of
+13:02
+the different aesthetics that you have
+13:04
+at your fingertips. This saves you from
+13:07
+going through and refining a look, and
+13:08
+you can quickly generate something that
+13:10
+has an extremely high quality of
+13:14
+execution, so you don't spend hours
+13:16
+trying to find the right look for your
+13:18
+product. All of these different vibes
+13:20
+can be categorized into fashion,
+13:22
+general, beauty, food, fitness, and
+13:24
+home. I particularly like some of these
+13:26
+fitness aesthetics. Now, another way to
+13:29
+use Verve is to generate highquality UGC
+13:32
+ads, which showcase a person describing
+13:36
+and using your product. And these look
+13:39
+like this. Now, if you'd like to try
+13:41
+Verve, you get a 3-day free trial where
+13:44
+you can test it out and see exactly what
+13:46
+it's capable of. But if you're looking
+13:48
+to upgrade, you can get the starter
+13:50
+plan, which is $49 per month. I've also
+13:54
+got a discount code for you to get 30%
+13:56
+off your first month, and that's AI
+13:59
+Samson. And with $49 per month, you get
+14:02
+250 credits and commercial use for all
+14:05
+generated assets. So, if you're looking
+14:07
+to create high quality content for your
+14:09
+products in minutes, then Verve is a
+14:12
+great tool to explore. It's incredibly
+14:14
+easy to use. You just upload your
+14:16
+product, select your art direction, and
+14:18
+generate your images and videos straight
+14:20
+away. So, if you want to get premium
+14:22
+looking content for your clients and
+14:24
+products, try out Verve today. Check out
+14:26
+the link in the description below and
+14:28
+try your 3-day free trial today. And a
+14:30
+big thanks to Verve for sponsoring this
+14:33
+video. Now, there are a few ways to use
+14:36
+Zimage. One is on this website,
+14:38
+zimage.ai. I found this has some levels
+14:40
+of censorship. So, if you're looking for
+14:42
+super low censorship, I do not advise
+14:44
+that one. This one, however, is
+14:46
+exceptionally useful and it gives you
+14:49
+unbelievably low levels of censorship.
+14:52
+I'll leave a link to this in the
+14:53
+description below. And this is
+14:55
+Z-image.vip.
+14:57
+And what's great about this is you get
+14:59
+credits as a guest. You also get 150
+15:02
+credits when you sign in. And you can
+15:04
+even log out and sign in with a
+15:06
+different account to get another 150
+15:08
+free credits. And if you do want to
+15:10
+upgrade, they also offer handy pricing,
+15:13
+so you can really get a lot of images
+15:16
+out. Now, you can also get this image on
+15:19
+GitHub, download it, and run it locally
+15:21
+on your own machine, even with 16 GB of
+15:24
+RAM. Now what's particularly interesting
+15:26
+is looking at how this model compares to
+15:28
+other closed source models and you can
+15:31
+see that it is handling particularly
+15:34
+well. It is the fourth best model
+15:37
+currently available on closed blind
+15:40
+testing of AI images. And best of all is
+15:44
+it's the highest scoring open-source
+15:46
+model out there. So here's the real
+15:48
+story. Open source models are catching
+15:51
+up faster than anyone expected and
+15:54
+they're rivaling the powers that we have
+15:57
+with other models like Nano Banana Pro.
+15:59
+Now, watch this video next if you're
+16:02
+interested in exploring the
+16:03
+possibilities of graphic design with AI
+16:06
+imagery. But most of all, I want to wish
+16:08
+you a delightful

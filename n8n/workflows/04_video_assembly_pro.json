@@ -1,0 +1,222 @@
+{
+  "name": "04 - Professional Video Assembly",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "🍌 Professional Video Assembly",
+        "formDescription": "Assemble images and audio into professional-quality videos with smooth transitions, Ken Burns effects, and advanced audio mixing.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Asset Manifest (JSON)",
+              "fieldType": "textarea",
+              "requiredField": false,
+              "placeholder": "Paste manifest from Multi-Asset Processor, or leave empty to configure manually"
+            },
+            {
+              "fieldLabel": "Output Platform",
+              "fieldType": "dropdown",
+              "requiredField": true,
+              "fieldOptions": {
+                "values": [
+                  { "option": "YouTube Long-form (16:9, 1080p)" },
+                  { "option": "YouTube Shorts (9:16, 1080p)" },
+                  { "option": "TikTok (9:16, 1080p)" },
+                  { "option": "Instagram Reel (9:16, 1080p)" },
+                  { "option": "Instagram Post (1:1, 1080p)" },
+                  { "option": "Cinematic (2.39:1, 1080p)" },
+                  { "option": "4K YouTube (16:9, 2160p)" },
+                  { "option": "4K Cinematic (2.39:1, 2160p)" }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Quality Preset",
+              "fieldType": "dropdown",
+              "requiredField": true,
+              "fieldOptions": {
+                "values": [
+                  { "option": "Draft (Fast, Lower Quality)" },
+                  { "option": "Standard (Balanced)" },
+                  { "option": "High (Slow, Better Quality)" },
+                  { "option": "Maximum (Very Slow, Best Quality)" },
+                  { "option": "Broadcast (Professional)" }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Transition Style",
+              "fieldType": "dropdown",
+              "requiredField": true,
+              "fieldOptions": {
+                "values": [
+                  { "option": "Smooth Dissolve (Default)" },
+                  { "option": "Quick Cut" },
+                  { "option": "Fade Through Black" },
+                  { "option": "Fade Through White" },
+                  { "option": "Slide Left" },
+                  { "option": "Slide Right" },
+                  { "option": "Zoom Blur" },
+                  { "option": "Mixed (Variety)" },
+                  { "option": "No Transitions" }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Transition Duration (seconds)",
+              "fieldType": "number",
+              "requiredField": true,
+              "fieldOptions": {
+                "numberMin": 0.1,
+                "numberMax": 3.0,
+                "numberStep": 0.1,
+                "numberDefault": 0.5
+              }
+            },
+            {
+              "fieldLabel": "Ken Burns Effect",
+              "fieldType": "dropdown",
+              "requiredField": true,
+              "fieldOptions": {
+                "values": [
+                  { "option": "Enabled - Subtle (5%)" },
+                  { "option": "Enabled - Medium (10%)" },
+                  { "option": "Enabled - Strong (15%)" },
+                  { "option": "Disabled" }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Audio Fade In (seconds)",
+              "fieldType": "number",
+              "requiredField": true,
+              "fieldOptions": {
+                "numberMin": 0,
+                "numberMax": 5,
+                "numberStep": 0.5,
+                "numberDefault": 1
+              }
+            },
+            {
+              "fieldLabel": "Audio Fade Out (seconds)",
+              "fieldType": "number",
+              "requiredField": true,
+              "fieldOptions": {
+                "numberMin": 0,
+                "numberMax": 10,
+                "numberStep": 0.5,
+                "numberDefault": 2
+              }
+            },
+            {
+              "fieldLabel": "Color Grading",
+              "fieldType": "dropdown",
+              "requiredField": true,
+              "fieldOptions": {
+                "values": [
+                  { "option": "None" },
+                  { "option": "Cinematic Warm" },
+                  { "option": "Cinematic Cool" },
+                  { "option": "High Contrast" },
+                  { "option": "Soft/Dreamy" },
+                  { "option": "Vintage Film" },
+                  { "option": "Black & White" },
+                  { "option": "Vibrant" },
+                  { "option": "Muted/Desaturated" }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Output Filename",
+              "fieldType": "text",
+              "requiredField": false,
+              "placeholder": "Leave empty for auto-generated name"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "form-trigger",
+      "name": "Video Assembly Form",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [200, 300],
+      "webhookId": "video-assembly-v1"
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first().json;\n\n// Parse manifest if provided\nlet manifest = null;\ntry {\n  const manifestJson = input['Asset Manifest (JSON)'];\n  if (manifestJson && manifestJson.trim()) {\n    manifest = JSON.parse(manifestJson);\n  }\n} catch (e) {\n  console.error('Invalid manifest JSON');\n}\n\nconst platform = input['Output Platform'] || 'YouTube Long-form (16:9, 1080p)';\nconst quality = input['Quality Preset'] || 'Standard (Balanced)';\nconst transitionStyle = input['Transition Style'] || 'Smooth Dissolve (Default)';\nconst transitionDuration = parseFloat(input['Transition Duration (seconds)']) || 0.5;\nconst kenBurns = input['Ken Burns Effect'] || 'Enabled - Medium (10%)';\nconst audioFadeIn = parseFloat(input['Audio Fade In (seconds)']) || 1;\nconst audioFadeOut = parseFloat(input['Audio Fade Out (seconds)']) || 2;\nconst colorGrading = input['Color Grading'] || 'None';\nconst outputFilename = input['Output Filename'] || '';\n\n// Platform configurations\nconst platformConfigs = {\n  'YouTube Long-form (16:9, 1080p)': { width: 1920, height: 1080, fps: 30, aspect: '16:9' },\n  'YouTube Shorts (9:16, 1080p)': { width: 1080, height: 1920, fps: 30, aspect: '9:16' },\n  'TikTok (9:16, 1080p)': { width: 1080, height: 1920, fps: 30, aspect: '9:16' },\n  'Instagram Reel (9:16, 1080p)': { width: 1080, height: 1920, fps: 30, aspect: '9:16' },\n  'Instagram Post (1:1, 1080p)': { width: 1080, height: 1080, fps: 30, aspect: '1:1' },\n  'Cinematic (2.39:1, 1080p)': { width: 1920, height: 803, fps: 24, aspect: '2.39:1' },\n  '4K YouTube (16:9, 2160p)': { width: 3840, height: 2160, fps: 30, aspect: '16:9' },\n  '4K Cinematic (2.39:1, 2160p)': { width: 3840, height: 1607, fps: 24, aspect: '2.39:1' }\n};\n\n// Quality presets (FFmpeg settings)\nconst qualityPresets = {\n  'Draft (Fast, Lower Quality)': { preset: 'ultrafast', crf: 28, bitrate: '3M' },\n  'Standard (Balanced)': { preset: 'medium', crf: 23, bitrate: '8M' },\n  'High (Slow, Better Quality)': { preset: 'slow', crf: 20, bitrate: '15M' },\n  'Maximum (Very Slow, Best Quality)': { preset: 'veryslow', crf: 18, bitrate: '25M' },\n  'Broadcast (Professional)': { preset: 'veryslow', crf: 16, bitrate: '35M' }\n};\n\n// Transition mappings (FFmpeg xfade filters)\nconst transitionMappings = {\n  'Smooth Dissolve (Default)': 'dissolve',\n  'Quick Cut': 'fade',\n  'Fade Through Black': 'fadeblack',\n  'Fade Through White': 'fadewhite',\n  'Slide Left': 'slideleft',\n  'Slide Right': 'slideright',\n  'Zoom Blur': 'zoomin',\n  'Mixed (Variety)': 'mixed',\n  'No Transitions': 'none'\n};\n\n// Ken Burns intensity\nconst kenBurnsIntensity = {\n  'Enabled - Subtle (5%)': 0.05,\n  'Enabled - Medium (10%)': 0.10,\n  'Enabled - Strong (15%)': 0.15,\n  'Disabled': 0\n};\n\n// Color grading LUT mappings\nconst colorGradingFilters = {\n  'None': '',\n  'Cinematic Warm': 'colortemperature=temperature=5500,eq=saturation=1.1:contrast=1.05',\n  'Cinematic Cool': 'colortemperature=temperature=7500,eq=saturation=0.95:contrast=1.1',\n  'High Contrast': 'eq=contrast=1.3:saturation=1.2',\n  'Soft/Dreamy': 'gblur=sigma=0.5,eq=contrast=0.9:saturation=0.9:brightness=0.05',\n  'Vintage Film': 'colorchannelmixer=.393:.769:.189:0:.349:.686:.168:0:.272:.534:.131,eq=saturation=0.8',\n  'Black & White': 'hue=s=0',\n  'Vibrant': 'eq=saturation=1.5:contrast=1.1',\n  'Muted/Desaturated': 'eq=saturation=0.6:contrast=1.05'\n};\n\nconst jobId = manifest?.jobId || `assembly_${Date.now()}_${Math.random().toString(36).substring(7)}`;\nconst filename = outputFilename || `${jobId}.mp4`;\n\nreturn {\n  jobId,\n  manifest,\n  hasManifest: !!manifest,\n  platform,\n  platformConfig: platformConfigs[platform],\n  quality,\n  qualityPreset: qualityPresets[quality],\n  transitionStyle,\n  transitionType: transitionMappings[transitionStyle],\n  transitionDuration,\n  kenBurnsEnabled: kenBurns !== 'Disabled',\n  kenBurnsIntensity: kenBurnsIntensity[kenBurns],\n  audioFadeIn,\n  audioFadeOut,\n  colorGrading,\n  colorGradingFilter: colorGradingFilters[colorGrading],\n  outputFilename: filename,\n  timestamp: new Date().toISOString()\n};"
+      },
+      "id": "parse-settings",
+      "name": "Parse Settings",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [400, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Build FFmpeg complex filter chain for professional video assembly\nconst data = $input.first().json;\n\nif (!data.hasManifest || !data.manifest.scenes || data.manifest.scenes.length === 0) {\n  throw new Error('No scenes available. Please provide a valid manifest with scenes.');\n}\n\nconst scenes = data.manifest.scenes;\nconst config = data.platformConfig;\nconst transitions = data.transitionType;\nconst transitionDur = data.transitionDuration;\nconst kenBurns = data.kenBurnsEnabled;\nconst kbIntensity = data.kenBurnsIntensity;\nconst colorFilter = data.colorGradingFilter;\n\n// Build filter chain\nlet filterParts = [];\nlet inputIndex = 0;\n\n// Process each scene\nscenes.forEach((scene, idx) => {\n  const duration = scene.duration || 5;\n  const fps = config.fps;\n  const totalFrames = Math.ceil(duration * fps);\n  \n  // Scale and pad to fit output dimensions\n  let scaleFilter = `[${idx}:v]scale=${config.width}:${config.height}:force_original_aspect_ratio=decrease,pad=${config.width}:${config.height}:(ow-iw)/2:(oh-ih)/2:black`;\n  \n  // Add Ken Burns effect if enabled\n  if (kenBurns && kbIntensity > 0) {\n    const zoomStart = idx % 2 === 0 ? 1 : (1 + kbIntensity);\n    const zoomEnd = idx % 2 === 0 ? (1 + kbIntensity) : 1;\n    const xExpr = idx % 3 === 0 ? \"'iw/2-(iw/zoom/2)'\" : idx % 3 === 1 ? \"'(iw/2-(iw/zoom/2))*(1-on/\" + totalFrames + \")'\" : \"'0'\";\n    const yExpr = \"'ih/2-(ih/zoom/2)'\";\n    \n    scaleFilter += `,zoompan=z='${zoomStart}+(${zoomEnd}-${zoomStart})*on/${totalFrames}':x=${xExpr}:y=${yExpr}:d=${totalFrames}:s=${config.width}x${config.height}:fps=${fps}`;\n  }\n  \n  // Set duration\n  scaleFilter += `,setpts=PTS-STARTPTS,trim=duration=${duration}`;\n  \n  // Apply color grading if specified\n  if (colorFilter) {\n    scaleFilter += `,${colorFilter}`;\n  }\n  \n  // Output label\n  scaleFilter += `[v${idx}]`;\n  \n  filterParts.push(scaleFilter);\n});\n\n// Build transition chain\nif (scenes.length > 1 && transitions !== 'none') {\n  let transitionFilters = [];\n  let currentInput = '[v0]';\n  \n  for (let i = 1; i < scenes.length; i++) {\n    const prevDuration = scenes[i - 1].duration || 5;\n    const offset = prevDuration - transitionDur;\n    \n    // Determine transition type\n    let transType = transitions;\n    if (transitions === 'mixed') {\n      const types = ['dissolve', 'fadeblack', 'fadewhite', 'slideleft', 'slideright'];\n      transType = types[i % types.length];\n    }\n    \n    const outputLabel = i === scenes.length - 1 ? '[vout]' : `[vt${i}]`;\n    transitionFilters.push(`${currentInput}[v${i}]xfade=transition=${transType}:duration=${transitionDur}:offset=${offset}${outputLabel}`);\n    currentInput = outputLabel.replace('[', '').replace(']', '');\n    currentInput = `[${currentInput}]`;\n  }\n  \n  filterParts = filterParts.concat(transitionFilters);\n} else {\n  // No transitions - just concat\n  const concatInputs = scenes.map((_, idx) => `[v${idx}]`).join('');\n  filterParts.push(`${concatInputs}concat=n=${scenes.length}:v=1:a=0[vout]`);\n}\n\n// Build audio filter if audio tracks exist\nlet audioFilter = '';\nif (data.manifest.audio && data.manifest.audio.tracks && data.manifest.audio.tracks.length > 0) {\n  const tracks = data.manifest.audio.tracks;\n  const fadeIn = data.audioFadeIn;\n  const fadeOut = data.audioFadeOut;\n  const totalDur = scenes.reduce((sum, s) => sum + (s.duration || 5), 0);\n  \n  if (tracks.length === 1) {\n    audioFilter = `[${scenes.length}:a]afade=t=in:st=0:d=${fadeIn},afade=t=out:st=${totalDur - fadeOut}:d=${fadeOut}[aout]`;\n  } else {\n    // Mix multiple audio tracks\n    let audioInputs = tracks.map((_, idx) => `[${scenes.length + idx}:a]`).join('');\n    audioFilter = `${audioInputs}amix=inputs=${tracks.length}:duration=longest,afade=t=in:st=0:d=${fadeIn},afade=t=out:st=${totalDur - fadeOut}:d=${fadeOut}[aout]`;\n  }\n}\n\nconst complexFilter = filterParts.join(';') + (audioFilter ? ';' + audioFilter : '');\n\nreturn {\n  ...data,\n  complexFilter,\n  hasAudio: !!audioFilter,\n  sceneCount: scenes.length,\n  totalDuration: scenes.reduce((sum, s) => sum + (s.duration || 5), 0) - (transitionDur * Math.max(0, scenes.length - 1))\n};"
+      },
+      "id": "build-filter",
+      "name": "Build FFmpeg Filter",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [600, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Generate complete FFmpeg command\nconst data = $input.first().json;\n\nconst config = data.platformConfig;\nconst preset = data.qualityPreset;\n\n// Build input arguments\nconst inputArgs = [];\ndata.manifest.scenes.forEach((scene, idx) => {\n  if (scene.imageData) {\n    // For inline images, we'd save them first\n    inputArgs.push(`-loop 1 -t ${scene.duration} -i /app/data/temp/${data.jobId}_scene_${idx}.png`);\n  } else if (scene.imageFilename) {\n    inputArgs.push(`-loop 1 -t ${scene.duration} -i /app/data/uploads/${scene.imageFilename}`);\n  }\n});\n\n// Add audio inputs\nif (data.manifest.audio && data.manifest.audio.tracks) {\n  data.manifest.audio.tracks.forEach((track, idx) => {\n    if (track.data) {\n      inputArgs.push(`-i /app/data/temp/${data.jobId}_audio_${idx}.mp3`);\n    } else if (track.filename) {\n      inputArgs.push(`-i /app/data/uploads/${track.filename}`);\n    }\n  });\n}\n\n// Build output arguments\nconst outputArgs = [\n  `-filter_complex \"${data.complexFilter}\"`,\n  `-map \"[vout]\"`,\n  data.hasAudio ? `-map \"[aout]\"` : '-an',\n  `-c:v libx264`,\n  `-preset ${preset.preset}`,\n  `-crf ${preset.crf}`,\n  `-b:v ${preset.bitrate}`,\n  `-maxrate ${parseInt(preset.bitrate) * 1.5}M`,\n  `-bufsize ${parseInt(preset.bitrate) * 2}M`,\n  `-pix_fmt yuv420p`,\n  `-r ${config.fps}`,\n  data.hasAudio ? `-c:a aac -b:a 192k` : '',\n  `-movflags +faststart`,\n  `-y`,\n  `/app/data/outputs/${data.outputFilename}`\n].filter(Boolean);\n\nconst ffmpegCommand = `ffmpeg ${inputArgs.join(' ')} ${outputArgs.join(' ')}`;\n\nreturn {\n  ...data,\n  ffmpegCommand,\n  inputArgs,\n  outputArgs,\n  outputPath: `/app/data/outputs/${data.outputFilename}`\n};"
+      },
+      "id": "generate-command",
+      "name": "Generate FFmpeg Command",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [800, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"jobId\": \"{{ $json.jobId }}\",\n  \"status\": \"command_ready\",\n  \"ffmpegCommand\": {{ JSON.stringify($json.ffmpegCommand) }},\n  \"outputPath\": \"{{ $json.outputPath }}\",\n  \"settings\": {\n    \"platform\": \"{{ $json.platform }}\",\n    \"quality\": \"{{ $json.quality }}\",\n    \"transitionStyle\": \"{{ $json.transitionStyle }}\",\n    \"kenBurnsEnabled\": {{ $json.kenBurnsEnabled }},\n    \"colorGrading\": \"{{ $json.colorGrading }}\"\n  },\n  \"metrics\": {\n    \"sceneCount\": {{ $json.sceneCount }},\n    \"totalDuration\": {{ $json.totalDuration }},\n    \"hasAudio\": {{ $json.hasAudio }}\n  },\n  \"timestamp\": \"{{ $json.timestamp }}\"\n}",
+        "options": {}
+      },
+      "id": "respond",
+      "name": "Respond",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [1000, 300]
+    }
+  ],
+  "connections": {
+    "Video Assembly Form": {
+      "main": [
+        [{ "node": "Parse Settings", "type": "main", "index": 0 }]
+      ]
+    },
+    "Parse Settings": {
+      "main": [
+        [{ "node": "Build FFmpeg Filter", "type": "main", "index": 0 }]
+      ]
+    },
+    "Build FFmpeg Filter": {
+      "main": [
+        [{ "node": "Generate FFmpeg Command", "type": "main", "index": 0 }]
+      ]
+    },
+    "Generate FFmpeg Command": {
+      "main": [
+        [{ "node": "Respond", "type": "main", "index": 0 }]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": [
+    { "name": "nano-banana" },
+    { "name": "video-assembly" },
+    { "name": "ffmpeg" }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2024-12-17T00:00:00.000Z",
+  "versionId": "1"
+}

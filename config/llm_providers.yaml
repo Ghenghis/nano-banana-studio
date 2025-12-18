@@ -1,0 +1,138 @@
+# LLM Provider Configuration for Nano Banana Studio Pro
+# =====================================================
+# Configure local and cloud LLM providers with fallback chain
+
+providers:
+  # Local Providers (preferred - free, private)
+  lm_studio:
+    enabled: true
+    base_url: "http://localhost:1234/v1"
+    priority: 1
+    timeout: 120
+    models:
+      - "llama-3.1-8b-instruct"
+      - "mistral-7b-instruct-v0.3"
+      - "qwen2.5-7b-instruct"
+      - "deepseek-coder-6.7b"
+    default_model: "llama-3.1-8b-instruct"
+    capabilities:
+      - chat
+      - completion
+      - code
+    
+  ollama:
+    enabled: true
+    base_url: "http://localhost:11434"
+    priority: 2
+    timeout: 120
+    models:
+      - "llama3.1:8b"
+      - "mistral:7b"
+      - "codellama:7b"
+      - "qwen2.5:7b"
+    default_model: "llama3.1:8b"
+    capabilities:
+      - chat
+      - completion
+      - embeddings
+      - code
+    
+  # Cloud Providers (fallback)
+  openrouter:
+    enabled: true
+    base_url: "https://openrouter.ai/api/v1"
+    priority: 3
+    timeout: 60
+    requires_key: "OPENROUTER_API_KEY"
+    models:
+      - "google/gemini-2.0-flash-exp:free"
+      - "meta-llama/llama-3.1-70b-instruct:free"
+      - "mistralai/mistral-7b-instruct:free"
+      - "anthropic/claude-3.5-sonnet"
+      - "openai/gpt-4o-mini"
+    default_model: "google/gemini-2.0-flash-exp:free"
+    capabilities:
+      - chat
+      - completion
+      - vision
+      - code
+    
+  openai:
+    enabled: true
+    base_url: "https://api.openai.com/v1"
+    priority: 4
+    timeout: 60
+    requires_key: "OPENAI_API_KEY"
+    models:
+      - "gpt-4o-mini"
+      - "gpt-4o"
+      - "gpt-4-turbo"
+      - "gpt-3.5-turbo"
+    default_model: "gpt-4o-mini"
+    capabilities:
+      - chat
+      - completion
+      - vision
+      - embeddings
+      - code
+      - function_calling
+
+# Fallback chain configuration
+fallback:
+  enabled: true
+  max_retries: 3
+  retry_delay: 1.0
+  chain:
+    - lm_studio
+    - ollama
+    - openrouter
+    - openai
+
+# Task-specific model recommendations
+task_models:
+  prompt_enhancement:
+    preferred: ["llama-3.1-8b-instruct", "gpt-4o-mini"]
+    temperature: 0.8
+    max_tokens: 2000
+    
+  storyboard_generation:
+    preferred: ["gpt-4o", "llama-3.1-8b-instruct"]
+    temperature: 0.7
+    max_tokens: 4000
+    
+  code_generation:
+    preferred: ["deepseek-coder-6.7b", "codellama:7b", "gpt-4o"]
+    temperature: 0.3
+    max_tokens: 4000
+    
+  scene_analysis:
+    preferred: ["llama-3.1-8b-instruct", "mistral-7b-instruct-v0.3"]
+    temperature: 0.5
+    max_tokens: 1500
+    
+  lyrics_generation:
+    preferred: ["llama-3.1-8b-instruct", "gpt-4o-mini"]
+    temperature: 0.9
+    max_tokens: 2000
+
+# Rate limiting
+rate_limits:
+  lm_studio:
+    requests_per_minute: 60
+    tokens_per_minute: 100000
+  ollama:
+    requests_per_minute: 30
+    tokens_per_minute: 50000
+  openrouter:
+    requests_per_minute: 20
+    tokens_per_minute: 40000
+  openai:
+    requests_per_minute: 20
+    tokens_per_minute: 40000
+
+# Health check configuration
+health_check:
+  enabled: true
+  interval_seconds: 60
+  timeout_seconds: 5
+  test_prompt: "Say 'OK' if you're working."

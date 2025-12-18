@@ -1,0 +1,236 @@
+{
+  "name": "10 - Image-to-Video Animation (Runway/Kling/SVD)",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "🎬 Image-to-Video Animation",
+        "formDescription": "Animate still images into video clips using AI. Supports multiple providers: Runway Gen-3, Kling AI, Stable Video Diffusion, or FFmpeg Ken Burns.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Source Image",
+              "fieldType": "file",
+              "requiredField": true,
+              "acceptFileTypes": ".jpg,.jpeg,.png,.webp"
+            },
+            {
+              "fieldLabel": "Animation Provider",
+              "fieldType": "dropdown",
+              "requiredField": true,
+              "fieldOptions": {
+                "values": [
+                  { "option": "Auto (Best Available)" },
+                  { "option": "Runway Gen-3 (Best Quality)" },
+                  { "option": "Kling AI (Good Quality, Free Tier)" },
+                  { "option": "Stable Video Diffusion (Local GPU)" },
+                  { "option": "FFmpeg Ken Burns (Fastest, No AI)" }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Motion Type",
+              "fieldType": "dropdown",
+              "requiredField": true,
+              "fieldOptions": {
+                "values": [
+                  { "option": "Subtle Movement (breathing, blinking)" },
+                  { "option": "Talking/Singing (lip sync)" },
+                  { "option": "Dancing (body movement)" },
+                  { "option": "Walking/Moving" },
+                  { "option": "Camera Pan Left" },
+                  { "option": "Camera Pan Right" },
+                  { "option": "Zoom In (dramatic)" },
+                  { "option": "Zoom Out (reveal)" },
+                  { "option": "Parallax (depth effect)" },
+                  { "option": "Custom Prompt" }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Custom Motion Prompt (if selected)",
+              "fieldType": "textarea",
+              "requiredField": false,
+              "placeholder": "Describe the motion you want: e.g., 'Person turns head slowly to the left while smiling'"
+            },
+            {
+              "fieldLabel": "Duration (seconds)",
+              "fieldType": "dropdown",
+              "requiredField": true,
+              "fieldOptions": {
+                "values": [
+                  { "option": "2" },
+                  { "option": "3" },
+                  { "option": "4" },
+                  { "option": "5" },
+                  { "option": "6" },
+                  { "option": "8" },
+                  { "option": "10" }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Output Quality",
+              "fieldType": "dropdown",
+              "requiredField": true,
+              "fieldOptions": {
+                "values": [
+                  { "option": "720p (Fast)" },
+                  { "option": "1080p (Standard)" },
+                  { "option": "4K (Best, Slow)" }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Aspect Ratio",
+              "fieldType": "dropdown",
+              "requiredField": true,
+              "fieldOptions": {
+                "values": [
+                  { "option": "16:9 (Landscape)" },
+                  { "option": "9:16 (Portrait/Vertical)" },
+                  { "option": "1:1 (Square)" },
+                  { "option": "4:3 (Classic)" },
+                  { "option": "Original (Match Input)" }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Seed (for reproducibility)",
+              "fieldType": "number",
+              "requiredField": false,
+              "fieldOptions": {
+                "numberMin": 0,
+                "numberMax": 999999999
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "form-trigger",
+      "name": "Animation Form",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [200, 300],
+      "webhookId": "image-to-video-v1"
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first().json;\n\nconst provider = input['Animation Provider'];\nconst motionType = input['Motion Type'];\nconst customMotion = input['Custom Motion Prompt (if selected)'] || '';\nconst duration = parseInt(input['Duration (seconds)']);\nconst quality = input['Output Quality'];\nconst aspectRatio = input['Aspect Ratio'];\nconst seed = input['Seed (for reproducibility)'] || Math.floor(Math.random() * 999999999);\n\n// Get image data\nlet imageData = null;\nlet imageFilename = 'input.jpg';\nif ($binary && $binary.data) {\n  imageData = $binary.data.data;\n  imageFilename = $binary.data.fileName || 'input.jpg';\n}\n\n// Map motion type to provider-specific prompts\nconst motionPrompts = {\n  'Subtle Movement (breathing, blinking)': 'subtle breathing movement, gentle eye blinks, lifelike micro-expressions',\n  'Talking/Singing (lip sync)': 'person speaking or singing, natural lip movements, expressive face',\n  'Dancing (body movement)': 'person dancing, rhythmic body movement, energetic motion',\n  'Walking/Moving': 'person walking forward, natural gait, smooth movement',\n  'Camera Pan Left': 'camera panning slowly to the left, cinematic movement',\n  'Camera Pan Right': 'camera panning slowly to the right, cinematic movement',\n  'Zoom In (dramatic)': 'slow dramatic zoom in, focus intensifies',\n  'Zoom Out (reveal)': 'slow zoom out revealing more of the scene',\n  'Parallax (depth effect)': 'parallax depth effect, layers moving at different speeds',\n  'Custom Prompt': customMotion\n};\n\n// Quality to resolution mapping\nconst resolutions = {\n  '720p (Fast)': { width: 1280, height: 720 },\n  '1080p (Standard)': { width: 1920, height: 1080 },\n  '4K (Best, Slow)': { width: 3840, height: 2160 }\n};\n\n// Aspect ratio adjustments\nconst aspectRatios = {\n  '16:9 (Landscape)': { width: 1920, height: 1080 },\n  '9:16 (Portrait/Vertical)': { width: 1080, height: 1920 },\n  '1:1 (Square)': { width: 1080, height: 1080 },\n  '4:3 (Classic)': { width: 1440, height: 1080 },\n  'Original (Match Input)': null\n};\n\nconst resolution = aspectRatio === 'Original (Match Input)' \n  ? resolutions[quality]\n  : aspectRatios[aspectRatio];\n\nconst jobId = `animate_${Date.now()}_${Math.random().toString(36).substring(7)}`;\n\nreturn {\n  jobId,\n  imageData,\n  imageFilename,\n  provider: provider.split(' ')[0].toLowerCase(),\n  providerFull: provider,\n  motionType,\n  motionPrompt: motionPrompts[motionType] || motionType,\n  customMotion,\n  duration,\n  quality,\n  resolution,\n  aspectRatio,\n  seed,\n  timestamp: new Date().toISOString()\n};"
+      },
+      "id": "parse-input",
+      "name": "Parse Input",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [400, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.provider }}",
+              "operation": "equals",
+              "value2": "ffmpeg"
+            }
+          ]
+        }
+      },
+      "id": "switch-provider",
+      "name": "Route by Provider",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [600, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api:8000/api/v1/animate/image",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"image_base64\": {{ JSON.stringify($json.imageData) }},\n  \"motion_type\": \"{{ $json.motionType.split(' ')[0].toLowerCase() }}\",\n  \"duration\": {{ $json.duration }},\n  \"provider\": \"{{ $json.provider }}\"\n}",
+        "options": {
+          "timeout": 300000
+        }
+      },
+      "id": "call-animation-api",
+      "name": "Call Animation API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [800, 200]
+    },
+    {
+      "parameters": {
+        "jsCode": "// FFmpeg Ken Burns fallback (no external API needed)\nconst data = $input.first().json;\n\n// Build FFmpeg command based on motion type\nconst duration = data.duration;\nconst width = data.resolution?.width || 1920;\nconst height = data.resolution?.height || 1080;\nconst fps = 30;\nconst frames = duration * fps;\n\nlet zoomFormula = '';\nlet panFormula = { x: \"'iw/2-(iw/zoom/2)'\", y: \"'ih/2-(ih/zoom/2)'\" };\n\nswitch (data.motionType) {\n  case 'Zoom In (dramatic)':\n    zoomFormula = `'1+(0.3*on/${frames})'`;\n    break;\n  case 'Zoom Out (reveal)':\n    zoomFormula = `'1.3-(0.3*on/${frames})'`;\n    break;\n  case 'Camera Pan Left':\n    zoomFormula = \"'1.1'\";\n    panFormula.x = `'(iw*0.1)*(1-on/${frames})'`;\n    break;\n  case 'Camera Pan Right':\n    zoomFormula = \"'1.1'\";\n    panFormula.x = `'(iw*0.1)*(on/${frames})'`;\n    break;\n  case 'Parallax (depth effect)':\n    zoomFormula = `'1.05+(0.1*sin(on*PI/${frames}))'`;\n    break;\n  default:\n    // Subtle movement\n    zoomFormula = `'1+(0.1*on/${frames})'`;\n}\n\nconst ffmpegFilter = `zoompan=z=${zoomFormula}:x=${panFormula.x}:y=${panFormula.y}:d=${frames}:s=${width}x${height}:fps=${fps}`;\n\nconst outputPath = `/app/data/outputs/${data.jobId}_animated.mp4`;\n\nreturn {\n  ...data,\n  provider_used: 'ffmpeg_kenburns',\n  ffmpeg_filter: ffmpegFilter,\n  output_path: outputPath,\n  command: `ffmpeg -loop 1 -i input.jpg -vf \"${ffmpegFilter}\" -c:v libx264 -t ${duration} -pix_fmt yuv420p -y \"${outputPath}\"`,\n  status: 'ready_to_execute'\n};"
+      },
+      "id": "build-ffmpeg-kenburns",
+      "name": "Build FFmpeg Ken Burns",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [800, 400]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Process animation result\nconst result = $input.first().json;\nconst inputData = $('Parse Input').first().json;\n\nreturn {\n  jobId: inputData.jobId,\n  status: result.status || 'completed',\n  \n  input: {\n    image: inputData.imageFilename,\n    motion_type: inputData.motionType,\n    duration: inputData.duration,\n    aspect_ratio: inputData.aspectRatio\n  },\n  \n  output: {\n    provider: result.provider_used || inputData.provider,\n    video_path: result.video_path || result.output_path,\n    duration: inputData.duration,\n    resolution: inputData.resolution,\n    seed: inputData.seed\n  },\n  \n  next_steps: [\n    'Video clip is ready for assembly',\n    'Use Video Assembly workflow to combine with audio',\n    'Can be used as a scene in the full music video pipeline'\n  ]\n};"
+      },
+      "id": "process-result",
+      "name": "Process Result",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1000, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {}
+      },
+      "id": "respond",
+      "name": "Respond",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [1200, 300]
+    }
+  ],
+  "connections": {
+    "Animation Form": {
+      "main": [
+        [{ "node": "Parse Input", "type": "main", "index": 0 }]
+      ]
+    },
+    "Parse Input": {
+      "main": [
+        [{ "node": "Route by Provider", "type": "main", "index": 0 }]
+      ]
+    },
+    "Route by Provider": {
+      "main": [
+        [{ "node": "Call Animation API", "type": "main", "index": 0 }],
+        [{ "node": "Build FFmpeg Ken Burns", "type": "main", "index": 0 }]
+      ]
+    },
+    "Call Animation API": {
+      "main": [
+        [{ "node": "Process Result", "type": "main", "index": 0 }]
+      ]
+    },
+    "Build FFmpeg Ken Burns": {
+      "main": [
+        [{ "node": "Process Result", "type": "main", "index": 0 }]
+      ]
+    },
+    "Process Result": {
+      "main": [
+        [{ "node": "Respond", "type": "main", "index": 0 }]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": [
+    { "name": "nano-banana" },
+    { "name": "animation" },
+    { "name": "image-to-video" }
+  ]
+}

@@ -1,0 +1,343 @@
+# =============================================================================
+# NANO BANANA STUDIO PRO - VISUAL STYLE PRESETS
+# =============================================================================
+# Pre-configured style presets for consistent visual output
+# =============================================================================
+
+styles:
+  # ===========================================================================
+  # PHOTOGRAPHY STYLES
+  # ===========================================================================
+  
+  photorealistic:
+    name: "Photorealistic"
+    description: "Ultra-realistic photography with natural lighting"
+    prompt_modifiers:
+      - "photorealistic"
+      - "hyperrealistic"
+      - "professional photography"
+      - "natural lighting"
+      - "high detail"
+      - "8K resolution"
+      - "sharp focus"
+    negative_modifiers:
+      - "cartoon"
+      - "illustration"
+      - "painting"
+      - "anime"
+      - "artificial"
+    color_grading: "natural"
+    recommended_for: ["portraits", "products", "nature"]
+    
+  cinematic:
+    name: "Cinematic"
+    description: "Hollywood film-like visuals with dramatic lighting"
+    prompt_modifiers:
+      - "cinematic"
+      - "film still"
+      - "movie scene"
+      - "dramatic lighting"
+      - "anamorphic lens"
+      - "depth of field"
+      - "35mm film"
+      - "color graded"
+    negative_modifiers:
+      - "flat lighting"
+      - "amateur"
+      - "snapshot"
+    color_grading: "cinematic_warm"
+    recommended_for: ["music_videos", "trailers", "dramatic_content"]
+    
+  documentary:
+    name: "Documentary"
+    description: "Raw, authentic documentary-style footage"
+    prompt_modifiers:
+      - "documentary style"
+      - "raw footage"
+      - "authentic"
+      - "journalistic"
+      - "natural light"
+      - "candid"
+    negative_modifiers:
+      - "staged"
+      - "artificial"
+      - "over-processed"
+    color_grading: "desaturated"
+    recommended_for: ["interviews", "behind_scenes", "reality"]
+
+  # ===========================================================================
+  # ARTISTIC STYLES
+  # ===========================================================================
+  
+  artistic:
+    name: "Artistic"
+    description: "Fine art photography with creative interpretation"
+    prompt_modifiers:
+      - "artistic"
+      - "fine art photography"
+      - "creative"
+      - "expressive"
+      - "gallery quality"
+      - "museum piece"
+    negative_modifiers:
+      - "plain"
+      - "boring"
+      - "generic"
+    color_grading: "vibrant"
+    recommended_for: ["creative_projects", "art_videos"]
+    
+  vintage_film:
+    name: "Vintage Film"
+    description: "Nostalgic film grain and warm tones"
+    prompt_modifiers:
+      - "vintage film"
+      - "1970s aesthetic"
+      - "film grain"
+      - "warm tones"
+      - "nostalgic"
+      - "kodak portra"
+      - "analog"
+    negative_modifiers:
+      - "digital"
+      - "modern"
+      - "clean"
+      - "sharp"
+    color_grading: "vintage"
+    film_grain: 0.3
+    recommended_for: ["retro_content", "nostalgia"]
+    
+  noir:
+    name: "Film Noir"
+    description: "High contrast black and white with dramatic shadows"
+    prompt_modifiers:
+      - "film noir"
+      - "black and white"
+      - "high contrast"
+      - "dramatic shadows"
+      - "chiaroscuro"
+      - "1940s detective film"
+    negative_modifiers:
+      - "colorful"
+      - "bright"
+      - "cheerful"
+    color_grading: "black_white"
+    recommended_for: ["mystery", "drama", "artistic"]
+
+  # ===========================================================================
+  # MODERN DIGITAL STYLES
+  # ===========================================================================
+  
+  neon_cyberpunk:
+    name: "Neon/Cyberpunk"
+    description: "Futuristic neon-lit cyberpunk aesthetics"
+    prompt_modifiers:
+      - "cyberpunk"
+      - "neon lights"
+      - "futuristic"
+      - "blade runner"
+      - "rain-soaked streets"
+      - "holographic"
+      - "synthwave"
+      - "pink and blue neon"
+    negative_modifiers:
+      - "natural"
+      - "daylight"
+      - "pastoral"
+    color_grading: "neon"
+    recommended_for: ["sci_fi", "music_videos", "tech"]
+    
+  minimalist:
+    name: "Minimalist"
+    description: "Clean, simple compositions with negative space"
+    prompt_modifiers:
+      - "minimalist"
+      - "clean design"
+      - "negative space"
+      - "simple composition"
+      - "elegant"
+      - "modern"
+      - "white background"
+    negative_modifiers:
+      - "cluttered"
+      - "busy"
+      - "complex"
+    color_grading: "minimal"
+    recommended_for: ["products", "corporate", "modern"]
+
+  # ===========================================================================
+  # ILLUSTRATION STYLES
+  # ===========================================================================
+  
+  anime:
+    name: "Anime"
+    description: "Japanese animation style artwork"
+    prompt_modifiers:
+      - "anime style"
+      - "japanese animation"
+      - "cel shading"
+      - "vibrant colors"
+      - "expressive eyes"
+      - "manga"
+      - "studio ghibli"
+    negative_modifiers:
+      - "realistic"
+      - "photographic"
+      - "3D render"
+    color_grading: "anime"
+    recommended_for: ["animation", "manga_style"]
+    
+  3d_render:
+    name: "3D Render"
+    description: "High-quality 3D computer graphics"
+    prompt_modifiers:
+      - "3D render"
+      - "octane render"
+      - "unreal engine 5"
+      - "ray tracing"
+      - "volumetric lighting"
+      - "subsurface scattering"
+      - "physically based rendering"
+    negative_modifiers:
+      - "2D"
+      - "flat"
+      - "illustration"
+    color_grading: "hdr"
+    recommended_for: ["products", "environments", "characters"]
+
+  # ===========================================================================
+  # GENRE-SPECIFIC STYLES
+  # ===========================================================================
+  
+  fantasy:
+    name: "Fantasy"
+    description: "Magical and fantastical imagery"
+    prompt_modifiers:
+      - "fantasy art"
+      - "magical"
+      - "ethereal"
+      - "mystical"
+      - "enchanted"
+      - "fairy tale"
+      - "epic fantasy"
+    negative_modifiers:
+      - "mundane"
+      - "realistic"
+      - "modern"
+    color_grading: "fantasy"
+    recommended_for: ["fantasy_content", "music_videos"]
+    
+  scifi:
+    name: "Sci-Fi"
+    description: "Science fiction futuristic visuals"
+    prompt_modifiers:
+      - "science fiction"
+      - "futuristic"
+      - "space"
+      - "advanced technology"
+      - "alien"
+      - "starship"
+      - "dystopian"
+    negative_modifiers:
+      - "medieval"
+      - "historical"
+      - "primitive"
+    color_grading: "cool"
+    recommended_for: ["scifi_content", "tech_videos"]
+    
+  horror:
+    name: "Horror"
+    description: "Dark, unsettling horror aesthetics"
+    prompt_modifiers:
+      - "horror"
+      - "dark"
+      - "creepy"
+      - "unsettling"
+      - "gothic"
+      - "ominous"
+      - "supernatural"
+    negative_modifiers:
+      - "cheerful"
+      - "bright"
+      - "happy"
+    color_grading: "horror"
+    recommended_for: ["horror_content", "halloween"]
+
+  # ===========================================================================
+  # SEASONAL/THEMED STYLES
+  # ===========================================================================
+  
+  christmas:
+    name: "Christmas/Holiday"
+    description: "Warm, festive holiday aesthetics"
+    prompt_modifiers:
+      - "christmas"
+      - "holiday season"
+      - "festive"
+      - "warm lighting"
+      - "snow"
+      - "cozy"
+      - "magical winter"
+      - "christmas lights"
+    negative_modifiers:
+      - "summer"
+      - "beach"
+      - "tropical"
+    color_grading: "warm"
+    recommended_for: ["holiday_content", "christmas_videos"]
+
+# Color Grading Presets
+color_grading:
+  natural:
+    name: "Natural"
+    lut: null
+    adjustments:
+      saturation: 1.0
+      contrast: 1.0
+      temperature: 0
+      
+  cinematic_warm:
+    name: "Cinematic Warm"
+    adjustments:
+      saturation: 0.9
+      contrast: 1.15
+      temperature: 10
+      shadows_tint: "#1a0a00"
+      highlights_tint: "#fff5e6"
+      
+  cinematic_cool:
+    name: "Cinematic Cool"
+    adjustments:
+      saturation: 0.85
+      contrast: 1.2
+      temperature: -15
+      shadows_tint: "#001a33"
+      highlights_tint: "#e6f0ff"
+      
+  vintage:
+    name: "Vintage"
+    adjustments:
+      saturation: 0.8
+      contrast: 0.95
+      temperature: 15
+      fade: 0.15
+      
+  black_white:
+    name: "Black & White"
+    adjustments:
+      saturation: 0
+      contrast: 1.3
+      
+  neon:
+    name: "Neon"
+    adjustments:
+      saturation: 1.4
+      contrast: 1.25
+      vibrance: 1.3
+      
+  horror:
+    name: "Horror"
+    adjustments:
+      saturation: 0.7
+      contrast: 1.4
+      temperature: -10
+      shadows_lift: -0.1

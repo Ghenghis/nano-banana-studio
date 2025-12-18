@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-gray-900 text-white;
+}
+
+.timeline-track {
+  @apply relative h-24 bg-gray-800 rounded-lg overflow-hidden;
+}
+
+.timeline-scene {
+  @apply absolute h-full bg-gradient-to-r from-banana-500 to-banana-600 rounded cursor-pointer
+         border-2 border-transparent hover:border-white transition-all;
+}
+
+.timeline-scene.selected {
+  @apply border-banana-300 ring-2 ring-banana-400;
+}
+
+.scene-card {
+  @apply bg-gray-800 rounded-lg overflow-hidden hover:ring-2 hover:ring-banana-500 
+         transition-all cursor-pointer;
+}
+
+.scene-card.approved {
+  @apply ring-2 ring-green-500;
+}
+
+.tool-button {
+  @apply px-3 py-2 bg-gray-700 rounded-lg hover:bg-gray-600 
+         flex items-center gap-2 text-sm transition-colors;
+}
+
+.tool-button:disabled {
+  @apply opacity-50 cursor-not-allowed;
+}
+
+.status-badge {
+  @apply px-2 py-1 rounded text-xs font-medium;
+}
+
+.status-pending { @apply bg-yellow-500/20 text-yellow-400; }
+.status-generating { @apply bg-blue-500/20 text-blue-400; }
+.status-ready { @apply bg-purple-500/20 text-purple-400; }
+.status-approved { @apply bg-green-500/20 text-green-400; }
+.status-error { @apply bg-red-500/20 text-red-400; }

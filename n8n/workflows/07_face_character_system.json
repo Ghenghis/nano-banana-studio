@@ -1,0 +1,271 @@
+{
+  "name": "07 - Face & Character Consistency System",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "🧑 Face Extraction & Character Registration",
+        "formDescription": "Extract faces from images and register characters for consistent generation across all video frames.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Operation",
+              "fieldType": "dropdown",
+              "requiredField": true,
+              "fieldOptions": {
+                "values": [
+                  { "option": "Extract Face from Image" },
+                  { "option": "Register New Character" },
+                  { "option": "Verify Character Consistency" },
+                  { "option": "List Registered Characters" }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Character Name",
+              "fieldType": "text",
+              "requiredField": false,
+              "placeholder": "e.g., 'Main Singer', 'Lead Actor'"
+            },
+            {
+              "fieldLabel": "Reference Image",
+              "fieldType": "file",
+              "requiredField": false,
+              "acceptFileTypes": ".jpg,.jpeg,.png,.webp"
+            },
+            {
+              "fieldLabel": "Character ID (for verification)",
+              "fieldType": "text",
+              "requiredField": false,
+              "placeholder": "char_xxxxxxxx"
+            },
+            {
+              "fieldLabel": "Style Keywords",
+              "fieldType": "text",
+              "requiredField": false,
+              "placeholder": "e.g., professional, friendly, energetic"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "form-trigger",
+      "name": "Character Form",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [200, 300],
+      "webhookId": "face-character-v1"
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first().json;\n\nconst operation = input['Operation'];\nconst characterName = input['Character Name'] || '';\nconst characterId = input['Character ID (for verification)'] || '';\nconst styleKeywords = input['Style Keywords'] || '';\n\n// Get binary data if image uploaded\nlet imageData = null;\nif ($binary && $binary.data) {\n  imageData = $binary.data.data;\n}\n\nreturn {\n  operation,\n  characterName,\n  characterId,\n  styleKeywords: styleKeywords.split(',').map(s => s.trim()).filter(Boolean),\n  imageData,\n  hasImage: !!imageData,\n  timestamp: new Date().toISOString()\n};"
+      },
+      "id": "parse-input",
+      "name": "Parse Input",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [400, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.operation }}",
+              "operation": "equals",
+              "value2": "Extract Face from Image"
+            }
+          ]
+        }
+      },
+      "id": "switch-operation",
+      "name": "Route by Operation",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [600, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api:8000/api/v1/face/extract",
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "image_base64",
+              "value": "={{ $json.imageData }}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "extract-face",
+      "name": "Extract Face API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [800, 200]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api:8000/api/v1/character/register",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"name\": \"{{ $json.characterName }}\",\n  \"face_embedding\": {{ $json.face_embedding || '[]' }},\n  \"reference_images\": [\"{{ $json.imageData }}\"],\n  \"style_keywords\": {{ JSON.stringify($json.styleKeywords) }}\n}",
+        "options": {}
+      },
+      "id": "register-character",
+      "name": "Register Character API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [800, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api:8000/api/v1/character/verify",
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "character_id",
+              "value": "={{ $json.characterId }}"
+            },
+            {
+              "name": "image_base64",
+              "value": "={{ $json.imageData }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "verify-character",
+      "name": "Verify Character API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [800, 400]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Process face extraction result\nconst result = $input.first().json;\n\nif (result.face_detected) {\n  return {\n    success: true,\n    message: `Face detected with ${(result.primary_face?.confidence * 100).toFixed(1)}% confidence`,\n    face_count: result.face_count,\n    bounding_box: result.primary_face?.bounding_box,\n    embedding_available: !!result.face_embedding,\n    next_step: 'Use \"Register New Character\" to save this face for consistent generation'\n  };\n} else {\n  return {\n    success: false,\n    message: 'No face detected in image',\n    suggestion: 'Try uploading a clearer image with the face more visible'\n  };\n}"
+      },
+      "id": "process-extraction",
+      "name": "Process Extraction Result",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1000, 200]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Process registration result\nconst result = $input.first().json;\n\nreturn {\n  success: true,\n  character_id: result.character_id,\n  character_name: result.name,\n  message: `Character \"${result.name}\" registered successfully`,\n  usage_instructions: [\n    `Use character_id: ${result.character_id} in image generation requests`,\n    'The system will use this face as reference for all generated images',\n    'Generated images will be verified against this character for consistency'\n  ]\n};"
+      },
+      "id": "process-registration",
+      "name": "Process Registration Result",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1000, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Process verification result\nconst result = $input.first().json;\n\nconst isConsistent = result.match_score >= result.threshold;\n\nreturn {\n  character_id: result.character_id,\n  is_consistent: isConsistent,\n  match_score: (result.match_score * 100).toFixed(1) + '%',\n  threshold: (result.threshold * 100).toFixed(1) + '%',\n  verdict: isConsistent \n    ? '✅ Image matches registered character' \n    : '❌ Image does NOT match registered character - regeneration recommended',\n  recommendation: isConsistent\n    ? 'This image can be used in the video sequence'\n    : 'Consider regenerating this image with stronger character reference'\n};"
+      },
+      "id": "process-verification",
+      "name": "Process Verification Result",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1000, 400]
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineAll",
+        "options": {}
+      },
+      "id": "merge-results",
+      "name": "Merge Results",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [1200, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {}
+      },
+      "id": "respond",
+      "name": "Respond",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [1400, 300]
+    }
+  ],
+  "connections": {
+    "Character Form": {
+      "main": [
+        [{ "node": "Parse Input", "type": "main", "index": 0 }]
+      ]
+    },
+    "Parse Input": {
+      "main": [
+        [{ "node": "Route by Operation", "type": "main", "index": 0 }]
+      ]
+    },
+    "Route by Operation": {
+      "main": [
+        [{ "node": "Extract Face API", "type": "main", "index": 0 }],
+        [{ "node": "Register Character API", "type": "main", "index": 0 }],
+        [{ "node": "Verify Character API", "type": "main", "index": 0 }]
+      ]
+    },
+    "Extract Face API": {
+      "main": [
+        [{ "node": "Process Extraction Result", "type": "main", "index": 0 }]
+      ]
+    },
+    "Register Character API": {
+      "main": [
+        [{ "node": "Process Registration Result", "type": "main", "index": 0 }]
+      ]
+    },
+    "Verify Character API": {
+      "main": [
+        [{ "node": "Process Verification Result", "type": "main", "index": 0 }]
+      ]
+    },
+    "Process Extraction Result": {
+      "main": [
+        [{ "node": "Merge Results", "type": "main", "index": 0 }]
+      ]
+    },
+    "Process Registration Result": {
+      "main": [
+        [{ "node": "Merge Results", "type": "main", "index": 1 }]
+      ]
+    },
+    "Process Verification Result": {
+      "main": [
+        [{ "node": "Merge Results", "type": "main", "index": 2 }]
+      ]
+    },
+    "Merge Results": {
+      "main": [
+        [{ "node": "Respond", "type": "main", "index": 0 }]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": [
+    { "name": "nano-banana" },
+    { "name": "face-detection" },
+    { "name": "character-consistency" }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2024-12-17T00:00:00.000Z",
+  "versionId": "1"
+}

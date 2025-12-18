@@ -1,0 +1,280 @@
+# =============================================================================
+# NANO BANANA STUDIO PRO - DOCKER COMPOSE WITH COMFYUI
+# =============================================================================
+# Complete stack with optional ComfyUI integration for advanced generation
+# =============================================================================
+# Usage:
+#   Basic:    docker compose up
+#   With GPU: docker compose --profile gpu up
+#   With ComfyUI: docker compose --profile comfyui up
+#   Full:     docker compose --profile gpu --profile comfyui --profile storage up
+# =============================================================================
+
+name: nano-banana-studio
+
+services:
+  # ===========================================================================
+  # CORE SERVICES
+  # ===========================================================================
+  
+  n8n:
+    image: n8nio/n8n:latest
+    container_name: nano-n8n
+    restart: unless-stopped
+    ports:
+      - "5678:5678"
+    environment:
+      - N8N_BASIC_AUTH_ACTIVE=true
+      - N8N_BASIC_AUTH_USER=admin
+      - N8N_BASIC_AUTH_PASSWORD=nanobanana
+      - N8N_HOST=0.0.0.0
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=http
+      - GENERIC_TIMEZONE=America/Phoenix
+      - NODE_ENV=production
+      - EXECUTIONS_DATA_PRUNE=true
+      - EXECUTIONS_DATA_MAX_AGE=168
+      - N8N_METRICS=true
+    volumes:
+      - n8n_data:/home/node/.n8n
+      - ./n8n/workflows:/home/node/workflows:ro
+      - ./data/uploads:/data/uploads
+      - ./data/outputs:/data/outputs
+    networks:
+      - nano-network
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:5678/healthz"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+  
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nano-api
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - UPLOAD_DIR=/app/data/uploads
+      - OUTPUT_DIR=/app/data/outputs
+      - CACHE_DIR=/app/data/cache
+      - COMFYUI_URL=http://comfyui:8188
+      - COMFYUI_WS_URL=ws://comfyui:8188/ws
+    env_file:
+      - .env
+    volumes:
+      - ./data/uploads:/app/data/uploads
+      - ./data/outputs:/app/data/outputs
+      - ./data/cache:/app/data/cache
+      - ./config:/app/config:ro
+      - ./backend:/app/backend:ro
+    depends_on:
+      - redis
+    networks:
+      - nano-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+  
+  redis:
+    image: redis:7-alpine
+    container_name: nano-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes --maxmemory 512mb --maxmemory-policy allkeys-lru
+    networks:
+      - nano-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  
+  video-worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.ffmpeg
+    container_name: nano-video-worker
+    restart: unless-stopped
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - OUTPUT_DIR=/app/data/outputs
+      - TEMP_DIR=/app/data/temp
+    volumes:
+      - ./data/uploads:/app/data/uploads:ro
+      - ./data/outputs:/app/data/outputs
+      - ./data/temp:/app/data/temp
+    depends_on:
+      - redis
+    networks:
+      - nano-network
+    command: python -m backend.workers.video_worker
+
+  # ===========================================================================
+  # COMFYUI SERVICE (Optional - use --profile comfyui)
+  # ===========================================================================
+  
+  comfyui:
+    image: ghcr.io/ai-dock/comfyui:latest
+    container_name: nano-comfyui
+    profiles: ["comfyui"]
+    restart: unless-stopped
+    ports:
+      - "8188:8188"
+    environment:
+      - CLI_ARGS=--listen 0.0.0.0 --port 8188
+      - COMFYUI_PATH=/opt/ComfyUI
+    volumes:
+      - comfyui_data:/opt/ComfyUI
+      - ./data/uploads:/opt/ComfyUI/input
+      - ./data/comfyui_output:/opt/ComfyUI/output
+      - ./comfyui/workflows:/opt/ComfyUI/user/default/workflows
+    networks:
+      - nano-network
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+  
+  # ComfyUI with CPU only (no GPU required)
+  comfyui-cpu:
+    image: ghcr.io/ai-dock/comfyui:cpu-latest
+    container_name: nano-comfyui-cpu
+    profiles: ["comfyui-cpu"]
+    restart: unless-stopped
+    ports:
+      - "8188:8188"
+    environment:
+      - CLI_ARGS=--listen 0.0.0.0 --port 8188 --cpu
+    volumes:
+      - comfyui_data:/opt/ComfyUI
+      - ./data/uploads:/opt/ComfyUI/input
+      - ./data/comfyui_output:/opt/ComfyUI/output
+    networks:
+      - nano-network
+
+  # ===========================================================================
+  # GPU SERVICES (Optional - use --profile gpu)
+  # ===========================================================================
+  
+  gpu-worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.gpu
+    container_name: nano-gpu-worker
+    profiles: ["gpu"]
+    restart: unless-stopped
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - OUTPUT_DIR=/app/data/outputs
+      - CUDA_VISIBLE_DEVICES=0
+    volumes:
+      - ./data/uploads:/app/data/uploads:ro
+      - ./data/outputs:/app/data/outputs
+      - ./models:/app/models
+    depends_on:
+      - redis
+    networks:
+      - nano-network
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+
+  # ===========================================================================
+  # STORAGE SERVICES (Optional - use --profile storage)
+  # ===========================================================================
+  
+  minio:
+    image: minio/minio:latest
+    container_name: nano-minio
+    profiles: ["storage"]
+    restart: unless-stopped
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      - MINIO_ROOT_USER=${MINIO_USER:-minioadmin}
+      - MINIO_ROOT_PASSWORD=${MINIO_PASSWORD:-minioadmin}
+    volumes:
+      - minio_data:/data
+    command: server /data --console-address ":9001"
+    networks:
+      - nano-network
+
+  # ===========================================================================
+  # DATABASE SERVICE (Optional - use --profile database)
+  # ===========================================================================
+  
+  postgres:
+    image: postgres:16-alpine
+    container_name: nano-postgres
+    profiles: ["database"]
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER:-nanobanana}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-nanobanana}
+      - POSTGRES_DB=${POSTGRES_DB:-nanobanana}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - nano-network
+
+  # ===========================================================================
+  # LOCAL LLM SERVICES (Optional - use --profile llm)
+  # ===========================================================================
+  
+  ollama:
+    image: ollama/ollama:latest
+    container_name: nano-ollama
+    profiles: ["llm"]
+    restart: unless-stopped
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    networks:
+      - nano-network
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+
+# =============================================================================
+# NETWORKS
+# =============================================================================
+
+networks:
+  nano-network:
+    driver: bridge
+
+# =============================================================================
+# VOLUMES
+# =============================================================================
+
+volumes:
+  n8n_data:
+  redis_data:
+  comfyui_data:
+  minio_data:
+  postgres_data:
+  ollama_data:

@@ -1,0 +1,432 @@
+{
+  "name": "02 - Nano Banana Image Generation",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "🍌 Nano Banana Image Generator",
+        "formDescription": "Generate stunning images using Google's Gemini 2.5 Flash (Nano Banana) with professional prompt enhancement.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Image Prompt",
+              "fieldType": "textarea",
+              "requiredField": true,
+              "placeholder": "Describe the image you want to create..."
+            },
+            {
+              "fieldLabel": "Use Prompt Enhancement",
+              "fieldType": "dropdown",
+              "requiredField": true,
+              "fieldOptions": {
+                "values": [
+                  { "option": "Yes - Full 7-Stage Enhancement" },
+                  { "option": "Yes - Quick Enhancement (3 stages)" },
+                  { "option": "No - Use Raw Prompt" }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Aspect Ratio",
+              "fieldType": "dropdown",
+              "requiredField": true,
+              "fieldOptions": {
+                "values": [
+                  { "option": "16:9 (Landscape)" },
+                  { "option": "9:16 (Portrait/Vertical)" },
+                  { "option": "1:1 (Square)" },
+                  { "option": "4:3 (Standard)" },
+                  { "option": "3:2 (Photo)" },
+                  { "option": "2.39:1 (Cinematic)" }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Style Preset",
+              "fieldType": "dropdown",
+              "requiredField": true,
+              "fieldOptions": {
+                "values": [
+                  { "option": "Photorealistic" },
+                  { "option": "Cinematic" },
+                  { "option": "Artistic" },
+                  { "option": "Documentary" },
+                  { "option": "Anime" },
+                  { "option": "3D Render" },
+                  { "option": "Vintage Film" },
+                  { "option": "Neon/Cyberpunk" },
+                  { "option": "Minimalist" },
+                  { "option": "Fantasy" },
+                  { "option": "Sci-Fi" }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Quality Level",
+              "fieldType": "dropdown",
+              "requiredField": true,
+              "fieldOptions": {
+                "values": [
+                  { "option": "Draft (Fast)" },
+                  { "option": "Standard" },
+                  { "option": "High Quality" },
+                  { "option": "Maximum (Slow)" }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Number of Images",
+              "fieldType": "dropdown",
+              "requiredField": true,
+              "fieldOptions": {
+                "values": [
+                  { "option": "1" },
+                  { "option": "2" },
+                  { "option": "4" },
+                  { "option": "6" },
+                  { "option": "8" }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Custom Negative Prompt (Optional)",
+              "fieldType": "textarea",
+              "requiredField": false,
+              "placeholder": "Elements to avoid in the image..."
+            },
+            {
+              "fieldLabel": "Seed (Optional)",
+              "fieldType": "text",
+              "requiredField": false,
+              "placeholder": "Leave empty for random"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "form-trigger",
+      "name": "Image Generation Form",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [200, 300],
+      "webhookId": "nano-banana-gen-v1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse form inputs\nconst input = $input.first().json;\n\nconst prompt = input['Image Prompt'] || '';\nconst useEnhancement = input['Use Prompt Enhancement'] || 'No';\nconst aspectRatio = input['Aspect Ratio'] || '16:9 (Landscape)';\nconst style = input['Style Preset'] || 'Photorealistic';\nconst quality = input['Quality Level'] || 'Standard';\nconst numImages = parseInt(input['Number of Images'] || '1');\nconst customNegative = input['Custom Negative Prompt (Optional)'] || '';\nconst seed = input['Seed (Optional)'] || Math.floor(Math.random() * 2147483647).toString();\n\n// Aspect ratio dimensions\nconst aspectRatios = {\n  '16:9 (Landscape)': { width: 1920, height: 1080, ratio: '16:9' },\n  '9:16 (Portrait/Vertical)': { width: 1080, height: 1920, ratio: '9:16' },\n  '1:1 (Square)': { width: 1024, height: 1024, ratio: '1:1' },\n  '4:3 (Standard)': { width: 1440, height: 1080, ratio: '4:3' },\n  '3:2 (Photo)': { width: 1620, height: 1080, ratio: '3:2' },\n  '2.39:1 (Cinematic)': { width: 1920, height: 803, ratio: '2.39:1' }\n};\n\n// Style modifiers\nconst styleModifiers = {\n  'Photorealistic': 'photorealistic, ultra realistic, 8K, high detail, natural lighting, professional photography',\n  'Cinematic': 'cinematic, film grain, dramatic lighting, movie still, anamorphic lens, color graded',\n  'Artistic': 'artistic, painterly, expressive brushstrokes, fine art, gallery quality',\n  'Documentary': 'documentary style, authentic, natural, journalistic, candid moment',\n  'Anime': 'anime style, detailed illustration, vibrant colors, dynamic composition',\n  '3D Render': '3D render, octane render, unreal engine, highly detailed, volumetric lighting',\n  'Vintage Film': 'vintage film photography, film grain, muted colors, nostalgic, retro',\n  'Neon/Cyberpunk': 'neon lighting, cyberpunk aesthetic, futuristic, high contrast, glowing elements',\n  'Minimalist': 'minimalist, clean composition, simple, elegant, negative space',\n  'Fantasy': 'fantasy art, magical, ethereal, detailed, imaginative, otherworldly',\n  'Sci-Fi': 'science fiction, futuristic technology, advanced civilization, space age'\n};\n\n// Quality settings\nconst qualitySettings = {\n  'Draft (Fast)': { steps: 20, cfg: 7, detail: 'standard' },\n  'Standard': { steps: 30, cfg: 7.5, detail: 'high' },\n  'High Quality': { steps: 40, cfg: 8, detail: 'very high' },\n  'Maximum (Slow)': { steps: 50, cfg: 8.5, detail: 'maximum' }\n};\n\n// Default negative prompt\nconst defaultNegative = 'blurry, low quality, distorted, deformed, bad anatomy, extra limbs, watermark, signature, text, logo, cropped, out of frame, worst quality, low resolution, jpeg artifacts, noise, grainy';\n\nconst dimensions = aspectRatios[aspectRatio] || aspectRatios['16:9 (Landscape)'];\nconst styleModifier = styleModifiers[style] || '';\nconst qualitySetting = qualitySettings[quality] || qualitySettings['Standard'];\n\n// Generate job ID\nconst jobId = `img_${Date.now()}_${Math.random().toString(36).substring(7)}`;\n\nreturn {\n  jobId,\n  originalPrompt: prompt,\n  useEnhancement: useEnhancement.includes('Yes'),\n  enhancementLevel: useEnhancement.includes('Full') ? 'full' : 'quick',\n  dimensions,\n  style,\n  styleModifier,\n  quality,\n  qualitySetting,\n  numImages,\n  negativePrompt: customNegative || defaultNegative,\n  seed: parseInt(seed) || Math.floor(Math.random() * 2147483647),\n  timestamp: new Date().toISOString()\n};"
+      },
+      "id": "parse-input",
+      "name": "Parse Form Input",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [400, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "check-enhancement",
+              "leftValue": "={{ $json.useEnhancement }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "if-enhance",
+      "name": "Use Enhancement?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [600, 300]
+    },
+    {
+      "parameters": {
+        "model": "gpt-4o-mini",
+        "options": {
+          "temperature": 0.8,
+          "maxTokens": 800
+        },
+        "messages": {
+          "values": [
+            {
+              "role": "system",
+              "content": "You are an expert prompt engineer for AI image generation. Transform basic prompts into detailed, professional image generation prompts.\n\nYour enhanced prompt should:\n1. Expand visual details (lighting, composition, colors)\n2. Add technical photography/cinematography terms\n3. Include style-appropriate modifiers\n4. Maintain the original concept while adding depth\n5. Be concise but comprehensive (max 200 words)\n\nRespond with ONLY the enhanced prompt text, no explanations or JSON."
+            },
+            {
+              "role": "user",
+              "content": "=Enhance this image prompt for {{ $json.style }} style:\n\n{{ $json.originalPrompt }}\n\nDimensions: {{ $json.dimensions.ratio }}\nQuality target: {{ $json.qualitySetting.detail }}"
+            }
+          ]
+        }
+      },
+      "id": "enhance-prompt",
+      "name": "Enhance Prompt",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [800, 200],
+      "credentials": {
+        "openAiApi": {
+          "id": "openai-cred",
+          "name": "OpenAI API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first().json;\nconst prevData = $('Parse Form Input').first().json;\n\nconst enhancedPrompt = input.message?.content || input.content || input.text || prevData.originalPrompt;\n\nreturn {\n  ...prevData,\n  finalPrompt: `${enhancedPrompt}, ${prevData.styleModifier}`,\n  wasEnhanced: true\n};"
+      },
+      "id": "prepare-enhanced",
+      "name": "Prepare Enhanced",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1000, 200]
+    },
+    {
+      "parameters": {
+        "jsCode": "const prevData = $input.first().json;\n\nreturn {\n  ...prevData,\n  finalPrompt: `${prevData.originalPrompt}, ${prevData.styleModifier}`,\n  wasEnhanced: false\n};"
+      },
+      "id": "prepare-raw",
+      "name": "Prepare Raw",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1000, 400]
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineAll",
+        "options": {}
+      },
+      "id": "merge-prompts",
+      "name": "Merge Prompts",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [1200, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Generate multiple image requests if needed\nconst data = $input.first().json;\nconst requests = [];\n\nfor (let i = 0; i < data.numImages; i++) {\n  requests.push({\n    ...data,\n    imageIndex: i + 1,\n    imageSeed: data.seed + i\n  });\n}\n\nreturn requests;"
+      },
+      "id": "split-requests",
+      "name": "Split Requests",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1400, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://openrouter.ai/api/v1/chat/completions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "HTTP-Referer",
+              "value": "https://nano-banana-studio.local"
+            },
+            {
+              "name": "X-Title",
+              "value": "Nano Banana Studio"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"google/gemini-2.0-flash-exp:free\",\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"Generate an image: {{ $json.finalPrompt }}\"\n        }\n      ]\n    }\n  ],\n  \"max_tokens\": 4096,\n  \"temperature\": 0.9\n}",
+        "options": {
+          "timeout": 120000
+        }
+      },
+      "id": "generate-gemini",
+      "name": "Generate with Gemini",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1600, 300],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "openrouter-cred",
+          "name": "OpenRouter API Key"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const response = $input.first().json;\nconst prevData = $('Split Requests').first().json;\n\n// Extract image from various possible response formats\nlet imageData = null;\nlet imageUrl = null;\n\ntry {\n  const content = response.choices?.[0]?.message?.content;\n  \n  if (typeof content === 'string') {\n    // Check for base64 image in response\n    const base64Match = content.match(/data:image\\/[^;]+;base64,([A-Za-z0-9+/=]+)/);\n    if (base64Match) {\n      imageData = base64Match[1];\n    }\n    \n    // Check for URL\n    const urlMatch = content.match(/https?:\\/\\/[^\\s\"']+\\.(png|jpg|jpeg|webp)/i);\n    if (urlMatch) {\n      imageUrl = urlMatch[0];\n    }\n  } else if (Array.isArray(content)) {\n    // Content might be an array of parts\n    for (const part of content) {\n      if (part.type === 'image' || part.type === 'image_url') {\n        imageUrl = part.image_url?.url || part.url;\n        imageData = part.data;\n      }\n    }\n  }\n  \n  // Check for inline_data in response\n  if (response.choices?.[0]?.message?.content?.[0]?.inline_data) {\n    imageData = response.choices[0].message.content[0].inline_data.data;\n  }\n} catch (e) {\n  console.error('Error extracting image:', e.message);\n}\n\n// Generate content hash for deduplication\nconst crypto = require('crypto');\nconst contentHash = imageData \n  ? crypto.createHash('sha256').update(imageData).digest('hex')\n  : `url_${Date.now()}`;\n\nreturn {\n  jobId: prevData.jobId,\n  imageIndex: prevData.imageIndex,\n  success: !!(imageData || imageUrl),\n  imageData,\n  imageUrl,\n  contentHash,\n  prompt: prevData.finalPrompt,\n  wasEnhanced: prevData.wasEnhanced,\n  style: prevData.style,\n  dimensions: prevData.dimensions,\n  seed: prevData.imageSeed,\n  timestamp: new Date().toISOString(),\n  rawResponse: response\n};"
+      },
+      "id": "extract-image",
+      "name": "Extract Image",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1800, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "check-success",
+              "leftValue": "={{ $json.success }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "if-success",
+      "name": "Image Generated?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [2000, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $input.first().json;\n\n// Save image to file system\nconst fs = require('fs');\nconst path = require('path');\n\nconst outputDir = '/home/node/outputs/images';\nconst filename = `${data.jobId}_${data.imageIndex}_${data.contentHash.substring(0, 8)}.png`;\nconst filepath = path.join(outputDir, filename);\n\n// Ensure directory exists\nif (!fs.existsSync(outputDir)) {\n  fs.mkdirSync(outputDir, { recursive: true });\n}\n\nif (data.imageData) {\n  // Save base64 image\n  fs.writeFileSync(filepath, Buffer.from(data.imageData, 'base64'));\n} else if (data.imageUrl) {\n  // URL will need separate download\n  // For now, just log the URL\n  console.log('Image URL:', data.imageUrl);\n}\n\nreturn {\n  ...data,\n  savedPath: filepath,\n  filename,\n  status: 'saved'\n};"
+      },
+      "id": "save-image",
+      "name": "Save Image",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2200, 200]
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $input.first().json;\n\nreturn {\n  jobId: data.jobId,\n  imageIndex: data.imageIndex,\n  status: 'failed',\n  error: 'Could not extract image from response',\n  rawResponse: data.rawResponse,\n  timestamp: new Date().toISOString()\n};"
+      },
+      "id": "handle-error",
+      "name": "Handle Error",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2200, 400]
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineAll",
+        "options": {}
+      },
+      "id": "merge-results",
+      "name": "Merge Results",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [2400, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {}
+      },
+      "id": "respond",
+      "name": "Respond",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [2600, 300]
+    }
+  ],
+  "connections": {
+    "Image Generation Form": {
+      "main": [
+        [{ "node": "Parse Form Input", "type": "main", "index": 0 }]
+      ]
+    },
+    "Parse Form Input": {
+      "main": [
+        [{ "node": "Use Enhancement?", "type": "main", "index": 0 }]
+      ]
+    },
+    "Use Enhancement?": {
+      "main": [
+        [{ "node": "Enhance Prompt", "type": "main", "index": 0 }],
+        [{ "node": "Prepare Raw", "type": "main", "index": 0 }]
+      ]
+    },
+    "Enhance Prompt": {
+      "main": [
+        [{ "node": "Prepare Enhanced", "type": "main", "index": 0 }]
+      ]
+    },
+    "Prepare Enhanced": {
+      "main": [
+        [{ "node": "Merge Prompts", "type": "main", "index": 0 }]
+      ]
+    },
+    "Prepare Raw": {
+      "main": [
+        [{ "node": "Merge Prompts", "type": "main", "index": 1 }]
+      ]
+    },
+    "Merge Prompts": {
+      "main": [
+        [{ "node": "Split Requests", "type": "main", "index": 0 }]
+      ]
+    },
+    "Split Requests": {
+      "main": [
+        [{ "node": "Generate with Gemini", "type": "main", "index": 0 }]
+      ]
+    },
+    "Generate with Gemini": {
+      "main": [
+        [{ "node": "Extract Image", "type": "main", "index": 0 }]
+      ]
+    },
+    "Extract Image": {
+      "main": [
+        [{ "node": "Image Generated?", "type": "main", "index": 0 }]
+      ]
+    },
+    "Image Generated?": {
+      "main": [
+        [{ "node": "Save Image", "type": "main", "index": 0 }],
+        [{ "node": "Handle Error", "type": "main", "index": 0 }]
+      ]
+    },
+    "Save Image": {
+      "main": [
+        [{ "node": "Merge Results", "type": "main", "index": 0 }]
+      ]
+    },
+    "Handle Error": {
+      "main": [
+        [{ "node": "Merge Results", "type": "main", "index": 1 }]
+      ]
+    },
+    "Merge Results": {
+      "main": [
+        [{ "node": "Respond", "type": "main", "index": 0 }]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": [
+    { "name": "nano-banana" },
+    { "name": "image-generation" }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2024-12-17T00:00:00.000Z",
+  "versionId": "1"
+}

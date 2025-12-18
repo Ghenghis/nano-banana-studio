@@ -1,0 +1,157 @@
+# =============================================================================
+# NANO BANANA STUDIO PRO - SUNO API SERVICE
+# =============================================================================
+# Docker Compose extension for Suno AI music generation
+#
+# Usage:
+#   docker compose -f docker-compose.yml -f docker/docker-compose.suno.yml up -d
+#
+# Or add to main docker-compose.yml profiles
+# =============================================================================
+
+services:
+  # ---------------------------------------------------------------------------
+  # SUNO API SERVICE (gcui-art/suno-api)
+  # ---------------------------------------------------------------------------
+  # The gold standard for Suno integration
+  # Supports: Generation, Custom Mode, Lyrics, Extensions, OpenAI-compatible
+  # ---------------------------------------------------------------------------
+  suno-api:
+    build:
+      context: ../suno-api
+      dockerfile: Dockerfile
+    image: nano-suno-api:latest
+    container_name: nano-suno-api
+    
+    environment:
+      # Required: Your Suno session cookie
+      - SUNO_COOKIE=${SUNO_COOKIE}
+      
+      # Optional: 2Captcha for CAPTCHA solving
+      - TWOCAPTCHA_API_KEY=${TWOCAPTCHA_API_KEY:-}
+      
+      # Server config
+      - PORT=3100
+      - NODE_ENV=production
+      
+    ports:
+      - "3100:3100"
+    
+    volumes:
+      # Persist generated audio cache
+      - suno_cache:/app/.cache
+      
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:3100/api/get_limit"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+    
+    networks:
+      - nano-network
+    
+    restart: unless-stopped
+    
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+        reservations:
+          memory: 256M
+    
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # ---------------------------------------------------------------------------
+  # SUNO API - DEVELOPMENT MODE
+  # ---------------------------------------------------------------------------
+  # Hot-reload enabled for development
+  # ---------------------------------------------------------------------------
+  suno-api-dev:
+    image: node:20-slim
+    container_name: nano-suno-api-dev
+    working_dir: /app
+    
+    command: >
+      sh -c "
+        npm install &&
+        npm run dev
+      "
+    
+    environment:
+      - SUNO_COOKIE=${SUNO_COOKIE}
+      - TWOCAPTCHA_API_KEY=${TWOCAPTCHA_API_KEY:-}
+      - PORT=3100
+      - NODE_ENV=development
+    
+    ports:
+      - "3100:3100"
+    
+    volumes:
+      - ../suno-api:/app
+      - suno_node_modules:/app/node_modules
+    
+    networks:
+      - nano-network
+    
+    profiles:
+      - suno-dev
+
+  # ---------------------------------------------------------------------------
+  # SUNO WORKER
+  # ---------------------------------------------------------------------------
+  # Background worker for async music generation jobs
+  # Connects to Redis queue and processes Suno requests
+  # ---------------------------------------------------------------------------
+  suno-worker:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.api
+    image: nano-api:latest
+    container_name: nano-suno-worker
+    
+    command: python -m celery -A backend.workers.suno_worker worker -l INFO -Q suno
+    
+    environment:
+      - SUNO_LOCAL_URL=http://suno-api:3100
+      - SUNO_COOKIE=${SUNO_COOKIE}
+      - REDIS_URL=redis://redis:6379
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+    
+    depends_on:
+      suno-api:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    
+    volumes:
+      - ../data/outputs:/app/data/outputs
+      - ../data/cache:/app/data/cache
+    
+    networks:
+      - nano-network
+    
+    restart: unless-stopped
+    
+    profiles:
+      - suno-worker
+
+# ---------------------------------------------------------------------------
+# VOLUMES
+# ---------------------------------------------------------------------------
+volumes:
+  suno_cache:
+    driver: local
+  suno_node_modules:
+    driver: local
+
+# ---------------------------------------------------------------------------
+# NETWORKS
+# ---------------------------------------------------------------------------
+networks:
+  nano-network:
+    external: true

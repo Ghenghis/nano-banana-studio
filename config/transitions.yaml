@@ -1,0 +1,336 @@
+# =============================================================================
+# NANO BANANA STUDIO PRO - TRANSITION LIBRARY
+# =============================================================================
+# Video transitions for professional scene changes
+# =============================================================================
+
+# FFmpeg xfade transitions
+transitions:
+  # ===========================================================================
+  # BASIC TRANSITIONS
+  # ===========================================================================
+  
+  dissolve:
+    name: "Dissolve"
+    description: "Smooth cross-fade between scenes"
+    ffmpeg_type: "dissolve"
+    default_duration: 1.0
+    min_duration: 0.25
+    max_duration: 3.0
+    energy_match: "any"
+    beat_sync: true
+    recommended_for: ["all", "emotional", "slow_paced"]
+    
+  fade_black:
+    name: "Fade to Black"
+    description: "Fade out to black, then fade in"
+    ffmpeg_type: "fade"
+    fade_color: "black"
+    default_duration: 1.5
+    energy_match: "low"
+    beat_sync: true
+    recommended_for: ["scene_end", "dramatic", "chapter_break"]
+    
+  fade_white:
+    name: "Fade to White"
+    description: "Fade out to white, then fade in"
+    ffmpeg_type: "fade"
+    fade_color: "white"
+    default_duration: 1.5
+    energy_match: "high"
+    beat_sync: true
+    recommended_for: ["flashback", "dream", "heavenly"]
+    
+  cut:
+    name: "Hard Cut"
+    description: "Instant transition with no effect"
+    ffmpeg_type: "none"
+    default_duration: 0
+    energy_match: "high"
+    beat_sync: true
+    recommended_for: ["fast_paced", "action", "beat_drops"]
+
+  # ===========================================================================
+  # DIRECTIONAL TRANSITIONS
+  # ===========================================================================
+  
+  slide_left:
+    name: "Slide Left"
+    description: "New scene slides in from the right"
+    ffmpeg_type: "slideleft"
+    default_duration: 0.75
+    min_duration: 0.3
+    max_duration: 2.0
+    energy_match: "medium"
+    beat_sync: true
+    recommended_for: ["progression", "movement", "travel"]
+    
+  slide_right:
+    name: "Slide Right"
+    description: "New scene slides in from the left"
+    ffmpeg_type: "slideright"
+    default_duration: 0.75
+    energy_match: "medium"
+    beat_sync: true
+    recommended_for: ["flashback", "return", "reverse"]
+    
+  slide_up:
+    name: "Slide Up"
+    description: "New scene slides in from the bottom"
+    ffmpeg_type: "slideup"
+    default_duration: 0.75
+    energy_match: "medium"
+    beat_sync: true
+    recommended_for: ["rising", "ascent", "growth"]
+    
+  slide_down:
+    name: "Slide Down"
+    description: "New scene slides in from the top"
+    ffmpeg_type: "slidedown"
+    default_duration: 0.75
+    energy_match: "medium"
+    beat_sync: true
+    recommended_for: ["descent", "falling", "gravity"]
+    
+  wipe_left:
+    name: "Wipe Left"
+    description: "Horizontal wipe revealing new scene"
+    ffmpeg_type: "wipeleft"
+    default_duration: 0.75
+    energy_match: "medium"
+    beat_sync: true
+    recommended_for: ["reveal", "progression"]
+    
+  wipe_right:
+    name: "Wipe Right"
+    description: "Horizontal wipe from left to right"
+    ffmpeg_type: "wiperight"
+    default_duration: 0.75
+    energy_match: "medium"
+    beat_sync: true
+    recommended_for: ["reveal", "progression"]
+
+  # ===========================================================================
+  # ZOOM TRANSITIONS
+  # ===========================================================================
+  
+  zoom_in:
+    name: "Zoom In"
+    description: "Zoom into the next scene"
+    ffmpeg_type: "zoomin"
+    default_duration: 0.75
+    energy_match: "high"
+    beat_sync: true
+    recommended_for: ["focus", "intensity", "impact"]
+    
+  zoom_out:
+    name: "Zoom Out"
+    description: "Zoom out revealing the next scene"
+    ffmpeg_type: "zoomout"
+    default_duration: 0.75
+    energy_match: "high"
+    beat_sync: true
+    recommended_for: ["reveal", "expansion", "epic"]
+
+  # ===========================================================================
+  # CREATIVE TRANSITIONS
+  # ===========================================================================
+  
+  circle_open:
+    name: "Circle Open"
+    description: "Circular reveal from center"
+    ffmpeg_type: "circleopen"
+    default_duration: 1.0
+    energy_match: "medium"
+    beat_sync: true
+    recommended_for: ["spotlight", "focus", "dramatic_reveal"]
+    
+  circle_close:
+    name: "Circle Close"
+    description: "Circular close to center"
+    ffmpeg_type: "circleclose"
+    default_duration: 1.0
+    energy_match: "medium"
+    beat_sync: true
+    recommended_for: ["end_scene", "tunnel", "focus"]
+    
+  radial:
+    name: "Radial"
+    description: "Radial sweep transition"
+    ffmpeg_type: "radial"
+    default_duration: 1.0
+    energy_match: "medium"
+    beat_sync: true
+    recommended_for: ["clock_wipe", "time_passage"]
+    
+  pixelize:
+    name: "Pixelize"
+    description: "Pixelation effect transition"
+    ffmpeg_type: "pixelize"
+    default_duration: 0.75
+    energy_match: "high"
+    beat_sync: true
+    recommended_for: ["retro", "glitch", "tech"]
+    
+  diagtl:
+    name: "Diagonal Top-Left"
+    description: "Diagonal wipe from corner"
+    ffmpeg_type: "diagtl"
+    default_duration: 0.75
+    energy_match: "medium"
+    beat_sync: true
+    recommended_for: ["dynamic", "energetic"]
+    
+  diagbr:
+    name: "Diagonal Bottom-Right"
+    description: "Diagonal wipe from opposite corner"
+    ffmpeg_type: "diagbr"
+    default_duration: 0.75
+    energy_match: "medium"
+    beat_sync: true
+    recommended_for: ["dynamic", "energetic"]
+    
+  hlslice:
+    name: "Horizontal Slice"
+    description: "Horizontal slice transition"
+    ffmpeg_type: "hlslice"
+    default_duration: 0.75
+    energy_match: "high"
+    beat_sync: true
+    recommended_for: ["action", "fast_paced"]
+    
+  vlslice:
+    name: "Vertical Slice"
+    description: "Vertical slice transition"
+    ffmpeg_type: "vlslice"
+    default_duration: 0.75
+    energy_match: "high"
+    beat_sync: true
+    recommended_for: ["action", "fast_paced"]
+
+  # ===========================================================================
+  # BLUR TRANSITIONS
+  # ===========================================================================
+  
+  smoothleft:
+    name: "Smooth Left"
+    description: "Smooth directional blur left"
+    ffmpeg_type: "smoothleft"
+    default_duration: 0.75
+    energy_match: "medium"
+    beat_sync: true
+    recommended_for: ["smooth", "flowing"]
+    
+  smoothright:
+    name: "Smooth Right"
+    description: "Smooth directional blur right"
+    ffmpeg_type: "smoothright"
+    default_duration: 0.75
+    energy_match: "medium"
+    beat_sync: true
+    recommended_for: ["smooth", "flowing"]
+
+# Transition Packs (pre-configured combinations)
+transition_packs:
+  music_video_energetic:
+    name: "Music Video - Energetic"
+    description: "Fast, beat-synced transitions for high-energy content"
+    transitions:
+      - type: "cut"
+        weight: 0.4
+      - type: "zoom_in"
+        weight: 0.2
+      - type: "pixelize"
+        weight: 0.15
+      - type: "hlslice"
+        weight: 0.15
+      - type: "slide_left"
+        weight: 0.1
+    beat_sync: true
+    default_duration: 0.5
+    
+  music_video_smooth:
+    name: "Music Video - Smooth"
+    description: "Flowing transitions for slower music"
+    transitions:
+      - type: "dissolve"
+        weight: 0.4
+      - type: "smoothleft"
+        weight: 0.2
+      - type: "slide_left"
+        weight: 0.2
+      - type: "fade_black"
+        weight: 0.2
+    beat_sync: true
+    default_duration: 1.0
+    
+  cinematic:
+    name: "Cinematic"
+    description: "Film-like transitions for dramatic content"
+    transitions:
+      - type: "dissolve"
+        weight: 0.5
+      - type: "fade_black"
+        weight: 0.3
+      - type: "cut"
+        weight: 0.2
+    beat_sync: false
+    default_duration: 1.5
+    
+  documentary:
+    name: "Documentary"
+    description: "Clean, professional transitions"
+    transitions:
+      - type: "dissolve"
+        weight: 0.6
+      - type: "cut"
+        weight: 0.3
+      - type: "fade_black"
+        weight: 0.1
+    beat_sync: false
+    default_duration: 1.0
+    
+  retro:
+    name: "Retro"
+    description: "Vintage-style transitions"
+    transitions:
+      - type: "wipe_left"
+        weight: 0.3
+      - type: "circle_close"
+        weight: 0.3
+      - type: "pixelize"
+        weight: 0.2
+      - type: "dissolve"
+        weight: 0.2
+    beat_sync: true
+    default_duration: 0.75
+
+# Beat-sync configuration
+beat_sync:
+  enabled: true
+  offset_ms: -50  # Trigger slightly before beat
+  min_interval: 2.0  # Minimum seconds between transitions
+  max_interval: 8.0  # Maximum seconds between transitions
+  energy_threshold: 0.6  # Minimum energy level to trigger transition
+  
+# Ken Burns effect presets
+ken_burns:
+  subtle:
+    zoom_range: [1.0, 1.05]
+    pan_range: 0.02
+    duration_multiplier: 1.0
+    
+  medium:
+    zoom_range: [1.0, 1.1]
+    pan_range: 0.05
+    duration_multiplier: 1.0
+    
+  strong:
+    zoom_range: [1.0, 1.15]
+    pan_range: 0.08
+    duration_multiplier: 1.0
+    
+  dramatic:
+    zoom_range: [0.95, 1.15]
+    pan_range: 0.1
+    duration_multiplier: 1.0

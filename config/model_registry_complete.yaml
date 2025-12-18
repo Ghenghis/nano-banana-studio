@@ -1,0 +1,1088 @@
+# =============================================================================
+# NANO BANANA STUDIO PRO - COMPLETE MODEL REGISTRY v2.0
+# =============================================================================
+# All models organized by task with selection criteria
+# =============================================================================
+
+version: "2.0"
+last_updated: "2025-12-17"
+
+# =============================================================================
+# IMAGE GENERATION MODELS
+# =============================================================================
+image_generation:
+  # ---------------------------------------------------------------------------
+  # RECOMMENDED: Best balance of quality/speed
+  # ---------------------------------------------------------------------------
+  recommended:
+    - nano_banana_pro
+    - flux_schnell
+    
+  models:
+    # -------------------------------------------------------------------------
+    # Cloud API Models
+    # -------------------------------------------------------------------------
+    nano_banana_pro:
+      id: "nano_banana_pro"
+      name: "Nano Banana Pro (Gemini 3 Pro Image)"
+      description: "Google's flagship image model with 4K, text rendering, and 14-image blending"
+      provider: "google"
+      type: "api"
+      enabled: true
+      
+      config:
+        endpoint: "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro"
+        api_key_env: "GOOGLE_API_KEY"
+        
+      capabilities:
+        max_resolution: 4096
+        aspect_ratios: ["1:1", "16:9", "9:16", "4:3", "3:4", "21:9"]
+        multi_reference: true
+        max_references: 14
+        text_rendering: true
+        character_consistency: true
+        
+      performance:
+        speed_rating: "fast"
+        quality_rating: "excellent"
+        cost_per_image: 0.02
+        avg_generation_time_s: 8
+        
+      use_cases:
+        - "hero_images"
+        - "character_consistency"
+        - "text_overlays"
+        - "4k_content"
+        
+    dall_e_3:
+      id: "dall_e_3"
+      name: "DALL-E 3"
+      description: "OpenAI's latest with automatic prompt enhancement"
+      provider: "openai"
+      type: "api"
+      enabled: true
+      
+      config:
+        endpoint: "https://api.openai.com/v1/images/generations"
+        api_key_env: "OPENAI_API_KEY"
+        model_name: "dall-e-3"
+        
+      capabilities:
+        max_resolution: 1792
+        aspect_ratios: ["1:1", "16:9", "9:16"]
+        multi_reference: false
+        text_rendering: true
+        auto_enhance_prompt: true
+        
+      performance:
+        speed_rating: "medium"
+        quality_rating: "excellent"
+        cost_per_image: 0.04
+        avg_generation_time_s: 15
+        
+    midjourney:
+      id: "midjourney"
+      name: "Midjourney v6"
+      description: "Premium quality via Discord API"
+      provider: "midjourney"
+      type: "api"
+      enabled: false  # Requires Discord integration
+      
+    # -------------------------------------------------------------------------
+    # Local Models - SDXL Family
+    # -------------------------------------------------------------------------
+    sdxl_base:
+      id: "sdxl_base"
+      name: "Stable Diffusion XL 1.0 Base"
+      description: "Industry standard for high-quality generation"
+      provider: "stabilityai"
+      type: "local"
+      enabled: true
+      
+      config:
+        hf_repo: "stabilityai/stable-diffusion-xl-base-1.0"
+        hf_revision: "main"
+        model_format: "safetensors"
+        precision: "fp16"
+        scheduler: "DPMSolverMultistep"
+        
+      requirements:
+        vram_min_gb: 8
+        vram_recommended_gb: 12
+        disk_space_gb: 7
+        
+      capabilities:
+        max_resolution: 1024
+        aspect_ratios: ["1:1", "16:9", "9:16", "4:3", "3:4"]
+        lora_support: true
+        controlnet_support: true
+        refiner_support: true
+        
+      generation_defaults:
+        steps: 30
+        cfg_scale: 7.0
+        sampler: "DPM++ 2M Karras"
+        
+      performance:
+        speed_rating: "medium"
+        quality_rating: "very_good"
+        avg_generation_time_s: 12
+        
+    sdxl_turbo:
+      id: "sdxl_turbo"
+      name: "SDXL Turbo"
+      description: "Fast 4-step generation"
+      provider: "stabilityai"
+      type: "local"
+      enabled: true
+      
+      config:
+        hf_repo: "stabilityai/sdxl-turbo"
+        precision: "fp16"
+        
+      requirements:
+        vram_min_gb: 8
+        
+      generation_defaults:
+        steps: 4
+        cfg_scale: 0.0
+        
+      performance:
+        speed_rating: "very_fast"
+        quality_rating: "good"
+        avg_generation_time_s: 3
+        
+    # -------------------------------------------------------------------------
+    # Local Models - FLUX Family
+    # -------------------------------------------------------------------------
+    flux_schnell:
+      id: "flux_schnell"
+      name: "FLUX.1 Schnell"
+      description: "Fast 4-step generation with excellent quality"
+      provider: "black-forest-labs"
+      type: "local"
+      enabled: true
+      
+      config:
+        hf_repo: "black-forest-labs/FLUX.1-schnell"
+        precision: "bf16"
+        
+      requirements:
+        vram_min_gb: 12
+        vram_recommended_gb: 16
+        disk_space_gb: 23
+        
+      capabilities:
+        max_resolution: 1024
+        aspect_ratios: ["1:1", "16:9", "9:16", "4:3", "3:4"]
+        
+      generation_defaults:
+        steps: 4
+        guidance_scale: 0.0
+        
+      performance:
+        speed_rating: "very_fast"
+        quality_rating: "excellent"
+        avg_generation_time_s: 5
+        
+    flux_dev:
+      id: "flux_dev"
+      name: "FLUX.1 Dev"
+      description: "Highest quality FLUX model"
+      provider: "black-forest-labs"
+      type: "local"
+      enabled: true
+      
+      config:
+        hf_repo: "black-forest-labs/FLUX.1-dev"
+        precision: "bf16"
+        
+      requirements:
+        vram_min_gb: 24
+        disk_space_gb: 23
+        
+      generation_defaults:
+        steps: 50
+        guidance_scale: 3.5
+        
+      performance:
+        speed_rating: "slow"
+        quality_rating: "best"
+        avg_generation_time_s: 45
+        
+    flux_merged_fp8:
+      id: "flux_merged_fp8"
+      name: "FLUX Schnell-Dev Merged FP8 4-Step"
+      description: "Community merge: schnell speed + dev quality"
+      provider: "community"
+      type: "local"
+      enabled: true
+      
+      config:
+        hf_repo: "drbaph/FLUX.1-schnell-dev-merged-fp8-4step"
+        precision: "fp8"
+        
+      requirements:
+        vram_min_gb: 16
+        disk_space_gb: 12
+        
+      generation_defaults:
+        steps: 4
+        
+      performance:
+        speed_rating: "fast"
+        quality_rating: "excellent"
+        avg_generation_time_s: 6
+
+# =============================================================================
+# VIDEO GENERATION MODELS
+# =============================================================================
+video_generation:
+  recommended:
+    - ltx_video_distilled
+    - wan_video
+    
+  models:
+    # -------------------------------------------------------------------------
+    # LTX-Video Family (Lightricks)
+    # -------------------------------------------------------------------------
+    ltx_video:
+      id: "ltx_video"
+      name: "LTX-Video 0.9.5"
+      description: "Original LTX-Video model"
+      provider: "lightricks"
+      type: "local"
+      enabled: true
+      
+      config:
+        hf_repo: "Lightricks/LTX-Video-0.9.5"
+        precision: "fp16"
+        
+      requirements:
+        vram_min_gb: 12
+        disk_space_gb: 8
+        
+      capabilities:
+        max_frames: 97
+        max_resolution: 720
+        fps_options: [8, 16, 24]
+        image_to_video: true
+        text_to_video: true
+        
+      generation_defaults:
+        num_frames: 49
+        fps: 24
+        steps: 30
+        guidance_scale: 7.0
+        
+      performance:
+        speed_rating: "medium"
+        quality_rating: "good"
+        avg_generation_time_s: 120
+        
+    ltx_video_distilled:
+      id: "ltx_video_distilled"
+      name: "LTX-Video 0.9.7 Distilled"
+      description: "Faster inference with keyframe control"
+      provider: "lightricks"
+      type: "local"
+      enabled: true
+      
+      config:
+        hf_repo: "Lightricks/LTX-Video-0.9.7-distilled"
+        precision: "fp16"
+        
+      requirements:
+        vram_min_gb: 12
+        disk_space_gb: 8
+        
+      capabilities:
+        max_frames: 121
+        keyframe_control: true
+        condition_pipeline: true
+        
+      generation_defaults:
+        num_frames: 61
+        fps: 24
+        steps: 20
+        
+      performance:
+        speed_rating: "fast"
+        quality_rating: "very_good"
+        avg_generation_time_s: 60
+        
+    ltx_video_13b:
+      id: "ltx_video_13b"
+      name: "LTX-Video 0.9.8 13B Distilled"
+      description: "Largest LTX model, best quality"
+      provider: "lightricks"
+      type: "local"
+      enabled: true
+      
+      config:
+        hf_repo: "Lightricks/LTX-Video-0.9.8-13B-distilled"
+        precision: "fp16"
+        
+      requirements:
+        vram_min_gb: 24
+        disk_space_gb: 26
+        
+      capabilities:
+        max_frames: 121
+        keyframe_control: true
+        iclora_support: true
+        
+      performance:
+        speed_rating: "slow"
+        quality_rating: "best"
+        avg_generation_time_s: 180
+        
+    # -------------------------------------------------------------------------
+    # WanVideo Family (Wan-AI / Kuaishou)
+    # -------------------------------------------------------------------------
+    wan_video:
+      id: "wan_video"
+      name: "WanVideo 2.1 (ComfyUI)"
+      description: "Excellent quality, ComfyUI native"
+      provider: "wan-ai"
+      type: "local"
+      enabled: true
+      
+      config:
+        hf_repo: "Kijai/WanVideo_comfy"
+        comfyui_node: "WanVideoSampler"
+        
+      requirements:
+        vram_min_gb: 16
+        disk_space_gb: 15
+        comfyui_required: true
+        
+      capabilities:
+        max_frames: 97
+        vace_support: true
+        
+      performance:
+        speed_rating: "medium"
+        quality_rating: "excellent"
+        avg_generation_time_s: 90
+        
+    wan_video_fp8:
+      id: "wan_video_fp8"
+      name: "WanVideo FP8 Scaled"
+      description: "Lower VRAM version"
+      provider: "community"
+      type: "local"
+      enabled: true
+      
+      config:
+        hf_repo: "Kijai/WanVideo_comfy_fp8_scaled"
+        
+      requirements:
+        vram_min_gb: 12
+        
+      performance:
+        speed_rating: "medium"
+        quality_rating: "very_good"
+        
+    wan_video_gguf:
+      id: "wan_video_gguf"
+      name: "WanVideo GGUF (Low VRAM)"
+      description: "Quantized for 8GB GPUs"
+      provider: "community"
+      type: "local"
+      enabled: true
+      
+      config:
+        hf_repo: "Kijai/WanVideo_comfy_GGUF"
+        
+      requirements:
+        vram_min_gb: 8
+        
+      capabilities:
+        max_frames: 65
+        
+      performance:
+        speed_rating: "medium"
+        quality_rating: "good"
+        
+    # -------------------------------------------------------------------------
+    # Stable Video Diffusion (Stability AI)
+    # -------------------------------------------------------------------------
+    svd_xt:
+      id: "svd_xt"
+      name: "Stable Video Diffusion XT 1.1"
+      description: "Proven stability, good motion"
+      provider: "stabilityai"
+      type: "local"
+      enabled: true
+      
+      config:
+        hf_repo: "stabilityai/stable-video-diffusion-img2vid-xt-1-1"
+        precision: "fp16"
+        
+      requirements:
+        vram_min_gb: 16
+        disk_space_gb: 10
+        
+      capabilities:
+        max_frames: 25
+        fps_options: [4, 6, 8]
+        image_to_video: true
+        
+      generation_defaults:
+        num_frames: 25
+        fps: 6
+        motion_bucket_id: 127
+        noise_aug_strength: 0.02
+        
+      performance:
+        speed_rating: "fast"
+        quality_rating: "good"
+        avg_generation_time_s: 30
+        
+    # -------------------------------------------------------------------------
+    # Cloud API Models
+    # -------------------------------------------------------------------------
+    runway_gen3:
+      id: "runway_gen3"
+      name: "Runway Gen-3 Alpha"
+      description: "Industry-leading quality"
+      provider: "runway"
+      type: "api"
+      enabled: true
+      
+      config:
+        endpoint: "https://api.runwayml.com/v1/generation"
+        api_key_env: "RUNWAY_API_KEY"
+        
+      capabilities:
+        max_duration_s: 10
+        fps: 24
+        motion_control: true
+        
+      performance:
+        speed_rating: "medium"
+        quality_rating: "best"
+        cost_per_second: 0.05
+        
+    kling_ai:
+      id: "kling_ai"
+      name: "Kling AI"
+      description: "Free tier available, good quality"
+      provider: "kuaishou"
+      type: "api"
+      enabled: true
+      
+      config:
+        api_key_env: "KLING_API_KEY"
+        
+      capabilities:
+        max_duration_s: 5
+        fps: 24
+        
+      performance:
+        speed_rating: "slow"
+        quality_rating: "very_good"
+        cost_per_second: 0.02
+
+# =============================================================================
+# MUSIC GENERATION MODELS
+# =============================================================================
+music_generation:
+  recommended:
+    - musicgen_large
+    - suno_api
+    
+  models:
+    musicgen_small:
+      id: "musicgen_small"
+      name: "MusicGen Small"
+      description: "Fast, lower quality"
+      provider: "facebook"
+      type: "local"
+      enabled: true
+      
+      config:
+        hf_repo: "facebook/musicgen-small"
+        
+      requirements:
+        vram_min_gb: 4
+        disk_space_gb: 2
+        
+      capabilities:
+        max_duration_s: 30
+        sample_rate: 32000
+        stereo: false
+        
+      performance:
+        speed_rating: "fast"
+        quality_rating: "good"
+        
+    musicgen_medium:
+      id: "musicgen_medium"
+      name: "MusicGen Medium"
+      description: "Balanced speed/quality"
+      provider: "facebook"
+      type: "local"
+      enabled: true
+      
+      config:
+        hf_repo: "facebook/musicgen-medium"
+        
+      requirements:
+        vram_min_gb: 6
+        disk_space_gb: 4
+        
+      capabilities:
+        max_duration_s: 30
+        sample_rate: 32000
+        
+      performance:
+        speed_rating: "medium"
+        quality_rating: "very_good"
+        
+    musicgen_large:
+      id: "musicgen_large"
+      name: "MusicGen Large"
+      description: "Best quality, 1.5B parameters"
+      provider: "facebook"
+      type: "local"
+      enabled: true
+      
+      config:
+        hf_repo: "facebook/musicgen-large"
+        
+      requirements:
+        vram_min_gb: 8
+        disk_space_gb: 7
+        
+      capabilities:
+        max_duration_s: 30
+        sample_rate: 32000
+        
+      performance:
+        speed_rating: "medium"
+        quality_rating: "best"
+        avg_generation_time_s: 45
+        
+    musicgen_melody:
+      id: "musicgen_melody"
+      name: "MusicGen Melody"
+      description: "Melody-conditioned generation"
+      provider: "facebook"
+      type: "local"
+      enabled: true
+      
+      config:
+        hf_repo: "facebook/musicgen-melody"
+        
+      requirements:
+        vram_min_gb: 6
+        
+      capabilities:
+        melody_conditioning: true
+        reference_audio: true
+        
+      performance:
+        speed_rating: "medium"
+        quality_rating: "very_good"
+        
+    musicgen_stereo_large:
+      id: "musicgen_stereo_large"
+      name: "MusicGen Stereo Large"
+      description: "Stereo output, spatial audio"
+      provider: "facebook"
+      type: "local"
+      enabled: true
+      
+      config:
+        hf_repo: "facebook/musicgen-stereo-large"
+        
+      requirements:
+        vram_min_gb: 8
+        
+      capabilities:
+        stereo: true
+        
+      performance:
+        speed_rating: "medium"
+        quality_rating: "best"
+        
+    suno_api:
+      id: "suno_api"
+      name: "Suno AI"
+      description: "Full songs with lyrics"
+      provider: "suno"
+      type: "api"
+      enabled: true
+      
+      config:
+        api_key_env: "SUNO_COOKIE"
+        
+      capabilities:
+        max_duration_s: 240
+        lyrics_generation: true
+        full_songs: true
+        genres: ["pop", "rock", "electronic", "jazz", "classical", "hip-hop", "country", "r&b"]
+        
+      performance:
+        speed_rating: "slow"
+        quality_rating: "excellent"
+
+# =============================================================================
+# TEXT-TO-SPEECH MODELS
+# =============================================================================
+text_to_speech:
+  recommended:
+    - bark
+    - elevenlabs
+    
+  models:
+    bark:
+      id: "bark"
+      name: "Bark"
+      description: "Multilingual with emotions and sound effects"
+      provider: "suno"
+      type: "local"
+      enabled: true
+      
+      config:
+        hf_repo: "suno/bark"
+        
+      requirements:
+        vram_min_gb: 4
+        disk_space_gb: 5
+        
+      capabilities:
+        languages: ["en", "de", "es", "fr", "hi", "it", "ja", "ko", "pl", "pt", "ru", "tr", "zh"]
+        emotions: true
+        sound_effects: true
+        music_notes: true
+        sample_rate: 24000
+        
+      performance:
+        speed_rating: "medium"
+        quality_rating: "very_good"
+        
+    bark_small:
+      id: "bark_small"
+      name: "Bark Small"
+      description: "Faster, lower quality"
+      provider: "suno"
+      type: "local"
+      enabled: true
+      
+      config:
+        hf_repo: "suno/bark-small"
+        
+      requirements:
+        vram_min_gb: 2
+        disk_space_gb: 2
+        
+      performance:
+        speed_rating: "fast"
+        quality_rating: "good"
+        
+    xtts_v2:
+      id: "xtts_v2"
+      name: "XTTS v2"
+      description: "Voice cloning, 17 languages"
+      provider: "coqui"
+      type: "local"
+      enabled: true
+      
+      config:
+        hf_repo: "coqui/XTTS-v2"
+        
+      requirements:
+        vram_min_gb: 4
+        disk_space_gb: 3
+        
+      capabilities:
+        languages: 17
+        voice_cloning: true
+        real_time: true
+        sample_rate: 22050
+        
+      performance:
+        speed_rating: "fast"
+        quality_rating: "excellent"
+        
+    elevenlabs:
+      id: "elevenlabs"
+      name: "ElevenLabs"
+      description: "Best quality, cloud-based"
+      provider: "elevenlabs"
+      type: "api"
+      enabled: true
+      
+      config:
+        endpoint: "https://api.elevenlabs.io/v1/text-to-speech"
+        api_key_env: "ELEVENLABS_API_KEY"
+        
+      capabilities:
+        voice_cloning: true
+        emotion_control: true
+        sample_rate: 44100
+        
+      performance:
+        speed_rating: "fast"
+        quality_rating: "best"
+        cost_per_char: 0.00003
+
+# =============================================================================
+# SPEECH RECOGNITION MODELS
+# =============================================================================
+speech_recognition:
+  recommended:
+    - whisper_large_v3
+    
+  models:
+    whisper_tiny:
+      id: "whisper_tiny"
+      name: "Whisper Tiny"
+      description: "Fastest, lowest accuracy"
+      provider: "openai"
+      type: "local"
+      enabled: true
+      
+      config:
+        hf_repo: "openai/whisper-tiny"
+        
+      requirements:
+        vram_min_gb: 1
+        
+      performance:
+        speed_rating: "very_fast"
+        quality_rating: "fair"
+        
+    whisper_small:
+      id: "whisper_small"
+      name: "Whisper Small"
+      provider: "openai"
+      type: "local"
+      enabled: true
+      
+      config:
+        hf_repo: "openai/whisper-small"
+        
+      requirements:
+        vram_min_gb: 2
+        
+      performance:
+        speed_rating: "fast"
+        quality_rating: "good"
+        
+    whisper_medium:
+      id: "whisper_medium"
+      name: "Whisper Medium"
+      description: "Balanced"
+      provider: "openai"
+      type: "local"
+      enabled: true
+      
+      config:
+        hf_repo: "openai/whisper-medium"
+        
+      requirements:
+        vram_min_gb: 4
+        
+      performance:
+        speed_rating: "medium"
+        quality_rating: "very_good"
+        
+    whisper_large_v3:
+      id: "whisper_large_v3"
+      name: "Whisper Large V3"
+      description: "Best accuracy, 99 languages"
+      provider: "openai"
+      type: "local"
+      enabled: true
+      
+      config:
+        hf_repo: "openai/whisper-large-v3"
+        
+      requirements:
+        vram_min_gb: 6
+        disk_space_gb: 3
+        
+      capabilities:
+        languages: 99
+        timestamps: true
+        word_level_timestamps: true
+        
+      performance:
+        speed_rating: "slow"
+        quality_rating: "best"
+
+# =============================================================================
+# FACE & IDENTITY MODELS
+# =============================================================================
+face_detection:
+  recommended:
+    - mediapipe
+    - insightface
+    
+  models:
+    mediapipe:
+      id: "mediapipe"
+      name: "MediaPipe Face Detection"
+      description: "Fast CPU-based detection with 468 landmarks"
+      provider: "google"
+      type: "local"
+      enabled: true
+      
+      config:
+        min_detection_confidence: 0.5
+        model_selection: 1  # 0=short-range, 1=full-range
+        
+      capabilities:
+        landmarks: 468
+        cpu_only: true
+        real_time: true
+        
+      performance:
+        speed_rating: "very_fast"
+        quality_rating: "good"
+        
+    insightface:
+      id: "insightface"
+      name: "InsightFace"
+      description: "High-accuracy face recognition and embedding"
+      provider: "insightface"
+      type: "local"
+      enabled: true
+      
+      config:
+        model_name: "buffalo_l"
+        det_size: [640, 640]
+        
+      requirements:
+        vram_min_gb: 2
+        
+      capabilities:
+        embedding_dim: 512
+        face_recognition: true
+        age_gender: true
+        landmarks: 106
+        
+      performance:
+        speed_rating: "fast"
+        quality_rating: "best"
+
+identity_preservation:
+  recommended:
+    - ipadapter_faceid
+    
+  models:
+    ipadapter_faceid:
+      id: "ipadapter_faceid"
+      name: "IPAdapter FaceID"
+      description: "Face embedding injection for SDXL"
+      provider: "community"
+      type: "local"
+      enabled: true
+      
+      config:
+        hf_repo: "h94/IP-Adapter-FaceID"
+        
+      requirements:
+        vram_min_gb: 2
+        
+      capabilities:
+        sdxl_compatible: true
+        sd15_compatible: true
+        face_embedding: true
+        
+      performance:
+        quality_rating: "very_good"
+        
+    instantid:
+      id: "instantid"
+      name: "InstantID"
+      description: "Single-reference identity preservation"
+      provider: "community"
+      type: "local"
+      enabled: true
+      
+      config:
+        hf_repo: "InstantX/InstantID"
+        
+      requirements:
+        vram_min_gb: 4
+        
+      capabilities:
+        single_reference: true
+        strong_likeness: true
+        
+      performance:
+        quality_rating: "excellent"
+
+# =============================================================================
+# LLM MODELS (for storyboarding)
+# =============================================================================
+llm:
+  recommended:
+    - gpt4o_mini
+    - llama3_8b
+    
+  models:
+    # Local Models
+    llama3_8b:
+      id: "llama3_8b"
+      name: "Llama 3.1 8B Instruct"
+      provider: "meta"
+      type: "local"
+      enabled: true
+      
+      config:
+        hf_repo: "meta-llama/Meta-Llama-3.1-8B-Instruct"
+        
+      requirements:
+        vram_min_gb: 8
+        
+      capabilities:
+        context_length: 128000
+        
+      performance:
+        speed_rating: "fast"
+        quality_rating: "very_good"
+        
+    qwen2_7b:
+      id: "qwen2_7b"
+      name: "Qwen 2 7B Instruct"
+      provider: "alibaba"
+      type: "local"
+      enabled: true
+      
+      config:
+        hf_repo: "Qwen/Qwen2-7B-Instruct"
+        
+      requirements:
+        vram_min_gb: 8
+        
+      capabilities:
+        context_length: 32000
+        multilingual: true
+        
+    mistral_7b:
+      id: "mistral_7b"
+      name: "Mistral 7B Instruct v0.3"
+      provider: "mistral"
+      type: "local"
+      enabled: true
+      
+      config:
+        hf_repo: "mistralai/Mistral-7B-Instruct-v0.3"
+        
+      requirements:
+        vram_min_gb: 6
+        
+    # Cloud APIs
+    gpt4o_mini:
+      id: "gpt4o_mini"
+      name: "GPT-4o Mini"
+      provider: "openai"
+      type: "api"
+      enabled: true
+      
+      config:
+        endpoint: "https://api.openai.com/v1/chat/completions"
+        api_key_env: "OPENAI_API_KEY"
+        model_name: "gpt-4o-mini"
+        
+      capabilities:
+        context_length: 128000
+        
+      performance:
+        speed_rating: "fast"
+        quality_rating: "excellent"
+        cost_per_1k_tokens: 0.00015
+        
+    claude_35_sonnet:
+      id: "claude_35_sonnet"
+      name: "Claude 3.5 Sonnet"
+      provider: "anthropic"
+      type: "api"
+      enabled: true
+      
+      config:
+        endpoint: "https://api.anthropic.com/v1/messages"
+        api_key_env: "ANTHROPIC_API_KEY"
+        model_name: "claude-3-5-sonnet-20241022"
+        
+      capabilities:
+        context_length: 200000
+        
+      performance:
+        speed_rating: "medium"
+        quality_rating: "best"
+        cost_per_1k_tokens: 0.003
+        
+    gemini_15_flash:
+      id: "gemini_15_flash"
+      name: "Gemini 1.5 Flash"
+      provider: "google"
+      type: "api"
+      enabled: true
+      
+      config:
+        endpoint: "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash"
+        api_key_env: "GOOGLE_API_KEY"
+        
+      capabilities:
+        context_length: 1000000
+        
+      performance:
+        speed_rating: "very_fast"
+        quality_rating: "very_good"
+        cost_per_1k_tokens: 0.000075
+
+# =============================================================================
+# MODEL SELECTION PRESETS
+# =============================================================================
+presets:
+  # Fast mode - prioritize speed
+  fast:
+    image: "flux_schnell"
+    video: "svd_xt"
+    music: "musicgen_small"
+    tts: "bark_small"
+    stt: "whisper_small"
+    llm: "gemini_15_flash"
+    
+  # Balanced mode - speed/quality tradeoff
+  balanced:
+    image: "nano_banana_pro"
+    video: "ltx_video_distilled"
+    music: "musicgen_medium"
+    tts: "bark"
+    stt: "whisper_medium"
+    llm: "gpt4o_mini"
+    
+  # Quality mode - prioritize quality
+  quality:
+    image: "flux_dev"
+    video: "ltx_video_13b"
+    music: "musicgen_large"
+    tts: "elevenlabs"
+    stt: "whisper_large_v3"
+    llm: "claude_35_sonnet"
+    
+  # Local mode - no cloud APIs
+  local:
+    image: "flux_schnell"
+    video: "wan_video"
+    music: "musicgen_large"
+    tts: "xtts_v2"
+    stt: "whisper_large_v3"
+    llm: "llama3_8b"
+    
+  # Low VRAM mode - for 8GB GPUs
+  low_vram:
+    image: "sdxl_turbo"
+    video: "wan_video_gguf"
+    music: "musicgen_small"
+    tts: "bark_small"
+    stt: "whisper_small"
+    llm: "mistral_7b"

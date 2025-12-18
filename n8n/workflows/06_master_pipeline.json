@@ -1,0 +1,354 @@
+{
+  "name": "06 - Master Pipeline (Full Automation)",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "🍌 Nano Banana Master Pipeline",
+        "formDescription": "Complete end-to-end video production: Concept → Script → Images → Audio → Video. Choose Autopilot for hands-off or Guided for control at each step.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Pipeline Mode",
+              "fieldType": "dropdown",
+              "requiredField": true,
+              "fieldOptions": {
+                "values": [
+                  { "option": "🚀 Autopilot - Full automation, minimal input" },
+                  { "option": "🎯 Guided - Pause at key decisions" },
+                  { "option": "🔧 Manual - Step-by-step control" },
+                  { "option": "📋 From Script - Upload markdown script" },
+                  { "option": "🖼️ From Assets - Use uploaded images/audio" }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Video Concept/Topic",
+              "fieldType": "textarea",
+              "requiredField": true,
+              "placeholder": "Describe your video idea in detail. The more context, the better the result.\n\nExample: A calming nature documentary about the changing seasons in a Japanese garden, focusing on the interplay of light, water, and carefully cultivated plants."
+            },
+            {
+              "fieldLabel": "Video Style Template",
+              "fieldType": "dropdown",
+              "requiredField": true,
+              "fieldOptions": {
+                "values": [
+                  { "option": "📽️ Cinematic - Film-grade visuals, dramatic" },
+                  { "option": "📰 Documentary - Authentic, informative" },
+                  { "option": "🎨 Artistic - Creative, expressive" },
+                  { "option": "📱 Viral Short - Fast-paced, engaging" },
+                  { "option": "📊 Explainer - Clear, educational" },
+                  { "option": "🎙️ Podcast Visual - Audio-focused with visuals" },
+                  { "option": "🛍️ Product Showcase - Commercial, polished" },
+                  { "option": "✨ Inspirational - Uplifting, motivational" },
+                  { "option": "🎮 Gaming - Dynamic, energetic" },
+                  { "option": "🏠 Tutorial - Step-by-step, instructional" }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Target Platform",
+              "fieldType": "dropdown",
+              "requiredField": true,
+              "fieldOptions": {
+                "values": [
+                  { "option": "YouTube Long-form (16:9)" },
+                  { "option": "YouTube Shorts (9:16)" },
+                  { "option": "TikTok (9:16)" },
+                  { "option": "Instagram Reel (9:16)" },
+                  { "option": "Instagram Post (1:1)" },
+                  { "option": "LinkedIn (16:9)" },
+                  { "option": "Twitter/X (16:9)" },
+                  { "option": "Cinematic (2.39:1)" }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Target Duration",
+              "fieldType": "dropdown",
+              "requiredField": true,
+              "fieldOptions": {
+                "values": [
+                  { "option": "15 seconds (Quick hook)" },
+                  { "option": "30 seconds (Short form)" },
+                  { "option": "60 seconds (Standard short)" },
+                  { "option": "90 seconds (Extended short)" },
+                  { "option": "2 minutes (Brief)" },
+                  { "option": "3 minutes (Standard)" },
+                  { "option": "5 minutes (Detailed)" },
+                  { "option": "10 minutes (In-depth)" },
+                  { "option": "Custom duration" }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Custom Duration (seconds, if selected above)",
+              "fieldType": "number",
+              "requiredField": false,
+              "fieldOptions": {
+                "numberMin": 10,
+                "numberMax": 1800,
+                "numberDefault": 60
+              }
+            },
+            {
+              "fieldLabel": "Narration Style",
+              "fieldType": "dropdown",
+              "requiredField": true,
+              "fieldOptions": {
+                "values": [
+                  { "option": "🎙️ Professional Narrator - Authoritative, clear" },
+                  { "option": "💬 Conversational - Friendly, casual" },
+                  { "option": "🧘 Calm & Meditative - Soft, soothing" },
+                  { "option": "⚡ Energetic - Upbeat, exciting" },
+                  { "option": "📚 Educational - Informative, precise" },
+                  { "option": "🔇 No Narration - Music/visuals only" },
+                  { "option": "📝 Text Captions Only - On-screen text" }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Music Style",
+              "fieldType": "dropdown",
+              "requiredField": true,
+              "fieldOptions": {
+                "values": [
+                  { "option": "🎻 Orchestral/Cinematic" },
+                  { "option": "🎹 Ambient/Atmospheric" },
+                  { "option": "🎸 Upbeat/Pop" },
+                  { "option": "🎷 Jazz/Sophisticated" },
+                  { "option": "🎵 Lo-fi/Chill" },
+                  { "option": "🎼 Classical" },
+                  { "option": "🔊 Electronic/Modern" },
+                  { "option": "🥁 Drums/Percussive" },
+                  { "option": "🔇 No Music" },
+                  { "option": "📤 Upload Custom Music" }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Quality Level",
+              "fieldType": "dropdown",
+              "requiredField": true,
+              "fieldOptions": {
+                "values": [
+                  { "option": "⚡ Draft - Fast preview" },
+                  { "option": "📺 Standard - Good quality" },
+                  { "option": "🎬 High - Professional" },
+                  { "option": "🏆 Maximum - Broadcast ready" }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Upload Script (Optional - for 'From Script' mode)",
+              "fieldType": "file",
+              "requiredField": false,
+              "acceptFileTypes": ".md,.txt,.markdown"
+            },
+            {
+              "fieldLabel": "Upload Images (Optional - for 'From Assets' mode)",
+              "fieldType": "file",
+              "requiredField": false,
+              "acceptFileTypes": ".png,.jpg,.jpeg,.webp",
+              "multipleFiles": true
+            },
+            {
+              "fieldLabel": "Upload Audio (Optional)",
+              "fieldType": "file",
+              "requiredField": false,
+              "acceptFileTypes": ".mp3,.wav,.m4a",
+              "multipleFiles": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "form-trigger",
+      "name": "Master Pipeline Form",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [200, 400],
+      "webhookId": "master-pipeline-v1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse all form inputs and configure pipeline\nconst input = $input.first().json;\n\nconst pipelineMode = input['Pipeline Mode'] || 'Autopilot';\nconst concept = input['Video Concept/Topic'] || '';\nconst styleTemplate = input['Video Style Template'] || 'Cinematic';\nconst platform = input['Target Platform'] || 'YouTube Long-form (16:9)';\nconst durationOption = input['Target Duration'] || '60 seconds';\nconst customDuration = parseInt(input['Custom Duration (seconds, if selected above)']) || 60;\nconst narrationStyle = input['Narration Style'] || 'Professional Narrator';\nconst musicStyle = input['Music Style'] || 'Ambient/Atmospheric';\nconst quality = input['Quality Level'] || 'Standard';\n\n// Parse duration\nlet targetDuration;\nif (durationOption.includes('Custom')) {\n  targetDuration = customDuration;\n} else {\n  const match = durationOption.match(/(\\d+)/);\n  if (match) {\n    targetDuration = parseInt(match[1]);\n    if (durationOption.includes('minute')) targetDuration *= 60;\n  } else {\n    targetDuration = 60;\n  }\n}\n\n// Platform settings\nconst platformSettings = {\n  'YouTube Long-form (16:9)': { width: 1920, height: 1080, aspect: '16:9', fps: 30 },\n  'YouTube Shorts (9:16)': { width: 1080, height: 1920, aspect: '9:16', fps: 30 },\n  'TikTok (9:16)': { width: 1080, height: 1920, aspect: '9:16', fps: 30 },\n  'Instagram Reel (9:16)': { width: 1080, height: 1920, aspect: '9:16', fps: 30 },\n  'Instagram Post (1:1)': { width: 1080, height: 1080, aspect: '1:1', fps: 30 },\n  'LinkedIn (16:9)': { width: 1920, height: 1080, aspect: '16:9', fps: 30 },\n  'Twitter/X (16:9)': { width: 1920, height: 1080, aspect: '16:9', fps: 30 },\n  'Cinematic (2.39:1)': { width: 1920, height: 803, aspect: '2.39:1', fps: 24 }\n};\n\n// Calculate scene count based on duration\nconst avgSceneDuration = 5; // seconds per scene\nconst sceneCount = Math.max(3, Math.ceil(targetDuration / avgSceneDuration));\n\n// Style configurations\nconst styleConfigs = {\n  'Cinematic': { visual: 'cinematic, film grain, dramatic lighting, movie quality', pace: 'slow', transitions: 'dissolve' },\n  'Documentary': { visual: 'documentary, authentic, natural lighting, journalistic', pace: 'medium', transitions: 'cut' },\n  'Artistic': { visual: 'artistic, painterly, creative, expressive', pace: 'varied', transitions: 'mixed' },\n  'Viral Short': { visual: 'vibrant, eye-catching, dynamic, trending', pace: 'fast', transitions: 'quick' },\n  'Explainer': { visual: 'clean, clear, informative, professional', pace: 'medium', transitions: 'slide' },\n  'Podcast Visual': { visual: 'minimal, ambient, atmospheric', pace: 'slow', transitions: 'fade' },\n  'Product Showcase': { visual: 'polished, commercial, highlight, premium', pace: 'medium', transitions: 'zoom' },\n  'Inspirational': { visual: 'uplifting, bright, hopeful, beautiful', pace: 'slow', transitions: 'dissolve' },\n  'Gaming': { visual: 'dynamic, energetic, bold colors, action', pace: 'fast', transitions: 'quick' },\n  'Tutorial': { visual: 'clear, step-by-step, instructional', pace: 'medium', transitions: 'slide' }\n};\n\n// Extract style key from dropdown value\nconst styleKey = Object.keys(styleConfigs).find(key => styleTemplate.includes(key)) || 'Cinematic';\n\n// Pipeline stage configuration\nconst stages = {\n  concept_enhancement: true,\n  outline_generation: true,\n  script_writing: pipelineMode.includes('Script') ? false : true,\n  prompt_generation: true,\n  image_generation: true,\n  voice_generation: !narrationStyle.includes('No Narration') && !narrationStyle.includes('Text Captions'),\n  music_generation: !musicStyle.includes('No Music'),\n  video_assembly: true,\n  post_processing: quality.includes('High') || quality.includes('Maximum')\n};\n\nconst jobId = `master_${Date.now()}_${Math.random().toString(36).substring(7)}`;\n\nreturn {\n  jobId,\n  pipelineMode,\n  isAutopilot: pipelineMode.includes('Autopilot'),\n  isGuided: pipelineMode.includes('Guided'),\n  isManual: pipelineMode.includes('Manual'),\n  isFromScript: pipelineMode.includes('Script'),\n  isFromAssets: pipelineMode.includes('Assets'),\n  \n  concept,\n  styleTemplate,\n  styleKey,\n  styleConfig: styleConfigs[styleKey],\n  \n  platform,\n  platformSettings: platformSettings[platform],\n  \n  targetDuration,\n  sceneCount,\n  avgSceneDuration,\n  \n  narrationStyle,\n  hasNarration: !narrationStyle.includes('No Narration'),\n  hasTextCaptions: narrationStyle.includes('Text Captions'),\n  \n  musicStyle,\n  hasMusic: !musicStyle.includes('No Music'),\n  \n  quality,\n  stages,\n  \n  currentStage: 'initialized',\n  stageOutputs: {},\n  timestamp: new Date().toISOString()\n};"
+      },
+      "id": "initialize-pipeline",
+      "name": "Initialize Pipeline",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [400, 400]
+    },
+    {
+      "parameters": {
+        "model": "gpt-4o-mini",
+        "options": {
+          "temperature": 0.8,
+          "maxTokens": 2000
+        },
+        "messages": {
+          "values": [
+            {
+              "role": "system",
+              "content": "You are an expert video production planner. Create detailed video outlines with scene-by-scene breakdowns.\n\nFor the given concept, create a comprehensive outline including:\n1. Hook/Opening (first 3 seconds are crucial)\n2. Main content sections\n3. Climax/Key moment\n4. Resolution/Closing\n5. Call to action (if appropriate)\n\nRespond with JSON:\n{\n  \"title\": \"Video title\",\n  \"hook\": \"Opening hook description (3-5 seconds)\",\n  \"synopsis\": \"Brief overview (2-3 sentences)\",\n  \"targetAudience\": \"Who this is for\",\n  \"keyMessage\": \"Main takeaway\",\n  \"emotionalArc\": \"start emotion → peak → end emotion\",\n  \"scenes\": [\n    {\n      \"number\": 1,\n      \"title\": \"Scene title\",\n      \"duration\": 5,\n      \"purpose\": \"What this scene accomplishes\",\n      \"visualDescription\": \"Detailed visual for image generation\",\n      \"narration\": \"What is said (if applicable)\",\n      \"mood\": \"Emotional tone\",\n      \"transition\": \"How to transition to next\"\n    }\n  ],\n  \"musicCues\": [\n    {\n      \"timestamp\": \"0:00\",\n      \"description\": \"Music direction\"\n    }\n  ]\n}"
+            },
+            {
+              "role": "user",
+              "content": "=Create a video outline for:\n\nConcept: {{ $json.concept }}\n\nStyle: {{ $json.styleKey }} - {{ $json.styleConfig.visual }}\nPlatform: {{ $json.platform }}\nTarget Duration: {{ $json.targetDuration }} seconds\nNumber of Scenes: {{ $json.sceneCount }}\nNarration: {{ $json.narrationStyle }}\nMusic: {{ $json.musicStyle }}\nPace: {{ $json.styleConfig.pace }}"
+            }
+          ]
+        }
+      },
+      "id": "generate-outline",
+      "name": "Stage 1: Generate Outline",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [600, 400],
+      "credentials": {
+        "openAiApi": {
+          "id": "openai-cred",
+          "name": "OpenAI API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first().json;\nconst prevData = $('Initialize Pipeline').first().json;\n\nlet outline;\ntry {\n  const content = input.message?.content || input.content || '';\n  const cleaned = content.replace(/```json\\n?/g, '').replace(/```\\n?/g, '').trim();\n  outline = JSON.parse(cleaned);\n} catch (e) {\n  // Fallback outline\n  outline = {\n    title: 'Generated Video',\n    hook: 'Opening hook',\n    synopsis: 'Video synopsis',\n    targetAudience: 'General audience',\n    keyMessage: 'Key message',\n    emotionalArc: 'curious → engaged → satisfied',\n    scenes: Array.from({ length: prevData.sceneCount }, (_, i) => ({\n      number: i + 1,\n      title: `Scene ${i + 1}`,\n      duration: prevData.avgSceneDuration,\n      purpose: 'Scene purpose',\n      visualDescription: `Scene ${i + 1} visual`,\n      narration: '',\n      mood: 'engaging',\n      transition: 'dissolve'\n    })),\n    musicCues: [{ timestamp: '0:00', description: 'Music begins' }]\n  };\n}\n\nreturn {\n  ...prevData,\n  currentStage: 'outline_complete',\n  stageOutputs: {\n    ...prevData.stageOutputs,\n    outline\n  },\n  outline,\n  actualSceneCount: outline.scenes.length\n};"
+      },
+      "id": "parse-outline",
+      "name": "Parse Outline",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [800, 400]
+    },
+    {
+      "parameters": {
+        "model": "gpt-4o-mini",
+        "options": {
+          "temperature": 0.7,
+          "maxTokens": 3000
+        },
+        "messages": {
+          "values": [
+            {
+              "role": "system",
+              "content": "You are an expert prompt engineer for AI image generation. Transform scene descriptions into highly detailed, professional image generation prompts.\n\nFor each scene, create:\n1. A detailed visual prompt (100-150 words) with:\n   - Subject/focal point\n   - Environment/setting details\n   - Lighting description\n   - Color palette\n   - Composition/framing\n   - Style modifiers\n   - Technical quality terms\n\n2. A negative prompt to avoid unwanted elements\n\n3. Ken Burns direction (zoom_in, zoom_out, pan_left, pan_right)\n\nRespond with JSON:\n{\n  \"scenes\": [\n    {\n      \"number\": 1,\n      \"visualPrompt\": \"Detailed prompt for image generation...\",\n      \"negativePrompt\": \"Elements to avoid...\",\n      \"kenBurns\": \"zoom_in\",\n      \"colorPalette\": [\"#hex1\", \"#hex2\", \"#hex3\"],\n      \"lightingNotes\": \"Lighting description\",\n      \"compositionNotes\": \"Framing notes\"\n    }\n  ],\n  \"styleConsistency\": {\n    \"anchorKeywords\": [\"keyword1\", \"keyword2\"],\n    \"colorTheme\": \"Description\",\n    \"lightingStyle\": \"Description\"\n  }\n}"
+            },
+            {
+              "role": "user",
+              "content": "=Create image generation prompts for these scenes:\n\nVideo Style: {{ $json.styleKey }} - {{ $json.styleConfig.visual }}\nAspect Ratio: {{ $json.platformSettings.aspect }}\n\nScenes:\n{{ JSON.stringify($json.outline.scenes, null, 2) }}"
+            }
+          ]
+        }
+      },
+      "id": "generate-prompts",
+      "name": "Stage 2: Generate Image Prompts",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [1000, 400],
+      "credentials": {
+        "openAiApi": {
+          "id": "openai-cred",
+          "name": "OpenAI API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first().json;\nconst prevData = $('Parse Outline').first().json;\n\nlet promptData;\ntry {\n  const content = input.message?.content || input.content || '';\n  const cleaned = content.replace(/```json\\n?/g, '').replace(/```\\n?/g, '').trim();\n  promptData = JSON.parse(cleaned);\n} catch (e) {\n  // Fallback prompts\n  promptData = {\n    scenes: prevData.outline.scenes.map((scene, idx) => ({\n      number: scene.number,\n      visualPrompt: `${scene.visualDescription}, ${prevData.styleConfig.visual}, 8K, hyperdetailed, masterpiece quality, professional cinematography`,\n      negativePrompt: 'blurry, low quality, distorted, amateur, watermark, text',\n      kenBurns: idx % 2 === 0 ? 'zoom_in' : 'zoom_out',\n      colorPalette: ['#2C3E50', '#E74C3C', '#ECF0F1'],\n      lightingNotes: 'Professional cinematic lighting',\n      compositionNotes: 'Rule of thirds'\n    })),\n    styleConsistency: {\n      anchorKeywords: ['cinematic', 'professional', 'high quality'],\n      colorTheme: 'Cohesive palette',\n      lightingStyle: 'Consistent lighting'\n    }\n  };\n}\n\n// Merge prompt data with outline scenes\nconst enhancedScenes = prevData.outline.scenes.map((scene, idx) => {\n  const promptScene = promptData.scenes.find(p => p.number === scene.number) || promptData.scenes[idx];\n  return {\n    ...scene,\n    ...promptScene,\n    finalPrompt: promptScene?.visualPrompt || scene.visualDescription\n  };\n});\n\nreturn {\n  ...prevData,\n  currentStage: 'prompts_complete',\n  stageOutputs: {\n    ...prevData.stageOutputs,\n    prompts: promptData\n  },\n  enhancedScenes,\n  styleConsistency: promptData.styleConsistency\n};"
+      },
+      "id": "parse-prompts",
+      "name": "Parse Prompts",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1200, 400]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Split into individual image generation requests\nconst data = $input.first().json;\n\nconst imageRequests = data.enhancedScenes.map(scene => ({\n  jobId: data.jobId,\n  sceneNumber: scene.number,\n  prompt: scene.finalPrompt,\n  negativePrompt: scene.negativePrompt,\n  kenBurns: scene.kenBurns,\n  duration: scene.duration,\n  transition: scene.transition,\n  aspectRatio: data.platformSettings.aspect,\n  seed: Math.floor(Math.random() * 2147483647)\n}));\n\nreturn imageRequests;"
+      },
+      "id": "split-scenes",
+      "name": "Split Scene Requests",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1400, 400]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://openrouter.ai/api/v1/chat/completions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "HTTP-Referer", "value": "https://nano-banana-studio.local" },
+            { "name": "X-Title", "value": "Nano Banana Studio" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"google/gemini-2.0-flash-exp:free\",\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": \"Generate an image: {{ $json.prompt }}\"\n    }\n  ],\n  \"max_tokens\": 4096,\n  \"temperature\": 0.9\n}",
+        "options": { "timeout": 120000 }
+      },
+      "id": "generate-images",
+      "name": "Stage 3: Generate Images",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1600, 400],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "openrouter-cred",
+          "name": "OpenRouter API Key"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Collect all generated images\nconst results = $input.all();\nconst prevData = $('Parse Prompts').first().json;\n\nconst generatedScenes = results.map((result, idx) => {\n  const response = result.json;\n  const sceneData = prevData.enhancedScenes[idx];\n  let imageData = null;\n  let success = false;\n  \n  try {\n    const content = response.choices?.[0]?.message?.content;\n    if (typeof content === 'string') {\n      const base64Match = content.match(/data:image\\/[^;]+;base64,([A-Za-z0-9+/=]+)/);\n      if (base64Match) {\n        imageData = base64Match[1];\n        success = true;\n      }\n    }\n  } catch (e) {}\n  \n  return {\n    ...sceneData,\n    imageGenerated: success,\n    imageData,\n    status: success ? 'success' : 'pending_retry'\n  };\n});\n\nconst successCount = generatedScenes.filter(s => s.imageGenerated).length;\n\nreturn {\n  ...prevData,\n  currentStage: 'images_complete',\n  stageOutputs: {\n    ...prevData.stageOutputs,\n    images: generatedScenes\n  },\n  generatedScenes,\n  imageMetrics: {\n    total: generatedScenes.length,\n    successful: successCount,\n    failed: generatedScenes.length - successCount\n  }\n};"
+      },
+      "id": "collect-images",
+      "name": "Collect Images",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1800, 400]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Build final video assembly manifest\nconst data = $input.first().json;\n\nconst manifest = {\n  jobId: data.jobId,\n  title: data.outline.title,\n  \n  platform: data.platform,\n  dimensions: data.platformSettings,\n  quality: data.quality,\n  \n  scenes: data.generatedScenes.map(scene => ({\n    number: scene.number,\n    title: scene.title,\n    duration: scene.duration,\n    imageData: scene.imageData,\n    hasImage: scene.imageGenerated,\n    transition: scene.transition || data.styleConfig.transitions,\n    transitionDuration: 0.5,\n    kenBurns: {\n      enabled: true,\n      direction: scene.kenBurns,\n      intensity: 0.1\n    },\n    narration: scene.narration,\n    mood: scene.mood\n  })),\n  \n  audio: {\n    hasNarration: data.hasNarration,\n    narrationStyle: data.narrationStyle,\n    hasMusic: data.hasMusic,\n    musicStyle: data.musicStyle,\n    musicCues: data.outline.musicCues\n  },\n  \n  metadata: {\n    concept: data.concept,\n    style: data.styleKey,\n    synopsis: data.outline.synopsis,\n    targetAudience: data.outline.targetAudience,\n    keyMessage: data.outline.keyMessage,\n    emotionalArc: data.outline.emotionalArc\n  },\n  \n  metrics: {\n    totalDuration: data.generatedScenes.reduce((sum, s) => sum + s.duration, 0),\n    sceneCount: data.generatedScenes.length,\n    imagesGenerated: data.imageMetrics.successful,\n    imagesFailed: data.imageMetrics.failed\n  },\n  \n  readyForAssembly: data.imageMetrics.failed === 0,\n  timestamp: new Date().toISOString()\n};\n\nreturn manifest;"
+      },
+      "id": "build-manifest",
+      "name": "Build Assembly Manifest",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2000, 400]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {}
+      },
+      "id": "respond",
+      "name": "Respond",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [2200, 400]
+    }
+  ],
+  "connections": {
+    "Master Pipeline Form": { "main": [[{ "node": "Initialize Pipeline", "type": "main", "index": 0 }]] },
+    "Initialize Pipeline": { "main": [[{ "node": "Stage 1: Generate Outline", "type": "main", "index": 0 }]] },
+    "Stage 1: Generate Outline": { "main": [[{ "node": "Parse Outline", "type": "main", "index": 0 }]] },
+    "Parse Outline": { "main": [[{ "node": "Stage 2: Generate Image Prompts", "type": "main", "index": 0 }]] },
+    "Stage 2: Generate Image Prompts": { "main": [[{ "node": "Parse Prompts", "type": "main", "index": 0 }]] },
+    "Parse Prompts": { "main": [[{ "node": "Split Scene Requests", "type": "main", "index": 0 }]] },
+    "Split Scene Requests": { "main": [[{ "node": "Stage 3: Generate Images", "type": "main", "index": 0 }]] },
+    "Stage 3: Generate Images": { "main": [[{ "node": "Collect Images", "type": "main", "index": 0 }]] },
+    "Collect Images": { "main": [[{ "node": "Build Assembly Manifest", "type": "main", "index": 0 }]] },
+    "Build Assembly Manifest": { "main": [[{ "node": "Respond", "type": "main", "index": 0 }]] }
+  },
+  "settings": { "executionOrder": "v1" },
+  "tags": [{ "name": "nano-banana" }, { "name": "master-pipeline" }]
+}

@@ -1,0 +1,318 @@
+{
+  "name": "11 - PDF & Markdown Script Parser",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "📄 Document Parser - PDF & Markdown",
+        "formDescription": "Parse PDF documents or Markdown files to extract video production instructions, scene breakdowns, and storyboards.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Document File",
+              "fieldType": "file",
+              "requiredField": true,
+              "acceptFileTypes": ".pdf,.md,.txt,.docx"
+            },
+            {
+              "fieldLabel": "Document Type",
+              "fieldType": "dropdown",
+              "requiredField": true,
+              "fieldOptions": {
+                "values": [
+                  { "option": "Auto-detect" },
+                  { "option": "Video Script (scene-by-scene)" },
+                  { "option": "Storyboard Document" },
+                  { "option": "Lyrics Sheet" },
+                  { "option": "Shot List" },
+                  { "option": "Creative Brief" },
+                  { "option": "General Instructions" }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Extract Images from PDF",
+              "fieldType": "dropdown",
+              "requiredField": true,
+              "fieldOptions": {
+                "values": [
+                  { "option": "Yes - As reference images" },
+                  { "option": "Yes - As scene backgrounds" },
+                  { "option": "No - Text only" }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "AI Enhancement Level",
+              "fieldType": "dropdown",
+              "requiredField": true,
+              "fieldOptions": {
+                "values": [
+                  { "option": "None - Parse only" },
+                  { "option": "Basic - Structure extraction" },
+                  { "option": "Enhanced - Add visual prompts" },
+                  { "option": "Full - Complete storyboard generation" }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Target Video Duration (optional)",
+              "fieldType": "number",
+              "requiredField": false,
+              "fieldOptions": {
+                "numberMin": 15,
+                "numberMax": 600,
+                "numberDefault": 60
+              }
+            },
+            {
+              "fieldLabel": "Video Style Override",
+              "fieldType": "dropdown",
+              "requiredField": false,
+              "fieldOptions": {
+                "values": [
+                  { "option": "Use document style" },
+                  { "option": "Cinematic" },
+                  { "option": "Documentary" },
+                  { "option": "Music Video" },
+                  { "option": "Corporate" },
+                  { "option": "Artistic" }
+                ]
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "form-trigger",
+      "name": "Document Parser Form",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [200, 300],
+      "webhookId": "document-parser-v1"
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first().json;\n\nconst docType = input['Document Type'];\nconst extractImages = input['Extract Images from PDF'];\nconst aiLevel = input['AI Enhancement Level'];\nconst targetDuration = parseInt(input['Target Video Duration (optional)']) || 60;\nconst styleOverride = input['Video Style Override'];\n\n// Get document data\nlet docData = null;\nlet docFilename = 'document';\nlet docExtension = 'txt';\n\nif ($binary && $binary.data) {\n  docData = $binary.data.data;\n  docFilename = $binary.data.fileName || 'document';\n  docExtension = docFilename.split('.').pop().toLowerCase();\n}\n\nconst jobId = `parse_${Date.now()}_${Math.random().toString(36).substring(7)}`;\n\nreturn {\n  jobId,\n  docData,\n  docFilename,\n  docExtension,\n  docType: docType === 'Auto-detect' ? null : docType,\n  extractImages: extractImages !== 'No - Text only',\n  imagesAsBackground: extractImages === 'Yes - As scene backgrounds',\n  aiLevel,\n  aiLevelNum: ['None', 'Basic', 'Enhanced', 'Full'].findIndex(l => aiLevel.startsWith(l)),\n  targetDuration,\n  styleOverride: styleOverride === 'Use document style' ? null : styleOverride,\n  timestamp: new Date().toISOString()\n};"
+      },
+      "id": "parse-input",
+      "name": "Parse Input",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [400, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.docExtension }}",
+              "operation": "equals",
+              "value2": "pdf"
+            }
+          ]
+        }
+      },
+      "id": "switch-doc-type",
+      "name": "Route by Extension",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [600, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse Markdown/Text document\nconst data = $input.first().json;\n\n// Decode base64 content\nlet content = '';\ntry {\n  content = Buffer.from(data.docData, 'base64').toString('utf-8');\n} catch (e) {\n  content = data.docData;\n}\n\n// Extract YAML frontmatter if present\nlet frontmatter = {};\nconst frontmatterMatch = content.match(/^---\\s*\\n([\\s\\S]*?)\\n---\\s*\\n/);\nif (frontmatterMatch) {\n  try {\n    // Simple YAML parsing (key: value)\n    const yaml = frontmatterMatch[1];\n    yaml.split('\\n').forEach(line => {\n      const [key, ...valueParts] = line.split(':');\n      if (key && valueParts.length) {\n        frontmatter[key.trim()] = valueParts.join(':').trim();\n      }\n    });\n    content = content.substring(frontmatterMatch[0].length);\n  } catch (e) {}\n}\n\n// Parse scenes from markdown headers\nconst scenes = [];\nconst scenePattern = /##\\s*(?:Scene\\s*)?(\\d+)?[:\\s-]*(.+?)(?=\\n##|\\n#|$)/gis;\n\nlet match;\nlet sceneIndex = 0;\nwhile ((match = scenePattern.exec(content)) !== null) {\n  sceneIndex++;\n  const sceneNum = match[1] ? parseInt(match[1]) : sceneIndex;\n  const sceneContent = match[2].trim();\n  \n  // Extract scene details\n  const visualMatch = sceneContent.match(/\\*\\*(?:Visual|Image|Shot)\\*\\*[:\\s]*(.+?)(?=\\*\\*|\\n\\n|$)/is);\n  const durationMatch = sceneContent.match(/\\*\\*Duration\\*\\*[:\\s]*(\\d+)/i);\n  const narrationMatch = sceneContent.match(/\\*\\*(?:Narration|Voiceover|Text)\\*\\*[:\\s]*(.+?)(?=\\*\\*|\\n\\n|$)/is);\n  const transitionMatch = sceneContent.match(/\\*\\*Transition\\*\\*[:\\s]*(\\w+)/i);\n  const moodMatch = sceneContent.match(/\\*\\*(?:Mood|Tone)\\*\\*[:\\s]*(.+?)(?=\\*\\*|\\n|$)/i);\n  \n  scenes.push({\n    index: sceneNum,\n    raw_content: sceneContent.substring(0, 500),\n    visual_prompt: visualMatch ? visualMatch[1].trim() : sceneContent.split('\\n')[0],\n    duration: durationMatch ? parseInt(durationMatch[1]) : Math.round(data.targetDuration / 10),\n    narration: narrationMatch ? narrationMatch[1].trim() : '',\n    transition: transitionMatch ? transitionMatch[1].toLowerCase() : 'dissolve',\n    mood: moodMatch ? moodMatch[1].trim() : 'neutral'\n  });\n}\n\n// If no scenes found, create from paragraphs\nif (scenes.length === 0) {\n  const paragraphs = content.split(/\\n\\n+/).filter(p => p.trim().length > 20);\n  const sceneDuration = Math.round(data.targetDuration / Math.max(paragraphs.length, 1));\n  \n  paragraphs.forEach((para, idx) => {\n    scenes.push({\n      index: idx + 1,\n      raw_content: para.substring(0, 500),\n      visual_prompt: para.split('.')[0].trim(),\n      duration: sceneDuration,\n      narration: para,\n      transition: 'dissolve',\n      mood: 'neutral'\n    });\n  });\n}\n\nreturn {\n  ...data,\n  parsed: true,\n  format: 'markdown',\n  frontmatter,\n  raw_content: content.substring(0, 2000),\n  scenes,\n  scene_count: scenes.length,\n  total_duration: scenes.reduce((sum, s) => sum + s.duration, 0)\n};"
+      },
+      "id": "parse-markdown",
+      "name": "Parse Markdown/Text",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [800, 400]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api:8000/api/v1/parse/markdown",
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "file",
+              "value": "={{ $binary.data }}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 60000
+        }
+      },
+      "id": "parse-pdf-api",
+      "name": "Parse PDF API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [800, 200]
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineAll",
+        "options": {}
+      },
+      "id": "merge-parsed",
+      "name": "Merge Parsed Results",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [1000, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "needs-ai",
+              "leftValue": "={{ $json.aiLevelNum }}",
+              "rightValue": 1,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "if-needs-ai",
+      "name": "Needs AI Enhancement?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1200, 300]
+    },
+    {
+      "parameters": {
+        "model": "gpt-4o-mini",
+        "options": {
+          "temperature": 0.7,
+          "maxTokens": 3000
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=You are a video production AI assistant. Enhance these parsed scenes with detailed visual prompts suitable for AI image generation.\n\nDocument type: {{ $json.docType || 'Video Script' }}\nStyle: {{ $json.styleOverride || 'Cinematic' }}\nTarget duration: {{ $json.targetDuration }} seconds\n\nParsed scenes:\n{{ JSON.stringify($json.scenes, null, 2) }}\n\nFor each scene, provide:\n1. enhanced_prompt: Detailed visual description for image generation (include style, lighting, composition)\n2. negative_prompt: What to avoid in generation\n3. motion_suggestion: Recommended animation type (subtle, zoom_in, pan_left, etc.)\n4. color_palette: Suggested colors\n5. mood_keywords: 3-5 mood descriptors\n\nReturn JSON array with enhanced scenes."
+            }
+          ]
+        }
+      },
+      "id": "enhance-with-ai",
+      "name": "AI Scene Enhancement",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.4,
+      "position": [1400, 200],
+      "credentials": {
+        "openAiApi": {
+          "id": "openai-cred",
+          "name": "OpenAI API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Merge AI enhancements back into scenes\nconst parsed = $('Merge Parsed Results').first().json;\nconst enhanced = $input.first().json;\n\nlet enhancedScenes = parsed.scenes;\n\ntry {\n  const aiScenes = JSON.parse(enhanced.text?.replace(/```json|```/g, '') || '[]');\n  \n  enhancedScenes = parsed.scenes.map((scene, idx) => {\n    const aiScene = aiScenes[idx] || {};\n    return {\n      ...scene,\n      enhanced_prompt: aiScene.enhanced_prompt || scene.visual_prompt,\n      negative_prompt: aiScene.negative_prompt || 'blurry, low quality, distorted',\n      motion_suggestion: aiScene.motion_suggestion || 'subtle',\n      color_palette: aiScene.color_palette || [],\n      mood_keywords: aiScene.mood_keywords || [scene.mood],\n      ai_enhanced: true\n    };\n  });\n} catch (e) {\n  // Keep original scenes if parsing fails\n  enhancedScenes = parsed.scenes.map(s => ({ ...s, ai_enhanced: false }));\n}\n\nreturn {\n  ...parsed,\n  scenes: enhancedScenes,\n  enhancement_applied: true\n};"
+      },
+      "id": "merge-ai-enhancement",
+      "name": "Merge AI Enhancement",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1600, 200]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Final output formatting\nconst data = $input.first().json;\n\nreturn {\n  jobId: data.jobId,\n  status: 'parsed',\n  \n  document: {\n    filename: data.docFilename,\n    format: data.format || data.docExtension,\n    type: data.docType || 'Auto-detected'\n  },\n  \n  metadata: data.frontmatter || {},\n  \n  production: {\n    scene_count: data.scenes?.length || 0,\n    total_duration: data.total_duration || data.targetDuration,\n    style: data.styleOverride || 'Cinematic',\n    ai_enhanced: data.enhancement_applied || false\n  },\n  \n  scenes: data.scenes || [],\n  \n  next_steps: [\n    'Use these scenes with Image Generator',\n    'Pass to Video Assembly workflow',\n    'Can be combined with Audio Analyzer for beat sync'\n  ]\n};"
+      },
+      "id": "format-output",
+      "name": "Format Output",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1800, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {}
+      },
+      "id": "respond",
+      "name": "Respond",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [2000, 300]
+    }
+  ],
+  "connections": {
+    "Document Parser Form": {
+      "main": [
+        [{ "node": "Parse Input", "type": "main", "index": 0 }]
+      ]
+    },
+    "Parse Input": {
+      "main": [
+        [{ "node": "Route by Extension", "type": "main", "index": 0 }]
+      ]
+    },
+    "Route by Extension": {
+      "main": [
+        [{ "node": "Parse PDF API", "type": "main", "index": 0 }],
+        [{ "node": "Parse Markdown/Text", "type": "main", "index": 0 }]
+      ]
+    },
+    "Parse PDF API": {
+      "main": [
+        [{ "node": "Merge Parsed Results", "type": "main", "index": 0 }]
+      ]
+    },
+    "Parse Markdown/Text": {
+      "main": [
+        [{ "node": "Merge Parsed Results", "type": "main", "index": 1 }]
+      ]
+    },
+    "Merge Parsed Results": {
+      "main": [
+        [{ "node": "Needs AI Enhancement?", "type": "main", "index": 0 }]
+      ]
+    },
+    "Needs AI Enhancement?": {
+      "main": [
+        [{ "node": "AI Scene Enhancement", "type": "main", "index": 0 }],
+        [{ "node": "Format Output", "type": "main", "index": 0 }]
+      ]
+    },
+    "AI Scene Enhancement": {
+      "main": [
+        [{ "node": "Merge AI Enhancement", "type": "main", "index": 0 }]
+      ]
+    },
+    "Merge AI Enhancement": {
+      "main": [
+        [{ "node": "Format Output", "type": "main", "index": 0 }]
+      ]
+    },
+    "Format Output": {
+      "main": [
+        [{ "node": "Respond", "type": "main", "index": 0 }]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": [
+    { "name": "nano-banana" },
+    { "name": "document" },
+    { "name": "parser" }
+  ]
+}

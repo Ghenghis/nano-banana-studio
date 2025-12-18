@@ -1,0 +1,366 @@
+{
+  "name": "05 - Video Extender",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "🍌 Video Extender - Intelligently Extend Your Videos",
+        "formDescription": "Extend existing videos by generating new scenes that match the style and flow of your content.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Extension Mode",
+              "fieldType": "dropdown",
+              "requiredField": true,
+              "fieldOptions": {
+                "values": [
+                  { "option": "Content-Aware (AI analyzes and extends)" },
+                  { "option": "Prompt-Guided (You provide direction)" },
+                  { "option": "Duration Target (Fill to specific length)" },
+                  { "option": "Loop Creation (Seamless loop)" },
+                  { "option": "Scene Interpolation (Bridge existing scenes)" }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Existing Video/Manifest",
+              "fieldType": "file",
+              "requiredField": false,
+              "acceptFileTypes": ".mp4,.mov,.json"
+            },
+            {
+              "fieldLabel": "Original Prompt/Description",
+              "fieldType": "textarea",
+              "requiredField": false,
+              "placeholder": "Describe the existing video's content and style..."
+            },
+            {
+              "fieldLabel": "Extension Prompt (for Prompt-Guided mode)",
+              "fieldType": "textarea",
+              "requiredField": false,
+              "placeholder": "Where should the video go next? What new scenes to add?"
+            },
+            {
+              "fieldLabel": "Target Duration (seconds)",
+              "fieldType": "number",
+              "requiredField": false,
+              "fieldOptions": {
+                "numberMin": 10,
+                "numberMax": 600,
+                "numberDefault": 60
+              }
+            },
+            {
+              "fieldLabel": "Number of New Scenes",
+              "fieldType": "dropdown",
+              "requiredField": true,
+              "fieldOptions": {
+                "values": [
+                  { "option": "Auto (Based on duration)" },
+                  { "option": "1 scene" },
+                  { "option": "2 scenes" },
+                  { "option": "3 scenes" },
+                  { "option": "4 scenes" },
+                  { "option": "5 scenes" },
+                  { "option": "6 scenes" },
+                  { "option": "8 scenes" },
+                  { "option": "10 scenes" }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Scene Duration (seconds)",
+              "fieldType": "number",
+              "requiredField": true,
+              "fieldOptions": {
+                "numberMin": 2,
+                "numberMax": 30,
+                "numberDefault": 5
+              }
+            },
+            {
+              "fieldLabel": "Style Consistency",
+              "fieldType": "dropdown",
+              "requiredField": true,
+              "fieldOptions": {
+                "values": [
+                  { "option": "Strict (Match exactly)" },
+                  { "option": "Flexible (Similar style)" },
+                  { "option": "Evolution (Gradual change)" },
+                  { "option": "Contrast (Intentional shift)" }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Extend Position",
+              "fieldType": "dropdown",
+              "requiredField": true,
+              "fieldOptions": {
+                "values": [
+                  { "option": "End (Continue after)" },
+                  { "option": "Beginning (Add before)" },
+                  { "option": "Middle (Insert at specified point)" },
+                  { "option": "Throughout (Interleave)" }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Generate Images Automatically",
+              "fieldType": "dropdown",
+              "requiredField": true,
+              "fieldOptions": {
+                "values": [
+                  { "option": "Yes - Generate all new images" },
+                  { "option": "Yes - But review prompts first" },
+                  { "option": "No - Just create scene plan" }
+                ]
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "form-trigger",
+      "name": "Video Extender Form",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [200, 300],
+      "webhookId": "video-extender-v1"
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first().json;\n\nconst mode = input['Extension Mode'] || 'Content-Aware (AI analyzes and extends)';\nconst originalPrompt = input['Original Prompt/Description'] || '';\nconst extensionPrompt = input['Extension Prompt (for Prompt-Guided mode)'] || '';\nconst targetDuration = parseFloat(input['Target Duration (seconds)']) || 60;\nconst numScenes = input['Number of New Scenes'] || 'Auto (Based on duration)';\nconst sceneDuration = parseFloat(input['Scene Duration (seconds)']) || 5;\nconst styleConsistency = input['Style Consistency'] || 'Strict (Match exactly)';\nconst extendPosition = input['Extend Position'] || 'End (Continue after)';\nconst autoGenerate = input['Generate Images Automatically'] || 'Yes - Generate all new images';\n\n// Calculate number of scenes\nlet sceneCount;\nif (numScenes === 'Auto (Based on duration)') {\n  sceneCount = Math.ceil(targetDuration / sceneDuration);\n} else {\n  sceneCount = parseInt(numScenes.split(' ')[0]) || 3;\n}\n\n// Mode configurations\nconst modeConfig = {\n  'Content-Aware (AI analyzes and extends)': {\n    analyzeExisting: true,\n    useExtensionPrompt: false,\n    targetExactDuration: false,\n    createLoop: false\n  },\n  'Prompt-Guided (You provide direction)': {\n    analyzeExisting: true,\n    useExtensionPrompt: true,\n    targetExactDuration: false,\n    createLoop: false\n  },\n  'Duration Target (Fill to specific length)': {\n    analyzeExisting: true,\n    useExtensionPrompt: false,\n    targetExactDuration: true,\n    createLoop: false\n  },\n  'Loop Creation (Seamless loop)': {\n    analyzeExisting: true,\n    useExtensionPrompt: false,\n    targetExactDuration: false,\n    createLoop: true\n  },\n  'Scene Interpolation (Bridge existing scenes)': {\n    analyzeExisting: true,\n    useExtensionPrompt: true,\n    targetExactDuration: false,\n    createLoop: false,\n    interpolate: true\n  }\n};\n\nconst jobId = `extend_${Date.now()}_${Math.random().toString(36).substring(7)}`;\n\nreturn {\n  jobId,\n  mode,\n  modeConfig: modeConfig[mode],\n  originalPrompt,\n  extensionPrompt,\n  targetDuration,\n  sceneCount,\n  sceneDuration,\n  styleConsistency,\n  extendPosition,\n  autoGenerate: autoGenerate.includes('Yes'),\n  reviewPrompts: autoGenerate.includes('review'),\n  timestamp: new Date().toISOString()\n};"
+      },
+      "id": "parse-input",
+      "name": "Parse Input",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [400, 300]
+    },
+    {
+      "parameters": {
+        "model": "gpt-4o-mini",
+        "options": {
+          "temperature": 0.7,
+          "maxTokens": 2000
+        },
+        "messages": {
+          "values": [
+            {
+              "role": "system",
+              "content": "You are a video production AI that analyzes existing content and generates coherent extensions. Your task is to create new scene descriptions that seamlessly continue or complement existing video content.\n\nBased on the original description and extension requirements, generate scene prompts that:\n1. Maintain visual and tonal consistency\n2. Follow logical narrative progression\n3. Include detailed visual descriptions suitable for AI image generation\n4. Consider transitions between scenes\n\nRespond with JSON:\n{\n  \"analysis\": {\n    \"originalStyle\": \"Description of the original style\",\n    \"keyElements\": [\"element1\", \"element2\"],\n    \"colorPalette\": \"Description of colors\",\n    \"mood\": \"Overall mood\"\n  },\n  \"extensionPlan\": {\n    \"narrative\": \"How the extension continues the story\",\n    \"styleAdaptation\": \"How style will be maintained or evolved\"\n  },\n  \"scenes\": [\n    {\n      \"index\": 1,\n      \"duration\": 5,\n      \"visualPrompt\": \"Detailed prompt for image generation\",\n      \"narrativeContext\": \"What's happening in this scene\",\n      \"transition\": \"Transition to next scene\",\n      \"kenBurnsDirection\": \"zoom_in/zoom_out/pan_left/pan_right\"\n    }\n  ]\n}"
+            },
+            {
+              "role": "user",
+              "content": "=Create extension plan for:\n\nOriginal Content: {{ $json.originalPrompt || 'Not provided - analyze from context' }}\n\nExtension Direction: {{ $json.extensionPrompt || 'Continue naturally' }}\n\nNumber of new scenes: {{ $json.sceneCount }}\nScene duration: {{ $json.sceneDuration }} seconds each\nStyle consistency: {{ $json.styleConsistency }}\nExtend position: {{ $json.extendPosition }}\nMode: {{ $json.mode }}"
+            }
+          ]
+        }
+      },
+      "id": "generate-extension",
+      "name": "Generate Extension Plan",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [600, 300],
+      "credentials": {
+        "openAiApi": {
+          "id": "openai-cred",
+          "name": "OpenAI API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first().json;\nconst prevData = $('Parse Input').first().json;\n\nlet extensionPlan;\ntry {\n  const content = input.message?.content || input.content || '';\n  const cleaned = content.replace(/```json\\n?/g, '').replace(/```\\n?/g, '').trim();\n  extensionPlan = JSON.parse(cleaned);\n} catch (e) {\n  // Fallback plan\n  extensionPlan = {\n    analysis: {\n      originalStyle: 'Cinematic',\n      keyElements: ['visual storytelling', 'atmospheric'],\n      colorPalette: 'Natural tones',\n      mood: 'Contemplative'\n    },\n    extensionPlan: {\n      narrative: 'Continuation of the visual journey',\n      styleAdaptation: 'Maintaining consistency'\n    },\n    scenes: Array.from({ length: prevData.sceneCount }, (_, idx) => ({\n      index: idx + 1,\n      duration: prevData.sceneDuration,\n      visualPrompt: `Scene ${idx + 1} - continuation of the visual narrative, cinematic style, professional quality`,\n      narrativeContext: `Scene ${idx + 1} of the extended sequence`,\n      transition: 'dissolve',\n      kenBurnsDirection: idx % 2 === 0 ? 'zoom_in' : 'zoom_out'\n    }))\n  };\n}\n\n// Enhance each scene with full prompt enhancement\nconst enhancedScenes = extensionPlan.scenes.map((scene, idx) => ({\n  ...scene,\n  fullPrompt: `${scene.visualPrompt}, ${extensionPlan.analysis.originalStyle} style, ${extensionPlan.analysis.mood} mood, ${extensionPlan.analysis.colorPalette}, 8K, hyperdetailed, masterpiece quality, professional cinematography`,\n  negativePrompt: 'blurry, low quality, distorted, amateur, watermark, text, logo'\n}));\n\nreturn {\n  ...prevData,\n  analysis: extensionPlan.analysis,\n  extensionPlan: extensionPlan.extensionPlan,\n  scenes: enhancedScenes,\n  totalNewDuration: enhancedScenes.reduce((sum, s) => sum + s.duration, 0)\n};"
+      },
+      "id": "parse-extension",
+      "name": "Parse Extension Plan",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [800, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "check-auto",
+              "leftValue": "={{ $json.autoGenerate }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "if-auto-generate",
+      "name": "Auto Generate Images?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1000, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Prepare batch image generation requests\nconst data = $input.first().json;\n\nconst imageRequests = data.scenes.map(scene => ({\n  jobId: data.jobId,\n  sceneIndex: scene.index,\n  prompt: scene.fullPrompt,\n  negativePrompt: scene.negativePrompt,\n  seed: Math.floor(Math.random() * 2147483647),\n  duration: scene.duration,\n  transition: scene.transition,\n  kenBurns: scene.kenBurnsDirection\n}));\n\nreturn imageRequests;"
+      },
+      "id": "prepare-batch",
+      "name": "Prepare Batch Requests",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1200, 200]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://openrouter.ai/api/v1/chat/completions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "HTTP-Referer",
+              "value": "https://nano-banana-studio.local"
+            },
+            {
+              "name": "X-Title",
+              "value": "Nano Banana Studio"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"google/gemini-2.0-flash-exp:free\",\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"Generate an image: {{ $json.prompt }}\"\n        }\n      ]\n    }\n  ],\n  \"max_tokens\": 4096,\n  \"temperature\": 0.9\n}",
+        "options": {
+          "timeout": 120000
+        }
+      },
+      "id": "generate-images",
+      "name": "Generate Extension Images",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1400, 200],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "openrouter-cred",
+          "name": "OpenRouter API Key"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Aggregate results and create extension manifest\nconst results = $input.all();\nconst prevData = $('Parse Extension Plan').first().json;\n\nconst generatedScenes = results.map((result, idx) => {\n  const response = result.json;\n  let imageData = null;\n  \n  try {\n    const content = response.choices?.[0]?.message?.content;\n    if (typeof content === 'string') {\n      const base64Match = content.match(/data:image\\/[^;]+;base64,([A-Za-z0-9+/=]+)/);\n      if (base64Match) imageData = base64Match[1];\n    }\n  } catch (e) {}\n  \n  return {\n    ...prevData.scenes[idx],\n    imageGenerated: !!imageData,\n    imageData,\n    status: imageData ? 'success' : 'failed'\n  };\n});\n\nreturn {\n  jobId: prevData.jobId,\n  status: 'extension_complete',\n  analysis: prevData.analysis,\n  extensionPlan: prevData.extensionPlan,\n  scenes: generatedScenes,\n  metrics: {\n    totalScenes: generatedScenes.length,\n    successfulGenerations: generatedScenes.filter(s => s.imageGenerated).length,\n    totalDuration: prevData.totalNewDuration\n  },\n  readyForAssembly: generatedScenes.every(s => s.imageGenerated),\n  timestamp: new Date().toISOString()\n};"
+      },
+      "id": "aggregate-results",
+      "name": "Aggregate Results",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1600, 200]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Return plan only without generating\nconst data = $input.first().json;\n\nreturn {\n  jobId: data.jobId,\n  status: 'plan_ready',\n  analysis: data.analysis,\n  extensionPlan: data.extensionPlan,\n  scenes: data.scenes.map(scene => ({\n    index: scene.index,\n    duration: scene.duration,\n    visualPrompt: scene.fullPrompt,\n    negativePrompt: scene.negativePrompt,\n    transition: scene.transition,\n    kenBurns: scene.kenBurnsDirection,\n    narrativeContext: scene.narrativeContext\n  })),\n  instructions: 'Review the scene prompts and submit for generation when ready',\n  totalDuration: data.totalNewDuration,\n  timestamp: new Date().toISOString()\n};"
+      },
+      "id": "return-plan",
+      "name": "Return Plan Only",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1200, 400]
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineAll",
+        "options": {}
+      },
+      "id": "merge-outputs",
+      "name": "Merge Outputs",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [1800, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {}
+      },
+      "id": "respond",
+      "name": "Respond",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [2000, 300]
+    }
+  ],
+  "connections": {
+    "Video Extender Form": {
+      "main": [
+        [{ "node": "Parse Input", "type": "main", "index": 0 }]
+      ]
+    },
+    "Parse Input": {
+      "main": [
+        [{ "node": "Generate Extension Plan", "type": "main", "index": 0 }]
+      ]
+    },
+    "Generate Extension Plan": {
+      "main": [
+        [{ "node": "Parse Extension Plan", "type": "main", "index": 0 }]
+      ]
+    },
+    "Parse Extension Plan": {
+      "main": [
+        [{ "node": "Auto Generate Images?", "type": "main", "index": 0 }]
+      ]
+    },
+    "Auto Generate Images?": {
+      "main": [
+        [{ "node": "Prepare Batch Requests", "type": "main", "index": 0 }],
+        [{ "node": "Return Plan Only", "type": "main", "index": 0 }]
+      ]
+    },
+    "Prepare Batch Requests": {
+      "main": [
+        [{ "node": "Generate Extension Images", "type": "main", "index": 0 }]
+      ]
+    },
+    "Generate Extension Images": {
+      "main": [
+        [{ "node": "Aggregate Results", "type": "main", "index": 0 }]
+      ]
+    },
+    "Aggregate Results": {
+      "main": [
+        [{ "node": "Merge Outputs", "type": "main", "index": 0 }]
+      ]
+    },
+    "Return Plan Only": {
+      "main": [
+        [{ "node": "Merge Outputs", "type": "main", "index": 1 }]
+      ]
+    },
+    "Merge Outputs": {
+      "main": [
+        [{ "node": "Respond", "type": "main", "index": 0 }]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": [
+    { "name": "nano-banana" },
+    { "name": "video-extender" }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2024-12-17T00:00:00.000Z",
+  "versionId": "1"
+}

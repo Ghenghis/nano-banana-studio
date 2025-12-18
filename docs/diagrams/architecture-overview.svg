@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900">
+  <defs>
+    <linearGradient id="headerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="boxGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e1e2e;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2d2d3d;stop-opacity:1" />
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="2" dy="2" stdDeviation="3" flood-opacity="0.3"/>
+    </filter>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#667eea"/>
+    </marker>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1200" height="900" fill="#0d1117"/>
+  
+  <!-- Title -->
+  <rect x="0" y="0" width="1200" height="60" fill="url(#headerGrad)"/>
+  <text x="600" y="40" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="white">
+    🍌 NANO BANANA STUDIO PRO - SYSTEM ARCHITECTURE
+  </text>
+  
+  <!-- User Interface Layer -->
+  <rect x="50" y="80" width="1100" height="120" rx="10" fill="#1a1b26" stroke="#3b82f6" stroke-width="2" filter="url(#shadow)"/>
+  <text x="100" y="105" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#3b82f6">USER INTERFACE LAYER</text>
+  
+  <!-- n8n Box -->
+  <rect x="80" y="120" width="200" height="60" rx="8" fill="url(#boxGrad)" stroke="#f97316" stroke-width="2"/>
+  <text x="180" y="145" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#f97316">n8n Workflows</text>
+  <text x="180" y="165" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#888">:5678 | 14 Workflows</text>
+  
+  <!-- FastAPI Box -->
+  <rect x="310" y="120" width="200" height="60" rx="8" fill="url(#boxGrad)" stroke="#22c55e" stroke-width="2"/>
+  <text x="410" y="145" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#22c55e">FastAPI Backend</text>
+  <text x="410" y="165" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#888">:8000 | 50+ Endpoints</text>
+  
+  <!-- WebSocket Box -->
+  <rect x="540" y="120" width="200" height="60" rx="8" fill="url(#boxGrad)" stroke="#8b5cf6" stroke-width="2"/>
+  <text x="640" y="145" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#8b5cf6">WebSocket</text>
+  <text x="640" y="165" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#888">:8000/ws | Real-time</text>
+  
+  <!-- ComfyUI Box -->
+  <rect x="770" y="120" width="200" height="60" rx="8" fill="url(#boxGrad)" stroke="#ec4899" stroke-width="2"/>
+  <text x="870" y="145" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#ec4899">ComfyUI</text>
+  <text x="870" y="165" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#888">:8188 | Visual Workflows</text>
+  
+  <!-- Processing Layer -->
+  <rect x="50" y="220" width="1100" height="180" rx="10" fill="#1a1b26" stroke="#10b981" stroke-width="2" filter="url(#shadow)"/>
+  <text x="100" y="245" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#10b981">PROCESSING SERVICES</text>
+  
+  <!-- Prompt Enhancer -->
+  <rect x="80" y="260" width="160" height="120" rx="8" fill="url(#boxGrad)" stroke="#fbbf24" stroke-width="2"/>
+  <text x="160" y="285" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#fbbf24">Prompt Enhancer</text>
+  <text x="160" y="305" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#888">7-Stage Pipeline</text>
+  <text x="160" y="325" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#666">• Concept Expansion</text>
+  <text x="160" y="340" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#666">• Scene Definition</text>
+  <text x="160" y="355" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#666">• Visual Specification</text>
+  <text x="160" y="370" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#666">• Cinematic Language</text>
+  
+  <!-- Video Worker -->
+  <rect x="260" y="260" width="160" height="120" rx="8" fill="url(#boxGrad)" stroke="#ef4444" stroke-width="2"/>
+  <text x="340" y="285" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#ef4444">Video Worker</text>
+  <text x="340" y="305" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#888">FFmpeg Processing</text>
+  <text x="340" y="325" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#666">• 25+ Transitions</text>
+  <text x="340" y="340" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#666">• Ken Burns Effects</text>
+  <text x="340" y="355" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#666">• Multi-clip Assembly</text>
+  <text x="340" y="370" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#666">• Audio Mixing</text>
+  
+  <!-- Audio Worker -->
+  <rect x="440" y="260" width="160" height="120" rx="8" fill="url(#boxGrad)" stroke="#06b6d4" stroke-width="2"/>
+  <text x="520" y="285" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#06b6d4">Audio Worker</text>
+  <text x="520" y="305" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#888">Librosa Analysis</text>
+  <text x="520" y="325" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#666">• Beat Detection</text>
+  <text x="520" y="340" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#666">• BPM Analysis</text>
+  <text x="520" y="355" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#666">• Normalization</text>
+  <text x="520" y="370" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#666">• Beat-Sync Cuts</text>
+  
+  <!-- Face Service -->
+  <rect x="620" y="260" width="160" height="120" rx="8" fill="url(#boxGrad)" stroke="#a855f7" stroke-width="2"/>
+  <text x="700" y="285" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#a855f7">Face Service</text>
+  <text x="700" y="305" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#888">MediaPipe + InsightFace</text>
+  <text x="700" y="325" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#666">• 468 Landmarks</text>
+  <text x="700" y="340" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#666">• 512-dim Embedding</text>
+  <text x="700" y="355" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#666">• Character Store</text>
+  <text x="700" y="370" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#666">• Similarity Check</text>
+  
+  <!-- Whisper Service -->
+  <rect x="800" y="260" width="160" height="120" rx="8" fill="url(#boxGrad)" stroke="#14b8a6" stroke-width="2"/>
+  <text x="880" y="285" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#14b8a6">Whisper Service</text>
+  <text x="880" y="305" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#888">Speech Recognition</text>
+  <text x="880" y="325" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#666">• Large-V3 Model</text>
+  <text x="880" y="340" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#666">• Turbo (8x faster)</text>
+  <text x="880" y="355" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#666">• Lyrics Extraction</text>
+  <text x="880" y="370" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#666">• Word Timestamps</text>
+  
+  <!-- CAPTCHA Service -->
+  <rect x="980" y="260" width="140" height="120" rx="8" fill="url(#boxGrad)" stroke="#f472b6" stroke-width="2"/>
+  <text x="1050" y="285" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#f472b6">CAPTCHA</text>
+  <text x="1050" y="305" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#888">2Captcha API</text>
+  <text x="1050" y="325" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#666">• hCaptcha</text>
+  <text x="1050" y="340" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#666">• reCAPTCHA</text>
+  <text x="1050" y="355" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#666">• Turnstile</text>
+  <text x="1050" y="370" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#666">• Image OCR</text>
+  
+  <!-- AI Services Layer -->
+  <rect x="50" y="420" width="1100" height="180" rx="10" fill="#1a1b26" stroke="#f59e0b" stroke-width="2" filter="url(#shadow)"/>
+  <text x="100" y="445" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#f59e0b">AI GENERATION SERVICES</text>
+  
+  <!-- LTX-Video -->
+  <rect x="80" y="460" width="180" height="120" rx="8" fill="url(#boxGrad)" stroke="#3b82f6" stroke-width="2"/>
+  <text x="170" y="485" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#3b82f6">LTX-Video</text>
+  <text x="170" y="505" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#888">v0.9.7 Distilled</text>
+  <text x="170" y="525" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#666">• Text-to-Video</text>
+  <text x="170" y="540" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#666">• Image Animation</text>
+  <text x="170" y="555" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#666">• Keyframe Control</text>
+  <text x="170" y="570" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#666">• 4-8 Step Gen</text>
+  
+  <!-- MusicGen -->
+  <rect x="280" y="460" width="180" height="120" rx="8" fill="url(#boxGrad)" stroke="#22c55e" stroke-width="2"/>
+  <text x="370" y="485" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#22c55e">MusicGen</text>
+  <text x="370" y="505" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#888">Local Generation</text>
+  <text x="370" y="525" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#666">• Large (3.3B)</text>
+  <text x="370" y="540" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#666">• Medium (1.5B)</text>
+  <text x="370" y="555" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#666">• Melody Mode</text>
+  <text x="370" y="570" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#666">• Long-form (>30s)</text>
+  
+  <!-- Suno -->
+  <rect x="480" y="460" width="180" height="120" rx="8" fill="url(#boxGrad)" stroke="#ec4899" stroke-width="2"/>
+  <text x="570" y="485" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#ec4899">Suno API</text>
+  <text x="570" y="505" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#888">Cloud Music Gen</text>
+  <text x="570" y="525" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#666">• Chirp v3.5</text>
+  <text x="570" y="540" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#666">• Lyrics Gen (Free)</text>
+  <text x="570" y="555" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#666">• Extend Audio</text>
+  <text x="570" y="570" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#666">• 3 Deploy Options</text>
+  
+  <!-- Bark TTS -->
+  <rect x="680" y="460" width="180" height="120" rx="8" fill="url(#boxGrad)" stroke="#8b5cf6" stroke-width="2"/>
+  <text x="770" y="485" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#8b5cf6">Bark TTS</text>
+  <text x="770" y="505" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#888">Text-to-Speech</text>
+  <text x="770" y="525" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#666">• 100+ Languages</text>
+  <text x="770" y="540" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#666">• Emotion Control</text>
+  <text x="770" y="555" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#666">• Music/SFX</text>
+  <text x="770" y="570" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#666">• XTTS-v2 Clone</text>
+  
+  <!-- Image Gen -->
+  <rect x="880" y="460" width="180" height="120" rx="8" fill="url(#boxGrad)" stroke="#f97316" stroke-width="2"/>
+  <text x="970" y="485" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#f97316">Image Gen</text>
+  <text x="970" y="505" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#888">Multi-Model</text>
+  <text x="970" y="525" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#666">• Gemini 3 Pro</text>
+  <text x="970" y="540" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#666">• FLUX.1-schnell</text>
+  <text x="970" y="555" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#666">• SDXL 1.0/Turbo</text>
+  <text x="970" y="570" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#666">• IPAdapter Face</text>
+  
+  <!-- Infrastructure Layer -->
+  <rect x="50" y="620" width="1100" height="120" rx="10" fill="#1a1b26" stroke="#6366f1" stroke-width="2" filter="url(#shadow)"/>
+  <text x="100" y="645" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#6366f1">INFRASTRUCTURE</text>
+  
+  <!-- Redis -->
+  <rect x="80" y="660" width="200" height="60" rx="8" fill="url(#boxGrad)" stroke="#dc2626" stroke-width="2"/>
+  <text x="180" y="685" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#dc2626">Redis Queue</text>
+  <text x="180" y="705" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#888">:6379 | Job Queue + Cache</text>
+  
+  <!-- File Storage -->
+  <rect x="310" y="660" width="200" height="60" rx="8" fill="url(#boxGrad)" stroke="#059669" stroke-width="2"/>
+  <text x="410" y="685" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#059669">File Storage</text>
+  <text x="410" y="705" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#888">/data/* | uploads, outputs, cache</text>
+  
+  <!-- GPU/CUDA -->
+  <rect x="540" y="660" width="200" height="60" rx="8" fill="url(#boxGrad)" stroke="#7c3aed" stroke-width="2"/>
+  <text x="640" y="685" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#7c3aed">GPU Worker</text>
+  <text x="640" y="705" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#888">CUDA 12.4 | RTX 3090 Ti</text>
+  
+  <!-- Model Cache -->
+  <rect x="770" y="660" width="200" height="60" rx="8" fill="url(#boxGrad)" stroke="#0891b2" stroke-width="2"/>
+  <text x="870" y="685" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#0891b2">Model Cache</text>
+  <text x="870" y="705" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#888">G:\models | HuggingFace Hub</text>
+  
+  <!-- Logs -->
+  <rect x="1000" y="660" width="120" height="60" rx="8" fill="url(#boxGrad)" stroke="#64748b" stroke-width="2"/>
+  <text x="1060" y="685" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#64748b">Logs</text>
+  <text x="1060" y="705" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#888">/logs/*</text>
+  
+  <!-- Connection Lines -->
+  <line x1="180" y1="180" x2="180" y2="220" stroke="#667eea" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="410" y1="180" x2="410" y2="220" stroke="#667eea" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="640" y1="180" x2="640" y2="220" stroke="#667eea" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="870" y1="180" x2="870" y2="220" stroke="#667eea" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <line x1="600" y1="400" x2="600" y2="420" stroke="#667eea" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="600" y1="600" x2="600" y2="620" stroke="#667eea" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <!-- Stats Box -->
+  <rect x="50" y="760" width="1100" height="80" rx="10" fill="#1a1b26" stroke="#374151" stroke-width="1"/>
+  <text x="600" y="785" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#9ca3af">PROJECT STATISTICS</text>
+  <text x="200" y="815" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#6b7280">55+ Files</text>
+  <text x="350" y="815" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#6b7280">12 Services</text>
+  <text x="500" y="815" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#6b7280">14 Workflows</text>
+  <text x="650" y="815" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#6b7280">~15K LOC</text>
+  <text x="800" y="815" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#6b7280">50+ API Endpoints</text>
+  <text x="1000" y="815" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#6b7280">~48% Complete</text>
+  
+  <!-- Footer -->
+  <text x="600" y="880" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#4b5563">
+    Nano Banana Studio Pro v2.0 | December 2025 | Enterprise AI Video Production
+  </text>
+</svg>

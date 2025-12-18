@@ -1,0 +1,198 @@
+{
+  "name": "08 - Suno AI Music Generator",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "🎵 Suno AI Music Generator",
+        "formDescription": "Generate original music using Suno AI. Create songs with lyrics or instrumental tracks.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Music Prompt",
+              "fieldType": "textarea",
+              "requiredField": true,
+              "placeholder": "Describe the music you want: mood, style, tempo, instruments..."
+            },
+            {
+              "fieldLabel": "Genre",
+              "fieldType": "dropdown",
+              "requiredField": true,
+              "fieldOptions": {
+                "values": [
+                  { "option": "Pop" },
+                  { "option": "Rock" },
+                  { "option": "Electronic/EDM" },
+                  { "option": "Hip Hop" },
+                  { "option": "R&B" },
+                  { "option": "Country" },
+                  { "option": "Jazz" },
+                  { "option": "Classical" },
+                  { "option": "Cinematic/Orchestral" },
+                  { "option": "Lo-Fi" },
+                  { "option": "Ambient" },
+                  { "option": "Metal" },
+                  { "option": "Folk" },
+                  { "option": "Reggae" },
+                  { "option": "Christmas/Holiday" }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Mood/Energy",
+              "fieldType": "dropdown",
+              "requiredField": true,
+              "fieldOptions": {
+                "values": [
+                  { "option": "Upbeat & Energetic" },
+                  { "option": "Happy & Cheerful" },
+                  { "option": "Calm & Relaxing" },
+                  { "option": "Emotional & Moving" },
+                  { "option": "Dark & Mysterious" },
+                  { "option": "Epic & Powerful" },
+                  { "option": "Romantic & Soft" },
+                  { "option": "Fun & Playful" },
+                  { "option": "Melancholic & Sad" },
+                  { "option": "Aggressive & Intense" }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Type",
+              "fieldType": "dropdown",
+              "requiredField": true,
+              "fieldOptions": {
+                "values": [
+                  { "option": "Song with Lyrics" },
+                  { "option": "Instrumental Only" }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Duration (seconds)",
+              "fieldType": "dropdown",
+              "requiredField": true,
+              "fieldOptions": {
+                "values": [
+                  { "option": "30" },
+                  { "option": "60" },
+                  { "option": "90" },
+                  { "option": "120" },
+                  { "option": "180" }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Custom Lyrics (Optional)",
+              "fieldType": "textarea",
+              "requiredField": false,
+              "placeholder": "Enter your own lyrics if you want specific words..."
+            },
+            {
+              "fieldLabel": "BPM Preference",
+              "fieldType": "dropdown",
+              "requiredField": false,
+              "fieldOptions": {
+                "values": [
+                  { "option": "Auto" },
+                  { "option": "Slow (60-80)" },
+                  { "option": "Medium (80-110)" },
+                  { "option": "Fast (110-140)" },
+                  { "option": "Very Fast (140+)" }
+                ]
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "form-trigger",
+      "name": "Music Generator Form",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [200, 300],
+      "webhookId": "suno-generator-v1"
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first().json;\n\nconst prompt = input['Music Prompt'];\nconst genre = input['Genre'];\nconst mood = input['Mood/Energy'];\nconst type = input['Type'];\nconst duration = parseInt(input['Duration (seconds)']);\nconst customLyrics = input['Custom Lyrics (Optional)'] || '';\nconst bpm = input['BPM Preference'] || 'Auto';\n\n// Build enhanced music prompt\nlet enhancedPrompt = `${genre} ${mood.toLowerCase()} track. ${prompt}`;\n\nif (customLyrics) {\n  enhancedPrompt += `\\n\\nLyrics:\\n${customLyrics}`;\n}\n\n// BPM hints\nconst bpmHints = {\n  'Slow (60-80)': 'slow tempo, relaxed pace',\n  'Medium (80-110)': 'moderate tempo, steady beat',\n  'Fast (110-140)': 'fast tempo, energetic beat',\n  'Very Fast (140+)': 'very fast tempo, high energy'\n};\n\nif (bpm !== 'Auto' && bpmHints[bpm]) {\n  enhancedPrompt += `, ${bpmHints[bpm]}`;\n}\n\nconst jobId = `suno_${Date.now()}_${Math.random().toString(36).substring(7)}`;\n\nreturn {\n  jobId,\n  prompt: enhancedPrompt,\n  originalPrompt: prompt,\n  genre,\n  mood,\n  instrumental: type === 'Instrumental Only',\n  duration,\n  customLyrics,\n  bpm,\n  timestamp: new Date().toISOString()\n};"
+      },
+      "id": "parse-input",
+      "name": "Parse & Enhance Prompt",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [400, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api:8000/api/v1/suno/generate",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"prompt\": {{ JSON.stringify($json.prompt) }},\n  \"genre\": \"{{ $json.genre }}\",\n  \"duration\": {{ $json.duration }},\n  \"instrumental\": {{ $json.instrumental }}\n}",
+        "options": {
+          "timeout": 300000
+        }
+      },
+      "id": "call-suno-api",
+      "name": "Call Suno API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [600, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const response = $input.first().json;\nconst prevData = $('Parse & Enhance Prompt').first().json;\n\n// Check if Suno API was successful or fell back\nif (response.status === 'fallback') {\n  return {\n    jobId: prevData.jobId,\n    status: 'api_unavailable',\n    message: 'Suno API is not configured. Please upload your own MP3 instead.',\n    alternative: 'Use the Multi-Asset Processor workflow to upload your MP3 file',\n    prompt_used: prevData.prompt\n  };\n}\n\nreturn {\n  jobId: response.job_id || prevData.jobId,\n  status: 'success',\n  audio_path: response.audio_path,\n  lyrics: response.lyrics,\n  genre: prevData.genre,\n  mood: prevData.mood,\n  duration: prevData.duration,\n  instrumental: prevData.instrumental,\n  prompt_used: prevData.prompt,\n  next_steps: [\n    'Audio file is ready for video production',\n    'Use Audio Analyzer workflow to detect beats',\n    'Use Storyboard Generator to create visual scenes'\n  ]\n};"
+      },
+      "id": "process-result",
+      "name": "Process Result",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [800, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {}
+      },
+      "id": "respond",
+      "name": "Respond",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [1000, 300]
+    }
+  ],
+  "connections": {
+    "Music Generator Form": {
+      "main": [
+        [{ "node": "Parse & Enhance Prompt", "type": "main", "index": 0 }]
+      ]
+    },
+    "Parse & Enhance Prompt": {
+      "main": [
+        [{ "node": "Call Suno API", "type": "main", "index": 0 }]
+      ]
+    },
+    "Call Suno API": {
+      "main": [
+        [{ "node": "Process Result", "type": "main", "index": 0 }]
+      ]
+    },
+    "Process Result": {
+      "main": [
+        [{ "node": "Respond", "type": "main", "index": 0 }]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": [
+    { "name": "nano-banana" },
+    { "name": "suno" },
+    { "name": "music-generation" }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2024-12-17T00:00:00.000Z",
+  "versionId": "1"
+}

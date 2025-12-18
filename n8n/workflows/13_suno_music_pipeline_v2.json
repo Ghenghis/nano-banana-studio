@@ -1,0 +1,561 @@
+{
+  "name": "13_suno_music_pipeline_v2",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "suno-generate",
+        "options": {}
+      },
+      "id": "webhook-trigger",
+      "name": "Webhook Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [240, 300],
+      "webhookId": "suno-gen-webhook"
+    },
+    {
+      "parameters": {
+        "functionCode": "// Extract and validate request parameters\nconst body = $input.first().json.body || $input.first().json;\n\nconst config = {\n  // Generation mode\n  mode: body.mode || 'simple', // 'simple' or 'custom'\n  \n  // Simple mode\n  prompt: body.prompt || 'upbeat pop song',\n  style: body.style || '',\n  \n  // Custom mode\n  lyrics: body.lyrics || '',\n  title: body.title || 'Untitled',\n  tags: body.tags || body.style || '',\n  \n  // Options\n  instrumental: body.instrumental || false,\n  wait_audio: body.wait_audio !== false,\n  model: body.model || 'chirp-v3-5',\n  \n  // Extension\n  continue_clip_id: body.continue_clip_id || null,\n  continue_at: body.continue_at || null,\n  \n  // Video project integration\n  project_id: body.project_id || null,\n  scene_id: body.scene_id || null,\n  target_duration: body.target_duration || 60,\n  \n  // Rate limiting\n  priority: body.priority || 'normal'\n};\n\n// Validate\nif (config.mode === 'custom' && !config.lyrics) {\n  throw new Error('Lyrics required for custom mode');\n}\n\nif (config.mode === 'simple' && !config.prompt) {\n  throw new Error('Prompt required for simple mode');\n}\n\nreturn { json: config };"
+      },
+      "id": "validate-params",
+      "name": "Validate Parameters",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.mode }}",
+              "value2": "custom"
+            }
+          ]
+        }
+      },
+      "id": "mode-switch",
+      "name": "Mode Switch",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 1,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "url": "={{ $env.SUNO_API_URL || 'http://suno-api:3100' }}/api/generate",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "prompt",
+              "value": "={{ $json.style ? $json.style + ' style: ' + $json.prompt : $json.prompt }}"
+            },
+            {
+              "name": "make_instrumental",
+              "value": "={{ $json.instrumental }}"
+            },
+            {
+              "name": "wait_audio",
+              "value": "={{ $json.wait_audio }}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 300000
+        }
+      },
+      "id": "simple-generate",
+      "name": "Simple Generate",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [900, 200]
+    },
+    {
+      "parameters": {
+        "url": "={{ $env.SUNO_API_URL || 'http://suno-api:3100' }}/api/custom_generate",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "prompt",
+              "value": "={{ $json.lyrics }}"
+            },
+            {
+              "name": "tags",
+              "value": "={{ $json.tags }}"
+            },
+            {
+              "name": "title",
+              "value": "={{ $json.title }}"
+            },
+            {
+              "name": "make_instrumental",
+              "value": "={{ $json.instrumental }}"
+            },
+            {
+              "name": "wait_audio",
+              "value": "={{ $json.wait_audio }}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 300000
+        }
+      },
+      "id": "custom-generate",
+      "name": "Custom Generate",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [900, 400]
+    },
+    {
+      "parameters": {
+        "functionCode": "// Merge results from both paths\nconst items = $input.all();\nlet songs = [];\n\nfor (const item of items) {\n  const data = item.json;\n  \n  // Handle array or single response\n  if (Array.isArray(data)) {\n    songs.push(...data);\n  } else if (data.data) {\n    songs.push(...data.data);\n  } else if (data.id) {\n    songs.push(data);\n  }\n}\n\n// Get original config from previous node\nconst config = $('Validate Parameters').first().json;\n\nreturn {\n  json: {\n    success: songs.length > 0,\n    songs: songs.map(s => ({\n      id: s.id,\n      title: s.title || 'Untitled',\n      status: s.status,\n      audio_url: s.audio_url,\n      video_url: s.video_url,\n      image_url: s.image_url || s.image_large_url,\n      duration: s.duration,\n      lyrics: s.lyric || s.prompt,\n      style: s.tags,\n      model: s.model_name\n    })),\n    project_id: config.project_id,\n    scene_id: config.scene_id,\n    generated_at: new Date().toISOString()\n  }\n};"
+      },
+      "id": "merge-results",
+      "name": "Merge Results",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [1120, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.songs.length > 0 }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "check-success",
+      "name": "Check Success",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [1340, 300]
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.songs[0].audio_url }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "id": "download-audio",
+      "name": "Download Audio",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [1560, 200]
+    },
+    {
+      "parameters": {
+        "functionCode": "// Save audio file to outputs directory\nconst fs = require('fs');\nconst path = require('path');\n\nconst previousData = $('Merge Results').first().json;\nconst song = previousData.songs[0];\nconst binary = $input.first().binary;\n\n// Output directory\nconst outputDir = process.env.OUTPUT_DIR || '/app/data/outputs';\nconst musicDir = path.join(outputDir, 'music');\n\n// Ensure directory exists\nif (!fs.existsSync(musicDir)) {\n  fs.mkdirSync(musicDir, { recursive: true });\n}\n\n// Generate filename\nconst timestamp = Date.now();\nconst safeTitle = (song.title || 'song').replace(/[^a-z0-9]/gi, '_').substring(0, 50);\nconst filename = `${timestamp}_${safeTitle}_${song.id}.mp3`;\nconst filepath = path.join(musicDir, filename);\n\n// Write file\nif (binary && binary.data) {\n  const buffer = Buffer.from(binary.data.data, 'base64');\n  fs.writeFileSync(filepath, buffer);\n}\n\nreturn {\n  json: {\n    ...previousData,\n    saved_file: {\n      path: filepath,\n      filename: filename,\n      size: fs.statSync(filepath).size\n    }\n  }\n};"
+      },
+      "id": "save-audio",
+      "name": "Save Audio File",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [1780, 200]
+    },
+    {
+      "parameters": {
+        "functionCode": "// Prepare final response\nconst data = $json;\n\nreturn {\n  json: {\n    success: true,\n    message: 'Music generated successfully',\n    songs: data.songs,\n    saved_file: data.saved_file,\n    project_id: data.project_id,\n    scene_id: data.scene_id,\n    timestamp: data.generated_at,\n    \n    // For video pipeline integration\n    audio_path: data.saved_file?.path,\n    duration: data.songs[0]?.duration,\n    \n    // Webhook response\n    status_code: 200\n  }\n};"
+      },
+      "id": "format-response",
+      "name": "Format Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [2000, 200]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify($json) }}",
+        "options": {}
+      },
+      "id": "respond-success",
+      "name": "Respond Success",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [2220, 200]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ success: false, error: 'No songs generated', status_code: 500 }) }}",
+        "options": {
+          "responseCode": 500
+        }
+      },
+      "id": "respond-error",
+      "name": "Respond Error",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1560, 400]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "suno-lyrics",
+        "options": {}
+      },
+      "id": "lyrics-webhook",
+      "name": "Lyrics Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [240, 600],
+      "webhookId": "suno-lyrics-webhook"
+    },
+    {
+      "parameters": {
+        "url": "={{ $env.SUNO_API_URL || 'http://suno-api:3100' }}/api/generate_lyrics",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "prompt",
+              "value": "={{ $json.body?.prompt || $json.prompt || 'Write a song about adventure' }}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 60000
+        }
+      },
+      "id": "generate-lyrics",
+      "name": "Generate Lyrics",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [460, 600]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ success: true, lyrics: $json.text || $json, timestamp: new Date().toISOString() }) }}",
+        "options": {}
+      },
+      "id": "respond-lyrics",
+      "name": "Respond Lyrics",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [680, 600]
+    },
+    {
+      "parameters": {
+        "httpMethod": "GET",
+        "path": "suno-credits",
+        "options": {}
+      },
+      "id": "credits-webhook",
+      "name": "Credits Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [240, 800],
+      "webhookId": "suno-credits-webhook"
+    },
+    {
+      "parameters": {
+        "url": "={{ $env.SUNO_API_URL || 'http://suno-api:3100' }}/api/get_limit",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "get-credits",
+      "name": "Get Credits",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [460, 800]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ success: true, credits_left: $json.credits_left, monthly_limit: $json.monthly_limit, monthly_usage: $json.monthly_usage }) }}",
+        "options": {}
+      },
+      "id": "respond-credits",
+      "name": "Respond Credits",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [680, 800]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "suno-extend",
+        "options": {}
+      },
+      "id": "extend-webhook",
+      "name": "Extend Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [240, 1000],
+      "webhookId": "suno-extend-webhook"
+    },
+    {
+      "parameters": {
+        "url": "={{ $env.SUNO_API_URL || 'http://suno-api:3100' }}/api/extend_audio",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "continue_clip_id",
+              "value": "={{ $json.body?.clip_id || $json.clip_id }}"
+            },
+            {
+              "name": "continue_at",
+              "value": "={{ $json.body?.continue_at || $json.continue_at || 30 }}"
+            },
+            {
+              "name": "prompt",
+              "value": "={{ $json.body?.prompt || $json.prompt || '' }}"
+            },
+            {
+              "name": "tags",
+              "value": "={{ $json.body?.tags || $json.tags || '' }}"
+            },
+            {
+              "name": "wait_audio",
+              "value": "={{ $json.body?.wait_audio !== false }}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 300000
+        }
+      },
+      "id": "extend-audio",
+      "name": "Extend Audio",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [460, 1000]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ success: true, extended: $json }) }}",
+        "options": {}
+      },
+      "id": "respond-extend",
+      "name": "Respond Extend",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [680, 1000]
+    }
+  ],
+  "connections": {
+    "Webhook Trigger": {
+      "main": [
+        [
+          {
+            "node": "Validate Parameters",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate Parameters": {
+      "main": [
+        [
+          {
+            "node": "Mode Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mode Switch": {
+      "main": [
+        [
+          {
+            "node": "Custom Generate",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Simple Generate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Generate": {
+      "main": [
+        [
+          {
+            "node": "Merge Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Custom Generate": {
+      "main": [
+        [
+          {
+            "node": "Merge Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge Results": {
+      "main": [
+        [
+          {
+            "node": "Check Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Success": {
+      "main": [
+        [
+          {
+            "node": "Download Audio",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download Audio": {
+      "main": [
+        [
+          {
+            "node": "Save Audio File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Audio File": {
+      "main": [
+        [
+          {
+            "node": "Format Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Response": {
+      "main": [
+        [
+          {
+            "node": "Respond Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Lyrics Webhook": {
+      "main": [
+        [
+          {
+            "node": "Generate Lyrics",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Lyrics": {
+      "main": [
+        [
+          {
+            "node": "Respond Lyrics",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Credits Webhook": {
+      "main": [
+        [
+          {
+            "node": "Get Credits",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Credits": {
+      "main": [
+        [
+          {
+            "node": "Respond Credits",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extend Webhook": {
+      "main": [
+        [
+          {
+            "node": "Extend Audio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extend Audio": {
+      "main": [
+        [
+          {
+            "node": "Respond Extend",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "name": "music",
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "name": "suno",
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "name": "audio",
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    }
+  ]
+}

@@ -1,0 +1,532 @@
+{
+  "name": "99 - Full Music Video Pipeline (Complete Automation)",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "🎬 Complete Music Video Generator",
+        "formDescription": "Create professional music videos from scratch. Upload an image of a person, add music (or generate it), and get a fully automated music video with consistent character appearance across all frames.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Video Title",
+              "fieldType": "text",
+              "requiredField": true,
+              "placeholder": "My Awesome Music Video"
+            },
+            {
+              "fieldLabel": "Video Concept/Theme",
+              "fieldType": "textarea",
+              "requiredField": true,
+              "placeholder": "Describe the overall theme, story, or concept for your music video..."
+            },
+            {
+              "fieldLabel": "Character Image",
+              "fieldType": "file",
+              "requiredField": false,
+              "acceptFileTypes": ".jpg,.jpeg,.png,.webp"
+            },
+            {
+              "fieldLabel": "Music File (MP3)",
+              "fieldType": "file",
+              "requiredField": false,
+              "acceptFileTypes": ".mp3,.wav,.m4a"
+            },
+            {
+              "fieldLabel": "Music Source",
+              "fieldType": "dropdown",
+              "requiredField": true,
+              "fieldOptions": {
+                "values": [
+                  { "option": "Upload MP3 (above)" },
+                  { "option": "Generate with Suno AI" },
+                  { "option": "Use Background Music Library" }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Music Genre (for Suno)",
+              "fieldType": "dropdown",
+              "requiredField": false,
+              "fieldOptions": {
+                "values": [
+                  { "option": "Pop" },
+                  { "option": "Electronic/EDM" },
+                  { "option": "Cinematic/Orchestral" },
+                  { "option": "Lo-Fi" },
+                  { "option": "Rock" },
+                  { "option": "Hip Hop" },
+                  { "option": "Christmas/Holiday" }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Video Style",
+              "fieldType": "dropdown",
+              "requiredField": true,
+              "fieldOptions": {
+                "values": [
+                  { "option": "Cinematic (Film-like)" },
+                  { "option": "Music Video (Dynamic)" },
+                  { "option": "Documentary" },
+                  { "option": "Artistic/Abstract" },
+                  { "option": "Anime/Animation" },
+                  { "option": "Vintage/Retro" },
+                  { "option": "Neon/Cyberpunk" },
+                  { "option": "Minimalist/Clean" }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Target Platform",
+              "fieldType": "dropdown",
+              "requiredField": true,
+              "fieldOptions": {
+                "values": [
+                  { "option": "YouTube (16:9)" },
+                  { "option": "YouTube Shorts (9:16)" },
+                  { "option": "TikTok (9:16)" },
+                  { "option": "Instagram Reel (9:16)" },
+                  { "option": "4K YouTube (16:9)" }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Target Duration (seconds)",
+              "fieldType": "number",
+              "requiredField": true,
+              "fieldOptions": {
+                "numberMin": 15,
+                "numberMax": 300,
+                "numberDefault": 60
+              }
+            },
+            {
+              "fieldLabel": "Automation Level",
+              "fieldType": "dropdown",
+              "requiredField": true,
+              "fieldOptions": {
+                "values": [
+                  { "option": "Full Auto (No pauses)" },
+                  { "option": "Guided (Pause at key steps)" },
+                  { "option": "Manual (Confirm each stage)" }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Quality Preset",
+              "fieldType": "dropdown",
+              "requiredField": true,
+              "fieldOptions": {
+                "values": [
+                  { "option": "Draft (Fast preview)" },
+                  { "option": "Standard (Good quality)" },
+                  { "option": "High (Professional)" },
+                  { "option": "Maximum (Best quality, slow)" }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Include Lyrics Overlay",
+              "fieldType": "dropdown",
+              "requiredField": true,
+              "fieldOptions": {
+                "values": [
+                  { "option": "No" },
+                  { "option": "Yes - Auto-generate" },
+                  { "option": "Yes - Karaoke style" }
+                ]
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "form-trigger",
+      "name": "Music Video Form",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [200, 400],
+      "webhookId": "music-video-pipeline-v1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// STAGE 0: Initialize Pipeline\nconst input = $input.first().json;\n\nconst title = input['Video Title'];\nconst concept = input['Video Concept/Theme'];\nconst musicSource = input['Music Source'];\nconst musicGenre = input['Music Genre (for Suno)'] || 'Pop';\nconst style = input['Video Style'];\nconst platform = input['Target Platform'];\nconst duration = parseInt(input['Target Duration (seconds)']);\nconst automationLevel = input['Automation Level'];\nconst quality = input['Quality Preset'];\nconst lyricsOverlay = input['Include Lyrics Overlay'];\n\n// Platform configurations\nconst platformConfigs = {\n  'YouTube (16:9)': { width: 1920, height: 1080, aspect: '16:9' },\n  'YouTube Shorts (9:16)': { width: 1080, height: 1920, aspect: '9:16' },\n  'TikTok (9:16)': { width: 1080, height: 1920, aspect: '9:16' },\n  'Instagram Reel (9:16)': { width: 1080, height: 1920, aspect: '9:16' },\n  '4K YouTube (16:9)': { width: 3840, height: 2160, aspect: '16:9' }\n};\n\n// Quality settings\nconst qualitySettings = {\n  'Draft (Fast preview)': { preset: 'ultrafast', crf: 28, detail: 'low' },\n  'Standard (Good quality)': { preset: 'medium', crf: 23, detail: 'medium' },\n  'High (Professional)': { preset: 'slow', crf: 18, detail: 'high' },\n  'Maximum (Best quality, slow)': { preset: 'veryslow', crf: 16, detail: 'maximum' }\n};\n\n// Calculate scene count based on duration\nconst sceneDuration = 5; // seconds per scene\nconst sceneCount = Math.max(6, Math.ceil(duration / sceneDuration));\n\n// Generate job ID\nconst jobId = `musicvideo_${Date.now()}_${Math.random().toString(36).substring(7)}`;\n\nreturn {\n  jobId,\n  title,\n  concept,\n  musicSource,\n  musicGenre,\n  style,\n  platform,\n  platformConfig: platformConfigs[platform],\n  duration,\n  sceneCount,\n  sceneDuration,\n  automationLevel,\n  quality,\n  qualitySettings: qualitySettings[quality],\n  lyricsOverlay: lyricsOverlay !== 'No',\n  karaokeStyle: lyricsOverlay === 'Yes - Karaoke style',\n  \n  // Pipeline state tracking\n  pipeline: {\n    stage: 0,\n    stages: [\n      'initialize',\n      'process_character',\n      'process_audio',\n      'generate_storyboard',\n      'enhance_prompts',\n      'generate_images',\n      'verify_consistency',\n      'animate_scenes',\n      'assemble_video',\n      'finalize'\n    ],\n    status: 'initialized',\n    progress: 0\n  },\n  \n  timestamp: new Date().toISOString()\n};"
+      },
+      "id": "initialize-pipeline",
+      "name": "Stage 0: Initialize Pipeline",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [400, 400]
+    },
+    {
+      "parameters": {
+        "jsCode": "// STAGE 1: Process Character Image\nconst data = $input.first().json;\n\n// Get uploaded character image\nlet characterData = null;\nlet characterId = null;\n\nif ($binary && $binary.data) {\n  characterData = $binary.data.data; // base64 image\n  \n  // Register character for consistency\n  characterId = `char_${data.jobId.split('_')[1]}`;\n}\n\nreturn {\n  ...data,\n  character: {\n    hasImage: !!characterData,\n    imageData: characterData,\n    characterId: characterId,\n    registered: false // Will be updated after API call\n  },\n  pipeline: {\n    ...data.pipeline,\n    stage: 1,\n    status: characterData ? 'character_uploaded' : 'no_character',\n    progress: 0.1\n  }\n};"
+      },
+      "id": "process-character",
+      "name": "Stage 1: Process Character",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [600, 400]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "has-character",
+              "leftValue": "={{ $json.character.hasImage }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "if-has-character",
+      "name": "Has Character Image?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [800, 400]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api:8000/api/v1/face/extract",
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "image_base64",
+              "value": "={{ $json.character.imageData }}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "extract-face",
+      "name": "Extract Face",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1000, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Register character after face extraction\nconst faceResult = $input.first().json;\nconst prevData = $('Stage 1: Process Character').first().json;\n\nreturn {\n  ...prevData,\n  character: {\n    ...prevData.character,\n    faceDetected: faceResult.face_detected,\n    faceEmbedding: faceResult.face_embedding,\n    boundingBox: faceResult.primary_face?.bounding_box,\n    registered: true\n  },\n  pipeline: {\n    ...prevData.pipeline,\n    status: 'character_registered',\n    progress: 0.15\n  }\n};"
+      },
+      "id": "register-character",
+      "name": "Register Character",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1200, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// No character - continue without consistency checking\nconst prevData = $input.first().json;\n\nreturn {\n  ...prevData,\n  character: {\n    hasImage: false,\n    characterId: null,\n    registered: false\n  },\n  pipeline: {\n    ...prevData.pipeline,\n    status: 'no_character_needed',\n    progress: 0.15\n  }\n};"
+      },
+      "id": "skip-character",
+      "name": "Skip Character",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1000, 500]
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineAll",
+        "options": {}
+      },
+      "id": "merge-character",
+      "name": "Merge Character Paths",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [1400, 400]
+    },
+    {
+      "parameters": {
+        "jsCode": "// STAGE 2: Process Audio\nconst data = $input.first().json;\n\n// Check music source\nlet audioData = null;\nlet audioPath = null;\n\n// Check for uploaded audio\nif ($binary && $binary.audio) {\n  audioData = $binary.audio.data;\n  audioPath = `/app/data/uploads/${data.jobId}_audio.mp3`;\n}\n\nreturn {\n  ...data,\n  audio: {\n    source: data.musicSource,\n    hasUpload: !!audioData,\n    audioData: audioData,\n    audioPath: audioPath,\n    needsGeneration: data.musicSource === 'Generate with Suno AI',\n    genre: data.musicGenre\n  },\n  pipeline: {\n    ...data.pipeline,\n    stage: 2,\n    status: 'processing_audio',\n    progress: 0.2\n  }\n};"
+      },
+      "id": "process-audio",
+      "name": "Stage 2: Process Audio",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1600, 400]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api:8000/api/v1/audio/analyze",
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "audio_base64",
+              "value": "={{ $json.audio.audioData }}"
+            },
+            {
+              "name": "extract_lyrics",
+              "value": "={{ $json.lyricsOverlay }}"
+            },
+            {
+              "name": "detect_beats",
+              "value": "true"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 60000
+        }
+      },
+      "id": "analyze-audio",
+      "name": "Analyze Audio",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1800, 400]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Process audio analysis and prepare for storyboard\nconst audioAnalysis = $input.first().json;\nconst prevData = $('Stage 2: Process Audio').first().json;\n\nreturn {\n  ...prevData,\n  audio: {\n    ...prevData.audio,\n    analyzed: true,\n    duration: audioAnalysis.duration || prevData.duration,\n    bpm: audioAnalysis.bpm || 120,\n    beats: audioAnalysis.beats || [],\n    energyCurve: audioAnalysis.energy_curve || [],\n    sections: audioAnalysis.sections || [],\n    lyrics: audioAnalysis.lyrics || null\n  },\n  pipeline: {\n    ...prevData.pipeline,\n    status: 'audio_analyzed',\n    progress: 0.25\n  }\n};"
+      },
+      "id": "process-audio-analysis",
+      "name": "Process Audio Analysis",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2000, 400]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api:8000/api/v1/storyboard/generate",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"prompt\": {{ JSON.stringify($json.concept) }},\n  \"lyrics\": {{ JSON.stringify($json.audio.lyrics) }},\n  \"audio_analysis\": {\n    \"bpm\": {{ $json.audio.bpm }},\n    \"sections\": {{ JSON.stringify($json.audio.sections) }}\n  },\n  \"duration\": {{ $json.audio.duration || $json.duration }},\n  \"scene_count\": {{ $json.sceneCount }},\n  \"style\": \"{{ $json.style }}\"\n}",
+        "options": {
+          "timeout": 120000
+        }
+      },
+      "id": "generate-storyboard",
+      "name": "Stage 3: Generate Storyboard",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2200, 400]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Process storyboard and prepare scenes for generation\nconst storyboard = $input.first().json;\nconst prevData = $('Process Audio Analysis').first().json;\n\n// Add character reference to each scene prompt if character exists\nconst scenes = (storyboard.result?.scenes || storyboard.scenes || []).map((scene, idx) => {\n  let enhancedPrompt = scene.enhanced_prompt || scene.visual_prompt;\n  \n  // Add character reference if available\n  if (prevData.character.hasImage && prevData.character.registered) {\n    enhancedPrompt = `Person from reference image, ${enhancedPrompt}, maintain facial features and appearance from reference`;\n  }\n  \n  // Add style modifiers\n  enhancedPrompt += `, ${prevData.style} style, professional quality, 8K, cinematic lighting, masterpiece`;\n  \n  return {\n    ...scene,\n    index: idx + 1,\n    enhanced_prompt: enhancedPrompt,\n    negative_prompt: 'blurry, low quality, distorted, deformed, watermark, text, logo, amateur',\n    needs_generation: true\n  };\n});\n\nreturn {\n  ...prevData,\n  storyboard: {\n    title: storyboard.result?.title || prevData.title,\n    scenes: scenes,\n    scene_count: scenes.length,\n    total_duration: scenes.reduce((sum, s) => sum + (s.duration || prevData.sceneDuration), 0)\n  },\n  pipeline: {\n    ...prevData.pipeline,\n    stage: 3,\n    status: 'storyboard_generated',\n    progress: 0.35\n  }\n};"
+      },
+      "id": "process-storyboard",
+      "name": "Process Storyboard",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2400, 400]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Stage 4: Generate images for each scene\nconst data = $input.first().json;\n\n// Split scenes into individual generation requests\nconst imageRequests = data.storyboard.scenes.map(scene => ({\n  jobId: data.jobId,\n  sceneIndex: scene.index,\n  prompt: scene.enhanced_prompt,\n  negativePrompt: scene.negative_prompt,\n  characterId: data.character.characterId,\n  referenceImage: data.character.imageData,\n  style: data.style,\n  aspectRatio: data.platformConfig.aspect,\n  quality: data.qualitySettings.detail\n}));\n\nreturn imageRequests;"
+      },
+      "id": "prepare-image-generation",
+      "name": "Stage 4: Prepare Image Generation",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2600, 400]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api:8000/api/v1/generate/image",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"prompt\": {{ JSON.stringify($json.prompt) }},\n  \"negative_prompt\": {{ JSON.stringify($json.negativePrompt) }},\n  \"style\": \"{{ $json.style }}\",\n  \"aspect_ratio\": \"{{ $json.aspectRatio }}\",\n  \"quality\": \"{{ $json.quality }}\",\n  \"character_id\": {{ $json.characterId ? JSON.stringify($json.characterId) : 'null' }},\n  \"reference_image\": {{ $json.referenceImage ? JSON.stringify($json.referenceImage) : 'null' }},\n  \"use_enhancement\": true\n}",
+        "options": {
+          "timeout": 120000
+        }
+      },
+      "id": "generate-images",
+      "name": "Generate Images (Batch)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2800, 400]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Collect all generated images\nconst results = $input.all();\nconst pipelineData = $('Process Storyboard').first().json;\n\nconst generatedImages = results.map((result, idx) => {\n  const response = result.json;\n  const scene = pipelineData.storyboard.scenes[idx];\n  \n  return {\n    sceneIndex: idx + 1,\n    jobId: response.job_id,\n    status: response.status || 'processing',\n    imagePath: response.result?.image_path,\n    fingerprint: response.fingerprint,\n    ...scene\n  };\n});\n\nreturn {\n  ...pipelineData,\n  generatedImages: generatedImages,\n  pipeline: {\n    ...pipelineData.pipeline,\n    stage: 5,\n    status: 'images_generated',\n    progress: 0.6\n  }\n};"
+      },
+      "id": "collect-images",
+      "name": "Stage 5: Collect Images",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [3000, 400]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Stage 6: Build video assembly manifest\nconst data = $input.first().json;\n\nconst manifest = {\n  jobId: data.jobId,\n  title: data.title,\n  scenes: data.generatedImages.map(img => ({\n    index: img.sceneIndex,\n    duration: img.duration || data.sceneDuration,\n    image_path: img.imagePath,\n    transition: img.transition || 'dissolve',\n    motion: img.motion || 'zoom_in'\n  })),\n  audio_path: data.audio.audioPath,\n  platform: data.platform,\n  dimensions: data.platformConfig\n};\n\nreturn {\n  ...data,\n  manifest: manifest,\n  pipeline: {\n    ...data.pipeline,\n    stage: 6,\n    status: 'manifest_built',\n    progress: 0.7\n  }\n};"
+      },
+      "id": "build-manifest",
+      "name": "Stage 6: Build Manifest",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [3200, 400]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api:8000/api/v1/video/assemble",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"manifest\": {{ JSON.stringify($json.manifest) }},\n  \"platform\": \"{{ $json.platform }}\",\n  \"quality\": \"{{ $json.quality.split(' ')[0].toLowerCase() }}\",\n  \"transition_style\": \"dissolve\",\n  \"ken_burns\": true,\n  \"color_grading\": \"{{ $json.style.includes('Cinematic') ? 'Cinematic Warm' : 'none' }}\"\n}",
+        "options": {
+          "timeout": 600000
+        }
+      },
+      "id": "assemble-video",
+      "name": "Stage 7: Assemble Video",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [3400, 400]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Stage 8: Finalize and return results\nconst assemblyResult = $input.first().json;\nconst pipelineData = $('Stage 6: Build Manifest').first().json;\n\nconst finalResult = {\n  jobId: pipelineData.jobId,\n  title: pipelineData.title,\n  status: 'completed',\n  \n  video: {\n    path: assemblyResult.result?.video_path || `/app/data/outputs/${pipelineData.jobId}_final.mp4`,\n    duration: assemblyResult.result?.duration || pipelineData.duration,\n    platform: pipelineData.platform,\n    quality: pipelineData.quality,\n    sceneCount: pipelineData.storyboard.scenes.length\n  },\n  \n  audio: {\n    source: pipelineData.audio.source,\n    duration: pipelineData.audio.duration,\n    bpm: pipelineData.audio.bpm,\n    hasLyrics: !!pipelineData.audio.lyrics\n  },\n  \n  character: {\n    used: pipelineData.character.hasImage,\n    faceDetected: pipelineData.character.faceDetected,\n    characterId: pipelineData.character.characterId\n  },\n  \n  pipeline: {\n    stage: 8,\n    status: 'completed',\n    progress: 1.0,\n    completedAt: new Date().toISOString()\n  },\n  \n  nextSteps: [\n    'Download your video from the output path',\n    'Video is ready for YouTube upload',\n    pipelineData.lyricsOverlay ? 'Lyrics are overlaid on the video' : 'No lyrics overlay (as requested)'\n  ]\n};\n\nreturn finalResult;"
+      },
+      "id": "finalize",
+      "name": "Stage 8: Finalize",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [3600, 400]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {}
+      },
+      "id": "respond",
+      "name": "Respond",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [3800, 400]
+    }
+  ],
+  "connections": {
+    "Music Video Form": {
+      "main": [
+        [{ "node": "Stage 0: Initialize Pipeline", "type": "main", "index": 0 }]
+      ]
+    },
+    "Stage 0: Initialize Pipeline": {
+      "main": [
+        [{ "node": "Stage 1: Process Character", "type": "main", "index": 0 }]
+      ]
+    },
+    "Stage 1: Process Character": {
+      "main": [
+        [{ "node": "Has Character Image?", "type": "main", "index": 0 }]
+      ]
+    },
+    "Has Character Image?": {
+      "main": [
+        [{ "node": "Extract Face", "type": "main", "index": 0 }],
+        [{ "node": "Skip Character", "type": "main", "index": 0 }]
+      ]
+    },
+    "Extract Face": {
+      "main": [
+        [{ "node": "Register Character", "type": "main", "index": 0 }]
+      ]
+    },
+    "Register Character": {
+      "main": [
+        [{ "node": "Merge Character Paths", "type": "main", "index": 0 }]
+      ]
+    },
+    "Skip Character": {
+      "main": [
+        [{ "node": "Merge Character Paths", "type": "main", "index": 1 }]
+      ]
+    },
+    "Merge Character Paths": {
+      "main": [
+        [{ "node": "Stage 2: Process Audio", "type": "main", "index": 0 }]
+      ]
+    },
+    "Stage 2: Process Audio": {
+      "main": [
+        [{ "node": "Analyze Audio", "type": "main", "index": 0 }]
+      ]
+    },
+    "Analyze Audio": {
+      "main": [
+        [{ "node": "Process Audio Analysis", "type": "main", "index": 0 }]
+      ]
+    },
+    "Process Audio Analysis": {
+      "main": [
+        [{ "node": "Stage 3: Generate Storyboard", "type": "main", "index": 0 }]
+      ]
+    },
+    "Stage 3: Generate Storyboard": {
+      "main": [
+        [{ "node": "Process Storyboard", "type": "main", "index": 0 }]
+      ]
+    },
+    "Process Storyboard": {
+      "main": [
+        [{ "node": "Stage 4: Prepare Image Generation", "type": "main", "index": 0 }]
+      ]
+    },
+    "Stage 4: Prepare Image Generation": {
+      "main": [
+        [{ "node": "Generate Images (Batch)", "type": "main", "index": 0 }]
+      ]
+    },
+    "Generate Images (Batch)": {
+      "main": [
+        [{ "node": "Stage 5: Collect Images", "type": "main", "index": 0 }]
+      ]
+    },
+    "Stage 5: Collect Images": {
+      "main": [
+        [{ "node": "Stage 6: Build Manifest", "type": "main", "index": 0 }]
+      ]
+    },
+    "Stage 6: Build Manifest": {
+      "main": [
+        [{ "node": "Stage 7: Assemble Video", "type": "main", "index": 0 }]
+      ]
+    },
+    "Stage 7: Assemble Video": {
+      "main": [
+        [{ "node": "Stage 8: Finalize", "type": "main", "index": 0 }]
+      ]
+    },
+    "Stage 8: Finalize": {
+      "main": [
+        [{ "node": "Respond", "type": "main", "index": 0 }]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": [
+    { "name": "nano-banana" },
+    { "name": "music-video" },
+    { "name": "full-pipeline" },
+    { "name": "automation" }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2024-12-17T00:00:00.000Z",
+  "versionId": "1"
+}

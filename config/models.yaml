@@ -1,0 +1,210 @@
+# =============================================================================
+# NANO BANANA STUDIO PRO - MODEL REGISTRY
+# =============================================================================
+# Configure available AI models for each task
+# =============================================================================
+
+# Image Generation Models
+image_generation:
+  primary:
+    name: "Nano Banana Pro (Gemini 3 Pro Image)"
+    provider: "openrouter"
+    model_id: "google/gemini-2.0-flash-exp:free"
+    capabilities:
+      - "text_to_image"
+      - "image_editing"
+      - "multi_reference"
+      - "4k_output"
+    max_images: 8
+    supports_negative_prompt: true
+    native_resolution: "3840x2160"
+    
+  alternatives:
+    - name: "DALL-E 3"
+      provider: "openai"
+      model_id: "dall-e-3"
+      capabilities: ["text_to_image"]
+      max_images: 4
+      
+    - name: "Stable Diffusion XL"
+      provider: "local"
+      model_id: "stabilityai/stable-diffusion-xl-base-1.0"
+      capabilities: ["text_to_image", "image_editing"]
+      requires_gpu: true
+      
+    - name: "Flux.1 Schnell"
+      provider: "replicate"
+      model_id: "black-forest-labs/flux-schnell"
+      capabilities: ["text_to_image"]
+
+# LLM Models (for prompt enhancement & storyboarding)
+llm:
+  primary:
+    name: "GPT-4o Mini"
+    provider: "openai"
+    model_id: "gpt-4o-mini"
+    context_window: 128000
+    max_output: 16384
+    
+  local:
+    name: "LM Studio (Local)"
+    provider: "lm_studio"
+    endpoint: "http://localhost:1234/v1"
+    model_id: "auto"
+    recommended_models:
+      - "Llama-3.1-8B-Instruct"
+      - "Mistral-7B-Instruct-v0.3"
+      - "Qwen2.5-7B-Instruct"
+      
+  alternatives:
+    - name: "Ollama (Local)"
+      provider: "ollama"
+      endpoint: "http://localhost:11434"
+      model_id: "llama3.1:8b"
+      
+    - name: "Claude 3.5 Sonnet"
+      provider: "anthropic"
+      model_id: "claude-3-5-sonnet-20241022"
+
+# Image-to-Video Animation Models
+animation:
+  primary:
+    name: "Runway Gen-3 Alpha"
+    provider: "runway"
+    model_id: "gen-3-alpha"
+    max_duration: 10
+    supported_motions:
+      - "subtle"
+      - "moderate"
+      - "dynamic"
+      - "camera_movement"
+      
+  alternatives:
+    - name: "Kling AI"
+      provider: "kling"
+      model_id: "kling-v1"
+      max_duration: 5
+      
+    - name: "Luma Dream Machine"
+      provider: "luma"
+      model_id: "dream-machine"
+      max_duration: 5
+      
+    - name: "Stable Video Diffusion"
+      provider: "local"
+      model_id: "stabilityai/stable-video-diffusion-img2vid-xt"
+      requires_gpu: true
+      vram_required: "24GB"
+
+# Music Generation Models
+music_generation:
+  primary:
+    name: "Suno AI"
+    provider: "suno"
+    model_id: "suno-v3.5"
+    max_duration: 240
+    features:
+      - "lyrics_generation"
+      - "instrumental"
+      - "stem_separation"
+      
+  alternatives:
+    - name: "Udio"
+      provider: "udio"
+      model_id: "udio-v1"
+      
+    - name: "MusicGen (Local)"
+      provider: "local"
+      model_id: "facebook/musicgen-large"
+      requires_gpu: true
+
+# Speech Models (TTS & STT)
+speech:
+  tts:
+    primary:
+      name: "ElevenLabs"
+      provider: "elevenlabs"
+      model_id: "eleven_multilingual_v2"
+      voices:
+        - "Rachel"
+        - "Drew"
+        - "Clyde"
+        - "Paul"
+        - "Domi"
+      
+    alternatives:
+      - name: "OpenAI TTS"
+        provider: "openai"
+        model_id: "tts-1-hd"
+        voices: ["alloy", "echo", "fable", "onyx", "nova", "shimmer"]
+        
+      - name: "Coqui XTTS (Local)"
+        provider: "local"
+        model_id: "coqui/XTTS-v2"
+        
+  stt:
+    primary:
+      name: "Whisper Large v3"
+      provider: "openai"
+      model_id: "whisper-1"
+      
+    local:
+      name: "Whisper (Local)"
+      provider: "local"
+      model_id: "openai/whisper-large-v3"
+      requires_gpu: true
+
+# Face Detection & Recognition
+face:
+  detection:
+    name: "MediaPipe Face Detection"
+    provider: "local"
+    model_id: "mediapipe"
+    
+  recognition:
+    name: "InsightFace"
+    provider: "local"
+    model_id: "buffalo_l"
+    embedding_dim: 512
+
+# Provider Configurations
+providers:
+  openrouter:
+    base_url: "https://openrouter.ai/api/v1"
+    auth_header: "Authorization"
+    auth_prefix: "Bearer"
+    
+  openai:
+    base_url: "https://api.openai.com/v1"
+    auth_header: "Authorization"
+    auth_prefix: "Bearer"
+    
+  lm_studio:
+    base_url: "http://localhost:1234/v1"
+    auth_required: false
+    
+  ollama:
+    base_url: "http://localhost:11434"
+    auth_required: false
+    
+  runway:
+    base_url: "https://api.runwayml.com/v1"
+    auth_header: "Authorization"
+    auth_prefix: "Bearer"
+
+# Fallback Chain (try models in order)
+fallback_chains:
+  image:
+    - "openrouter/google/gemini-2.0-flash-exp:free"
+    - "openai/dall-e-3"
+    - "local/sdxl"
+    
+  llm:
+    - "lm_studio/auto"
+    - "ollama/llama3.1:8b"
+    - "openai/gpt-4o-mini"
+    
+  animation:
+    - "local/svd"
+    - "runway/gen-3-alpha"
+    - "kling/kling-v1"
